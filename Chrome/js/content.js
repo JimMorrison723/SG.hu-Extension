@@ -1539,8 +1539,18 @@ var highlight_comments_for_me = {
 		}
 	
 		// Get the proper domnodes
-		var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
-	
+		var comment = $('.msg-replyto a:contains("'+userName+'")');
+
+		//Make sure this post is for the right user
+		var start_pos = comment.text().indexOf('\'') + 1;
+		var end_pos = comment.text().indexOf('\'',start_pos);
+		var TesTcomment = comment.text().substring(start_pos, end_pos);
+
+		if (TesTcomment == userName) {
+			var comments = comment.closest('center');
+		};
+		/*var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');*/
+
 		// Iterate over them
 		comments.each(function() {
 		
