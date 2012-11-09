@@ -1539,18 +1539,8 @@ var highlight_comments_for_me = {
 		}
 	
 		// Get the proper domnodes
-		var comment = $('.msg-replyto a:contains("'+userName+'")');
-
-		//Make sure this post is for the right user
-		var start_pos = comment.text().indexOf('\'') + 1;
-		var end_pos = comment.text().indexOf('\'',start_pos);
-		var TesTcomment = comment.text().substring(start_pos, end_pos);
-
-		if (TesTcomment == userName) {
-			var comments = comment.closest('center');
-		};
-		/*var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');*/
-
+		var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
+	
 		// Iterate over them
 		comments.each(function() {
 		
@@ -3474,6 +3464,40 @@ var columnify_comments = {
 	
 };
 
+var quick_user_info = {
+	
+	activated : function() {
+
+		$('.topichead').closest('table').mouseenter(function() {
+
+			//Place info image
+		    $(this).find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
+		    
+		    $(this).append('<div class=\"infobox\"></div>');
+
+		    //Add EventListener
+		    $('img.ext_quick_user_info_btn').click(function(e) {
+
+		    	//Get user profile URL
+				var url = $(this).closest("tr").find('td:eq(0) td:eq(1) a').attr('href');
+
+				//Show infobox
+				$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top':e.pageY + 7});
+
+				//Show user information in infobox
+			    $('.infobox').load(url + " .std1 table"); 
+			});
+
+		}).mouseleave(function() {
+
+			//Remove info image and infobox on mouseleave
+		    $(this).find(".ext_quick_user_info_btn").parent().remove();		    
+		    $(this).find(".infobox").remove();
+		});
+	}
+
+};
+
 var better_yt_embed = {
 
 	activated : function() {
@@ -3806,6 +3830,10 @@ function extInit() {
 
 			if(dataStore['columnify_comments'] == 'true') {
 				columnify_comments.activated();
+			}
+
+			if(dataStore['quick_user_info'] == 'true') {
+				quick_user_info.activated();
 			}
 
 			//Removes the default YT embed code and replace it for faster page load

@@ -150,6 +150,11 @@ var cp = {
 					html += '<div class="button" id="columnify_comments"></div>';
 				html += '</div>';
 				html += '<div>';
+					html += '<h3>Info gomb a hozzászólás fejlécébe</h3>';
+					html += '<p>Létrehoz egy "info" gombot a hozzászólás fejlécében, amiben megjelennek a felhasználó adatai.</p>';
+					html += '<div class="button" id="quick_user_info"></div>';
+				html += '</div>';
+				html += '<div>';
 					html += '<h3>Youtube Őrület</h3>';
 					html += '<p>A script kiveszi a beágyazott videót az oldalból, és egy fekete sávot rak be a helyére, amiben a videó címe látható. A sávra kattintva megjelenik maga a videó. Mennyi beágyazott videó után linkesítsen?';
 						html += '<select id="youtube_embed_limit">';

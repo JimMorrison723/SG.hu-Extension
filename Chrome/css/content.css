@@ -672,3 +672,26 @@ textarea[name="message"] {
 	border-top: 1px solid #fff;
 	border-bottom: 1px solid #e0e0e0;
 }
+
+/* INFO button*/
+.ext_quick_user_info_btn {
+	cursor: pointer;
+	position: relative;
+	vertical-align: middle;
+}
+
+.infobox {
+	display: none;
+	background: white;
+	border: 1px solid;
+	width: 414px;
+	height: 340px;
+	padding-bottom: .5em;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	margin: auto;	
+	z-index: 50;
+	overflow-y: scroll;
+	color: black;
+}
