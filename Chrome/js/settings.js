@@ -36,7 +36,7 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 2.6.1<br></p>';
+				html += '<p>Verzió: 3.0.1<br></p>';
 				html += '<p>Kiadás dátuma: 2012. 05. 24.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
@@ -150,7 +150,7 @@ var cp = {
 					html += '<div class="button" id="columnify_comments"></div>';
 				html += '</div>';
 				html += '<div>';
-					html += '<h3>Info gomb a hozzászólás fejlécébe</h3>';
+					html += '<h3>Info gomb a hozzászólás fejlécében</h3>';
 					html += '<p>Létrehoz egy "info" gombot a hozzászólás fejlécében, amiben megjelennek a felhasználó adatai.</p>';
 					html += '<div class="button" id="quick_user_info"></div>';
 				html += '</div>';
