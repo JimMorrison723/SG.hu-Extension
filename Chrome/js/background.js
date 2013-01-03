@@ -1,8 +1,3 @@
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<script>
-
 			// Set properties default values
 			if( typeof localStorage['chat_hide'] 							== 'undefined') localStorage['chat_hide'] 							= 'false';
 			if( typeof localStorage['custom_blocks']						== 'undefined') localStorage['custom_blocks'] 						= 'false';
@@ -171,8 +166,3 @@
 					}
 				});
 			});
-
-		
-		</script>
-	</head>
-</html>
