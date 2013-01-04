@@ -639,7 +639,9 @@ var autoload_next_page = {
 				if(dataStore['columnify_comments'] == 'true') {
 					columnify_comments.activated();
 				}
-
+				if(dataStore['quick_user_info'] == 'true') {
+					quick_user_info.activated();
+				}
 		});
 	}
 
@@ -1857,7 +1859,7 @@ var show_mentioned_comments = {
 				id = id.split('&')[0];
 		}
 
-		var target = $(ele).closest('div[id*="msg"]').children().eq(3).attr('id');
+		var target = $(ele).next().attr('id');
 		
 		if(document.location.href.match('cikkek')) {
 			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);");
