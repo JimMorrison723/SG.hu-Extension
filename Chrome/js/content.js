@@ -1814,6 +1814,9 @@ var fetch_new_comments_in_topic = {
 					if(dataStore['profiles'] != '') {
 						profiles.init();
 					}
+					if(dataStore['quick_user_info'] == 'true') {
+						quick_user_info.activated();
+					}
 			}
 		});
 	}
