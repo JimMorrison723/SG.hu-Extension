@@ -682,16 +682,18 @@ textarea[name="message"] {
 
 .infobox {
 	display: none;
-	background: white;
-	border: 1px solid;
+	position: absolute;
 	width: 414px;
 	height: 340px;
-	padding-bottom: .5em;
-	overflow: hidden;
-	position: absolute;
-	top: 0;
 	margin: auto;	
-	z-index: 50;
+	top: 0;
+	padding-bottom: .5em;
+	border: 1px solid;
+	background: white;
+	overflow: hidden;
 	overflow-y: scroll;
 	color: black;
+	z-index: 500;
+	-webkit-box-shadow: #666 0px 0px 3px;
+	box-shadow: #666 0px 0px 3px;
 }

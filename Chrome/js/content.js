@@ -831,7 +831,7 @@ var show_navigation_buttons = {
 		show_navigation_buttons.removeOverlay();
 
 		// Clone and append the original search form to body
-		var clone = $('.lapozo:last').next().next().clone().appendTo('body');
+		var clone = $('.std1:last').find('form').clone().appendTo('body'); /* $('.lapozo:last').next().next() nem működik*/
 		
 		// Add class
 		clone.attr('id', 'ext_overlay_search');
@@ -1539,12 +1539,24 @@ var highlight_comments_for_me = {
 		}
 	
 		// Get the proper domnodes
-		var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
+		var comment = $('.msg-replyto a:contains("' + userName + '")');
+
+		//Make sure this post is for the right user
+		var start_pos   = comment.text().indexOf('\'') + 1;
+		var end_pos     = comment.text().indexOf('\'',start_pos);
+		var TesTcomment = comment.text().substring(start_pos, end_pos);
+		if (TesTcomment == userName) {
+			var comments = comment.closest('center');
+    };
 	
 		// Iterate over them
 		comments.each(function() {
 		
 			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
+
+				var th_height = ($(this).find('.topichead').css('height').replace('px', '')) / 2;
+				var fromTop = $(this).find('.topichead').offset().top;
+				var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 			
 				$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('/img/content/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
 			
@@ -3481,8 +3493,16 @@ var quick_user_info = {
 		    	//Get user profile URL
 				var url = $(this).closest("tr").find('td:eq(0) td:eq(1) a').attr('href');
 
+				//Fix for vip, non vip topichead height
+				var th_height = $(this).closest('.topichead').css('height').replace('px', '');
+
+				//Get topichead pos from the top of the page
+				var fromTop = $(this).parents('.topichead').offset().top;
+				
+				var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
+
 				//Show infobox
-				$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top':e.pageY + 7});
+				$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
 
 				//Show user information in infobox
 			    $('.infobox').load(url + " .std1 table"); 
