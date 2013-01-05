@@ -1547,21 +1547,18 @@ var highlight_comments_for_me = {
 		var start_pos   = comment.text().indexOf('\'') + 1;
 		var end_pos     = comment.text().indexOf('\'',start_pos);
 		var TesTcomment = comment.text().substring(start_pos, end_pos);
+		
 		if (TesTcomment == userName) {
 			var comments = comment.closest('center');
-    };
+    	};
 	
 		// Iterate over them
 		comments.each(function() {
-		
+
 			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
 
-				var th_height = ($(this).find('.topichead').css('height').replace('px', '')) / 2;
-				var fromTop = $(this).find('.topichead').offset().top;
-				var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
-			
 				$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('/img/content/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
-			
+
 				if(document.location.href.match('cikkek')) {
 					$(this).find('.ext_comments_for_me_indicator').addClass('article');
 				} else {
@@ -1814,6 +1811,8 @@ var fetch_new_comments_in_topic = {
 					if(dataStore['profiles'] != '') {
 						profiles.init();
 					}
+
+					//Quick user info button
 					if(dataStore['quick_user_info'] == 'true') {
 						quick_user_info.activated();
 					}
@@ -3487,8 +3486,11 @@ var quick_user_info = {
 
 		$('.topichead').closest('table').mouseenter(function() {
 
-			//Place info image
-		    $(this).find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
+			if ($(this).not('quick_user_info'))
+			{
+				//Place info image
+			    $(this).addClass('quick_user_info').find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
+			}
 		    
 		    $(this).append('<div class=\"infobox\"></div>');
 
@@ -3857,6 +3859,7 @@ function extInit() {
 				columnify_comments.activated();
 			}
 
+			//Quick user info button
 			if(dataStore['quick_user_info'] == 'true') {
 				quick_user_info.activated();
 			}
