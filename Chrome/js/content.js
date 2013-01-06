@@ -1543,7 +1543,7 @@ var highlight_comments_for_me = {
 		// Get the proper domnodes
 		var comment = $('.msg-replyto a:contains("' + userName + '")');
 
-		//Make sure this post is for the right user
+		//We need exact match with the userName
 		var start_pos   = comment.text().indexOf('\'') + 1;
 		var end_pos     = comment.text().indexOf('\'',start_pos);
 		var TesTcomment = comment.text().substring(start_pos, end_pos);
@@ -1552,20 +1552,23 @@ var highlight_comments_for_me = {
 			var comments = comment.closest('center');
     	};
 	
-		// Iterate over them
-		comments.each(function() {
+		if (comments != undefined) {
 
-			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
+			// Iterate over them
+			comments.each(function() {
 
-				$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('/img/content/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+				if($(this).find('.ext_comments_for_me_indicator').length == 0) {
 
-				if(document.location.href.match('cikkek')) {
-					$(this).find('.ext_comments_for_me_indicator').addClass('article');
-				} else {
-					$(this).find('.ext_comments_for_me_indicator').addClass('topic');
-				}			
-			}
-		});
+					$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('/img/content/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+
+					if(document.location.href.match('cikkek')) {
+						$(this).find('.ext_comments_for_me_indicator').addClass('article');
+					} else {
+						$(this).find('.ext_comments_for_me_indicator').addClass('topic');
+					}			
+				}
+			});
+		};
 	},
 	
 	disabled : function() {
@@ -3486,7 +3489,7 @@ var quick_user_info = {
 
 		$('.topichead').closest('table').mouseenter(function() {
 
-			if ($(this).not('quick_user_info'))
+			if ($(this).not('.quick_user_info'))
 			{
 				//Place info image
 			    $(this).addClass('quick_user_info').find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
