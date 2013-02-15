@@ -3487,45 +3487,50 @@ var quick_user_info = {
 	
 	activated : function() {
 
-		$('.topichead').closest('table').mouseenter(function() {
+		$('.topichead').closest('table').each(function() {
 
-			if ($(this).not('.quick_user_info'))
-			{
-				//Place info image
-			    $(this).addClass('quick_user_info').find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
-			}
-		    
-		    $(this).append('<div class=\"infobox\"></div>');
+			//Do not add the mouseenter function again if the element already has it
+			if(!$(this).data('events')) {
 
-		    //Add EventListener
-		    $('img.ext_quick_user_info_btn').click(function(e) {
+				$($(this)).mouseenter(function() {
+				if ($(this).not('.quick_user_info'))
+				{
+					//Place info image
+				    $(this).addClass('quick_user_info').find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
+				}
+			    $(this).append('<div class=\"infobox\"></div>');
 
-		    	//Get user profile URL
-				var url = $(this).closest("tr").find('td:eq(0) td:eq(1) a').attr('href');
+			    //Add EventListener
+			    $('img.ext_quick_user_info_btn').click(function(e) {
 
-				//Fix for vip, non vip topichead height
-				var th_height = $(this).closest('.topichead').css('height').replace('px', '');
+			    	//Get user profile URL
+					var url = $(this).closest("tr").find('td:eq(0) td:eq(1) a').attr('href');
 
-				//Get topichead pos from the top of the page
-				var fromTop = $(this).parents('.topichead').offset().top;
-				
-				var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
+					//Fix for vip, non vip topichead height
+					var th_height = $(this).closest('.topichead').css('height').replace('px', '');
 
-				//Show infobox
-				$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
+					//Get topichead pos from the top of the page
+					var fromTop = $(this).parents('.topichead').offset().top;
+					
+					var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 
-				//Show user information in infobox
-			    $('.infobox').load(url + " .std1 table"); 
-			});
+					//Show infobox
+					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
 
-		}).mouseleave(function() {
+					//Show user information in infobox
+				    $('.infobox').load(url + " .std1 table"); 
 
-			//Remove info image and infobox on mouseleave
-		    $(this).find(".ext_quick_user_info_btn").parent().remove();		    
-		    $(this).find(".infobox").remove();
+				});
+
+				}).mouseleave(function() {
+
+					//Remove info image and infobox on mouseleave
+				    $(this).find(".ext_quick_user_info_btn").parent().remove();		    
+				    $(this).find(".infobox").remove();
+				});
+			};
 		});
 	}
-
 };
 
 var better_yt_embed = {
