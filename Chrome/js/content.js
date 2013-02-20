@@ -3504,7 +3504,7 @@ var quick_user_info = {
 			    $('img.ext_quick_user_info_btn').click(function(e) {
 
 			    	//Get user profile URL
-					var url = $(this).closest("tr").find('td:eq(0) td:eq(1) a').attr('href');
+					var url = $(this).closest("tr").find('a[href^="forumuserinfo"]').attr('href');
 
 					//Fix for vip, non vip topichead height
 					var th_height = $(this).closest('.topichead').css('height').replace('px', '');
