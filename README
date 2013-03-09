@@ -44,6 +44,8 @@ A bővítmény funkciói:
 	- Topikba érkező üzenetek automatikus kinyerése
 	- Felhasználói profilcsoportok
 	- Beállítások szinkronizálása
+	- Topikon belül lekérhető a felhasználó adatlapja
+    - YouTube videókat nem tölti be egyből, hogy ha sok videó van egy oldalon zökkenőmentes legyen az oldalbetöltés (szabályozható)
 
 Credits:
 	Fejlesztő: Gera János "dzsani", http://kreaturamedia.com
