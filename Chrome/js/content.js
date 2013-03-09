@@ -89,14 +89,14 @@ var jump_unreaded_messages = {
 				var page = Math.ceil( newMsg / 80 );
 				
 				// Rewrite the url
-				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
+				$(this).prop('href', $(this).prop('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
 			
 			// Remove newmsg var from link
-			} else if( $(this).attr('href').indexOf('&order') != -1) {
+			} else if( $(this).prop('href').indexOf('&order') != -1) {
 				
-				var start = $(this).attr('href').indexOf('&order');
+				var start = $(this).prop('href').indexOf('&order');
 				
-				$(this).attr('href', $(this).attr('href').substring(0, start));
+				$(this).prop('href', $(this).prop('href').substring(0, start));
 			}
 		});
 	},
@@ -105,11 +105,11 @@ var jump_unreaded_messages = {
 	
 		$('.ext_faves').next().find('a').each(function() {
 			
-			if( $(this).attr('href').indexOf('&order') != -1) {
+			if( $(this).prop('href').indexOf('&order') != -1) {
 				
-				var start = $(this).attr('href').indexOf('&order');
+				var start = $(this).prop('href').indexOf('&order');
 				
-				$(this).attr('href', $(this).attr('href').substring(0, start));
+				$(this).prop('href', $(this).prop('href').substring(0, start));
 			}
 		});
 	},
@@ -135,13 +135,13 @@ var jump_unreaded_messages = {
 			var target = $('a[name=pirosvonal]').prev();
 			
 				// Insert the horizontal rule
-				$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+				$('<hr>').insertAfter(target).prop('id', 'ext_unreaded_hr');
 				
 		} else {
 			var target = $('.topichead').closest('center').eq(lastMsg-1);
 			
 			// Insert the horizontal rule
-			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+			$('<hr>').insertAfter(target).prop('id', 'ext_unreaded_hr');
 		}
 		
 		// Append hr tag content if any
@@ -263,14 +263,14 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
 		// Apply some styles
-		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+		$('#ext_show_filtered_faves_arrow').prop('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').die('click').live('click', function() {
+		$('#ext_show_filtered_faves').off('click').on('click', function() {
 		
 			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
-				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
+				$('#ext_show_filtered_faves_arrow').prop('class', 'hide');
 				$('.ext_hidden_fave').show();
 				
 				fav_show_only_unreaded.opened = true;
@@ -285,7 +285,7 @@ var fav_show_only_unreaded = {
 			
 			} else {
 				$('#ext_filtered_faves_error').show();
-				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+				$('#ext_show_filtered_faves_arrow').prop('class', 'show');
 				$('.ext_hidden_fave').hide();
 				
 				fav_show_only_unreaded.opened = false;
@@ -303,7 +303,7 @@ var fav_show_only_unreaded = {
 		// Check opened status
 		if(fav_show_only_unreaded.opened == true) {
 			$('#ext_filtered_faves_error').hide();
-			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
+			$('#ext_show_filtered_faves_arrow').prop('class', 'hide');
 			$('.ext_hidden_fave').show();
 		}
 	},
@@ -382,7 +382,7 @@ var blocklist =  {
 
 			} else {
 			
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").prop("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
@@ -399,10 +399,10 @@ var blocklist =  {
 		var nick = '';
 
 		var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
-		var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
+		var tmpUrl = anchor.prop('href').replace('http://www.sg.hu/', '');
 
 		if(anchor.children('img').length > 0) {
-			nick = anchor.children('img').attr('title').replace(" - VIP", "");
+			nick = anchor.children('img').prop('title').replace(" - VIP", "");
 	
 		} else {
 			nick = anchor.html().replace(" - VIP", "");
@@ -438,7 +438,7 @@ var blocklist =  {
 				var nick = $(this).find('a:first').html();
 			} else {
 			
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").prop("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 
@@ -494,7 +494,7 @@ var autoload_next_page = {
 			autoload_next_page.currPage = 1;
 			
 			// Get topic ID
-			var topic_id = $('.std2 a').attr('href').split('?id=')[1];
+			var topic_id = $('.std2 a').prop('href').split('?id=')[1];
 			
 			// Get the topic page to determinate max page number
 			$.ajax({
@@ -537,7 +537,7 @@ var autoload_next_page = {
 	
 	disabled : function() {
 		
-		$(document).unbind('scroll');
+		$(document).off('scroll');
 	},
 	
 	load : function() {
@@ -553,7 +553,7 @@ var autoload_next_page = {
 			if(document.location.href.match('cikkek')) {
 			
 				// Get topic ID
-				var topic_id = $('.std2 a').attr('href').split('?id=')[1];		
+				var topic_id = $('.std2 a').prop('href').split('?id=')[1];		
 				
 				// Url to call	
 				var url = 'listazas.php3?id='+topic_id;
@@ -836,7 +836,7 @@ var show_navigation_buttons = {
 		var clone = $('.std1:last').find('form').clone().appendTo('body'); /* $('.lapozo:last').next().next() nem működik*/
 		
 		// Add class
-		clone.attr('id', 'ext_overlay_search');
+		clone.prop('id', 'ext_overlay_search');
 		
 		// Set position
 		show_navigation_buttons.findArrowPosition( $('#ext_overlay_search_arrow'), $('#ext_search') );
@@ -1017,7 +1017,7 @@ var update_fave_list = {
 	refresh : function() {
 		
 		// Set 'in progress' icon
-		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );	
+		$('#ext_refresh_faves img').prop('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );	
 		
 		$.ajax({
 			url : 'ajax/kedvencdb.php',
@@ -1025,11 +1025,11 @@ var update_fave_list = {
 			success : function(data) {
 
 				// Set 'completed' icon
-				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
+				$('#ext_refresh_faves img').prop('src', chrome.extension.getURL('/img/content/refresh_done.png') );
 				
 				// Set back the normal icon in 1 sec
 				setTimeout(function() {
-					$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh.png') );
+					$('#ext_refresh_faves img').prop('src', chrome.extension.getURL('/img/content/refresh.png') );
 				}, 2000);
 				
 				// Append new fave list
@@ -1087,7 +1087,7 @@ var make_read_all_faves = {
 		if(confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
 			
 			// Set 'in progress' icon
-			$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
+			$('#ext_read_faves img').prop('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
 			
 			var count = 0;
 			var counter = 0;
@@ -1124,7 +1124,7 @@ var make_read_all_faves = {
 				var ele = $(this);
 				
 				// Make an ajax query to refresh last readed time
-				$.get( $(this).attr('href'), function() {
+				$.get( $(this).prop('href'), function() {
 					
 					$(ele).find('font').remove();
 					$(ele).find('.ext_short_comment_marker').remove();
@@ -1142,11 +1142,11 @@ var make_read_all_faves = {
 				if(count == counter) {
 					
 					// Set 'completed' icon
-					$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_done.png') );
+					$('#ext_read_faves img').prop('src', chrome.extension.getURL('/img/content/makereaded_done.png') );
 			
 					// Set normal icon
 					setTimeout(function() {
-						$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded.png') );
+						$('#ext_read_faves img').prop('src', chrome.extension.getURL('/img/content/makereaded.png') );
 					}, 2000);
 					
 					// Faves: show only with unreaded messages
@@ -1171,13 +1171,13 @@ var make_read_all_faves = {
 
 
 function replyTo() {
-	$('.msg-replyto a').live('click', function(e) {
+	$('.msg-replyto a').on('click', function(e) {
 	
 		// Prevent default submisson
 		e.preventDefault();
 		
 		// Get original link params
-		var _params = $(this).attr('href').split(':');
+		var _params = $(this).prop('href').split(':');
 		
 		// Run replacement funciton
 		eval('ext_'+_params[1]+'');
@@ -1202,7 +1202,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 			// Maintain style settings
 			if(document.location.href.match('cikkek')) {
-				$('#'+target).find('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+				$('#'+target).find('.b-h-o-head a').closest('.b-h-o-head').prop('class', 'b-h-o-head topichead');
 				$('#'+target).find('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
 				$('#'+target).find('.b-h-o-head .msg-dateicon a').css('color', '#444');
 			}
@@ -1240,17 +1240,17 @@ var overlay_reply_to = {
 	activated : function() {
 	
 		// Change tabindexes for suit the overlay textarea
-		$('textarea:first').attr('tabindex', '3');
-		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
+		$('textarea:first').prop('tabindex', '3');
+		$('textarea:first').closest('div').find('a:last').prop('tabindex', '4');
 		
 		// Change the behavior the replyto button
-		$('.topichead a:contains("válasz")').live('click', function(e) {
+		$('.topichead a:contains("válasz")').on('click', function(e) {
 			
 			// Prevent default submission
 			e.preventDefault();
 
 			// Get ref msg ID and comment element
-			var msgno = $(this).attr('href').match(/\d+/g);
+			var msgno = $(this).prop('href').match(/\d+/g);
 			var entry = $(this).closest('center');
 
 			// Call show method
@@ -1260,7 +1260,7 @@ var overlay_reply_to = {
 	
 	disabled : function() {
 	
-		$('.topichead a:contains("válasz")').die('click');
+		$('.topichead a:contains("válasz")').off('click');
 	
 	},
 	
@@ -1442,10 +1442,10 @@ var overlay_reply_to = {
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
 			
 		// Change textarea name attr to avoid conflicts
-		$('form[name=newmessage]:gt(0)').attr('name', 'tmp');
+		$('form[name=newmessage]:gt(0)').prop('name', 'tmp');
 		
 		// Set msg no input
-		textarea_clone.find('input[name=no_ref]').attr('value', msgno);
+		textarea_clone.find('input[name=no_ref]').prop('value', msgno);
 		
 		// Autoscroll
 		var pageBottom	= $(window).scrollTop() + $(window).height();
@@ -1457,8 +1457,8 @@ var overlay_reply_to = {
 		}
 
 		// Set the right tabindex
-		textarea_clone.find('textarea').attr('tabindex', '1');
-		textarea_clone.find('a:last').attr('tabindex', '2');
+		textarea_clone.find('textarea').prop('tabindex', '1');
+		textarea_clone.find('a:last').prop('tabindex', '2');
 
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
@@ -1490,11 +1490,11 @@ var overlay_reply_to = {
 		textarea_clone.find('a.thickbox').each(function() {
 			
 			// Get the title and other stuff
-			var t = $(this).attr('title') || $(this).attr('name') || null;
-			var g = $(this).attr('rel') || false;
-			var h = $(this).attr('href');
+			var t = $(this).prop('title') || $(this).prop('name') || null;
+			var g = $(this).prop('rel') || false;
+			var h = $(this).prop('href');
 			
-			$(this).attr('href', 'javascript:TB_show(\''+t+'\',\''+h+'\','+g+');');
+			$(this).prop('href', 'javascript:TB_show(\''+t+'\',\''+h+'\','+g+');');
 			
 			$(this).blur();
 		});
@@ -1516,13 +1516,13 @@ var overlay_reply_to = {
 					$(this).remove();
 					$('.ext_hidden_layer').fadeTo(300, 0, function() {
 						$(this).remove();
-						$('form[name=tmp]:first').attr('name', 'newmessage');
+						$('form[name=tmp]:first').prop('name', 'newmessage');
 						
 						// Set back opened status
 						overlay_reply_to.opened = false;
 						
 						// Remove keydown event
-						$('body').unbind('keydown');
+						$('body').off('keydown');
 					});
 				});
 			});
@@ -1596,11 +1596,11 @@ var threaded_comments = {
 			$('<span class="thread_next">&raquo;</span>').insertAfter( $('.ext_new_comment') );
 			
 			// Bind events
-			$('.thread_prev').live('click', function() {
+			$('.thread_prev').on('click', function() {
 				threaded_comments.prev(this);
 			});
 
-			$('.thread_next').live('click', function() {
+			$('.thread_next').on('click', function() {
 				threaded_comments.next(this);
 			});
 		}
@@ -1738,10 +1738,10 @@ var fetch_new_comments_in_topic = {
 	
 	rewrite : function() {
 	
-		var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
+		var topic_url = $('#ujhszjott a').prop('href').substring(0, 27);
 		var comment_c = $('#ujhszjott a').text().match(/\d+/g);
 			
-		$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
+		$('#ujhszjott a').prop('href',  topic_url + '&newmsg=' + comment_c);
 	},
 	
 	fetch : function() {
@@ -1833,11 +1833,11 @@ var show_mentioned_comments = {
 		$('a[href*="hszmutat"]:not(.checked)').each(function() {
 			
 			// Remove original event
-			$(this).attr('class', 'ext_mentioned').addClass('checked');
+			$(this).prop('class', 'ext_mentioned').addClass('checked');
 		});
 		
 		// Attach click events
-		$('.ext_mentioned').unbind('click').click(function(e) {
+		$('.ext_mentioned').off('click').click(function(e) {
 		
 			// Prevent browser default submission
 			e.preventDefault();
@@ -1854,7 +1854,7 @@ var show_mentioned_comments = {
 		
 		if(document.location.href.match('cikkek')) {
 		
-			var id = $('.std2 a').attr('href').split('?id=')[1];
+			var id = $('.std2 a').prop('href').split('?id=')[1];
 		
 		} else {
 	
@@ -1864,7 +1864,7 @@ var show_mentioned_comments = {
 				id = id.split('&')[0];
 		}
 
-		var target = $(ele).next().attr('id');
+		var target = $(ele).next().prop('id');
 		
 		if(document.location.href.match('cikkek')) {
 			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);");
@@ -1912,7 +1912,7 @@ var custom_blocks = {
 		$('#ext_left_sidebar .b-h-o-head, #ext_right_sidebar .b-h-b-head').parent().each(function() {
 			
 			// Set the ID
-			$(this).attr('class', 'ext_block').attr('id', 'block-'+counter);
+			$(this).prop('class', 'ext_block').prop('id', 'block-'+counter);
 			
 			// Increase the counter
 			counter++;
@@ -1929,7 +1929,7 @@ var custom_blocks = {
 			
 			var tmp = {
 				
-				id 			: $(this).attr('id'),
+				id 			: $(this).prop('id'),
 				visibility	: true,
 				contentHide	: false,
 				side		: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
@@ -1990,9 +1990,9 @@ var custom_blocks = {
 			
 			var tmp = {
 				
-				id 			: $(this).attr('id'),
-				visibility	: custom_blocks.getConfigValByKey($(this).attr('id'), 'visibility'),
-				contentHide	: custom_blocks.getConfigValByKey($(this).attr('id'), 'contentHide'),
+				id 			: $(this).prop('id'),
+				visibility	: custom_blocks.getConfigValByKey($(this).prop('id'), 'visibility'),
+				contentHide	: custom_blocks.getConfigValByKey($(this).prop('id'), 'contentHide'),
 				side		: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
 				index 		: index
 			};
@@ -2037,12 +2037,12 @@ var custom_blocks = {
 		// Maintain style settings
 		$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
 		$('#ext_left_sidebar').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-		$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').prop('src', 'images/ful_o_l.png');
 
 		// Maintain style settings
 		$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
 		$('#ext_right_sidebar').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+		$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').prop('src', 'images/ful_b_l.png');
 		
 		
 		// Fix welcome block for private messages
@@ -2059,37 +2059,37 @@ var custom_blocks = {
 			// Contenthide
 			$('<img src="'+chrome.extension.getURL('/img/blocks/minimalize.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				custom_blocks.contentHide( $(this).closest('div').attr('id'), true );
+				custom_blocks.contentHide( $(this).closest('div').prop('id'), true );
 			});
 
 			// Hide
 			$('<img src="'+chrome.extension.getURL('/img/blocks/close.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				custom_blocks.hide( $(this).closest('div').attr('id'), true );
+				custom_blocks.hide( $(this).closest('div').prop('id'), true );
 			});
 			
 
 			// Down
 			$('<img src="'+chrome.extension.getURL('/img/blocks/down.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				custom_blocks.down( $(this).closest('div').attr('id'), true );
+				custom_blocks.down( $(this).closest('div').prop('id'), true );
 			});
 
 			// Up
 			$('<img src="'+chrome.extension.getURL('/img/blocks/up.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				custom_blocks.up( $(this).closest('div').attr('id'), true );
+				custom_blocks.up( $(this).closest('div').prop('id'), true );
 			});						
 
 			// Right
 			$('<img src="'+chrome.extension.getURL('/img/blocks/right.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				custom_blocks.right( $(this).closest('div').attr('id'), true );
+				custom_blocks.right( $(this).closest('div').prop('id'), true );
 			});			
 			// Left
 			$('<img src="'+chrome.extension.getURL('/img/blocks/left.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				custom_blocks.left( $(this).closest('div').attr('id'), true );
+				custom_blocks.left( $(this).closest('div').prop('id'), true );
 			});
 
 		});
@@ -2144,7 +2144,7 @@ var custom_blocks = {
 			// Maintain style settings
 			$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
 			$('#ext_left_sidebar').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-			$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+			$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').prop('src', 'images/ful_o_l.png');
 		
 			// Store data in localStorage
 			custom_blocks.reindexOrderConfig();
@@ -2162,7 +2162,7 @@ var custom_blocks = {
 			// Maintain style settings
 			$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
 			$('#ext_right_sidebar').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-			$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+			$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').prop('src', 'images/ful_b_l.png');
 	
 			// Store data in localStorage
 			custom_blocks.reindexOrderConfig();
@@ -2491,7 +2491,7 @@ var wysiwyg_editor = {
 
 			e.preventDefault();
 				
-			var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+			var tag = $(this).prop('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
 	
 			var bhtml = '[#' + tag + ']';
 			var ihtml = '<img src="/kep/faces/' + tag + '.gif">';
@@ -2626,12 +2626,12 @@ var message_center = {
 		
 		// Maintain styles, remove active style 
 		$('.ext_mc_tabs').removeClass('b-h-o-head').addClass('b-h-b-head');
-		$('.ext_mc_tabs').find('img[src*="ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+		$('.ext_mc_tabs').find('img[src*="ful_o_l.png"]').prop('src', 'images/ful_b_l.png');
 		$('.ext_mc_tabs').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
 		
 		// Maintain styles, add active style 
 		$('.ext_mc_tabs').eq(n).removeClass('b-h-b-head').addClass('b-h-o-head');
-		$('.ext_mc_tabs').eq(n).find('img[src*="ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		$('.ext_mc_tabs').eq(n).find('img[src*="ful_b_l.png"]').prop('src', 'images/ful_o_l.png');
 		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
 		
 		// Store last selected tag for initial status
@@ -2755,7 +2755,7 @@ var message_center = {
 					var topic_name = $('.cikk-title:first').html();
 			
 					// Get topic ID
-					var topic_id	= $('.std2:last a').attr('href');
+					var topic_id	= $('.std2:last a').prop('href');
 						topic_id	= topic_id.split('?id=')[1];
 				
 				// Topic
@@ -2894,7 +2894,7 @@ var message_center = {
 
 						for(c = 0; c < TmpAnswers.length; c++) {
 							
-							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
+							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").prop("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
 								nick = nick.replace(/ - VIP/, "");
 							
 							var message = $(TmpAnswers[c]).find('.maskwindow').html();
@@ -3134,7 +3134,7 @@ var topic_whitelist = {
 			$(ele).html('-');
 			
 			// Change status title
-			$(ele).attr('title', 'Téma eltávolítása a fehérlistából');
+			$(ele).prop('title', 'Téma eltávolítása a fehérlistából');
 
 			// Add to config
 			port.postMessage({ name : "addTopicToWhitelist", message : id });
@@ -3146,7 +3146,7 @@ var topic_whitelist = {
 			$(ele).html('+');
 
 			// Change status title
-			$(ele).attr('title', 'Téma hozzáadása a fehérlistához');
+			$(ele).prop('title', 'Téma hozzáadása a fehérlistához');
 
 			// Remove from config
 			port.postMessage({ name : "removeTopicFromWhitelist", message : id });
@@ -3165,7 +3165,7 @@ var textarea_auto_resize = {
 		$('<div id="ext_textheight"></div>').prependTo('body');
 		
 		// Create the keyup event
-		$('form[name="newmessage"] textarea').live('keyup', function() {
+		$('form[name="newmessage"] textarea').on('keyup', function() {
 			textarea_auto_resize.setHeight(this);
 		});
 		
@@ -3215,7 +3215,7 @@ var disable_point_system = {
 		$('.topichead .ertekelkep, .topichead span[id*="rates"]').hide();
 		$('.msg-text').show();
 		$('.msg-text').each(function() {
-			if( $(this).next().attr('id') == 'leful') {
+			if( $(this).next().prop('id') == 'leful') {
 				$(this).next().hide();
 			}
 		});
@@ -3254,7 +3254,7 @@ var profiles = {
 
 			} else {
 
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").prop("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
@@ -3343,7 +3343,7 @@ var add_to_list = {
 		});
 
 		// Create dropdown event
-		$('.ext_dropdown').die().live('click', function() {
+		$('.ext_dropdown').off().on('click', function() {
 			
 			if( $(this).find('ul').css('display') == 'none') {
 				$(this).find('ul').css('top', $(this).closest('.topichead').height() ).slideDown();
@@ -3358,13 +3358,13 @@ var add_to_list = {
 		add_to_list.buildList();
 
 		// Create events for blocklist
-		$('.ext_addtoblocklist').die().live('click', function() {
+		$('.ext_addtoblocklist').off().on('click', function() {
 			blocklist.block(this);
 		});
 		
 		// Create events for lists
-		$('.ext_addtolist').die().live('click', function() {
-			add_to_list.addToList( $(this).attr('class').match(/\d+/g), this );
+		$('.ext_addtolist').off().on('click', function() {
+			add_to_list.addToList( $(this).prop('class').match(/\d+/g), this );
 		});
 	},
 	
@@ -3405,7 +3405,7 @@ var add_to_list = {
 		var anchor = $(ele).closest('.topichead').find('a[href*="forumuserinfo.php"]');
 
 		if(anchor.children('img').length > 0) {
-			var nick = anchor.children('img').attr('title').replace(" - VIP", "");
+			var nick = anchor.children('img').prop('title').replace(" - VIP", "");
 	
 		} else {
 			var nick = anchor.html().replace(" - VIP", "");
@@ -3437,7 +3437,7 @@ var add_to_list = {
 
 			} else {
 			
-				var nick_2 = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick_2 = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").prop("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
 					nick_2 = nick_2.replace(/ - VIP/, "");
 			}
 			
@@ -3645,7 +3645,7 @@ function extInit() {
 		setPredefinedVars();
 
 		// Maintain style settings
-		$('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+		$('.b-h-o-head a').closest('.b-h-o-head').prop('class', 'b-h-o-head topichead');
 		$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
