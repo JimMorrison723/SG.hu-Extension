@@ -2477,6 +2477,7 @@ var wysiwyg_editor = {
 			html += '<img src="/kep/faces/gonosz1.gif" alt=""> ';
 			html += '<img src="/kep/faces/oooo.gif" alt=""> ';
 			html += '<img src="/kep/faces/integet2.gif" alt=""> ';
+			html += '<img src="/kep/faces/wilting.gif" border="0"> ';
 
 
 		html += '</div>';
