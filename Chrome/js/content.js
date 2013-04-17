@@ -3513,6 +3513,13 @@ var quick_user_info = {
 					//Get topichead pos from the top of the page
 					var fromTop = $(this).parents('.topichead').offset().top;
 					
+					//If "highlight_comments_for_me" is on we need to change the fromTop to the comment position
+					if ($(this).closest('center').css('position') !== 'static')
+					{
+						//Correct according a default padding on the messages
+						fromTop = $(this).closest('.topichead').parent('div').css('padding-top').replace('px', '');
+					}
+					
 					var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 
 					//Show infobox
