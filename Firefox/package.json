@@ -1,9 +1,9 @@
 {
 	"id": "jid1-YEB8XVqrOsQYow",
-	"name": "sgforumplus",
-	"fullName": "SG Fórum+",
-	"version": "2.2.0",
-	"author": "Gera János", 
+	"name": "sgforumtuning",
+	"fullName": "SG Fórum tuning",
+	"version": "3.0",
+	"author": "JimMorrison723", 
     "description": "Az SG.hu nemhivatalos Firefox bővítménye", 
     "license": "MIT"
 }
