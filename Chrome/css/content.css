@@ -318,6 +318,22 @@
 	border-width: 4px;	
 }
 
+#ext_nightmode {
+	width: 26px;
+	height: 26px;
+	position: fixed;
+	bottom: 28px;
+	left: 10px;
+	background-color: #bbb;
+	border-radius: 5px;
+	font: normal normal normal 14px/26px Arial;
+	cursor: pointer;
+	opacity: 0.6;
+	z-index: 90;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
 /* Overlay commentbox */
 .ext_hidden_layer {
 	width: 100%;
@@ -696,4 +712,36 @@ textarea[name="message"] {
 	z-index: 500;
 	-webkit-box-shadow: 0px 5px 10px;
 	box-shadow: #666 0px 5px 10px;
+}
+
+/* NIGHT MODE */ 
+.night_body {
+
+}
+
+.night_mainTable {
+	background-color: rgb(20, 20, 20);
+	background-image: none;
+}
+
+.night_topichead {
+	opacity: 0.7;
+}
+
+.night_p {
+	color: rgb(119, 119, 119) !important;
+	background-color: rgb(20, 20, 20) !important;
+	background-image: none;
+}
+
+.night_p a {
+	color: #F0DC82 !important;
+}
+
+.night_bottom {
+	border-top: 1px solid #333 !important;
+}
+
+.night_replyto {
+	color: #CC7722 !important;
 }

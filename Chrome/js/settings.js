@@ -36,8 +36,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.0.5.1<br></p>';
-				html += '<p>Kiadás dátuma: 2013. 02. 15.</p>';
+				html += '<p>Verzió: 3.0.6.3<br></p>';
+				html += '<p>Kiadás dátuma: 2013. 05. 05.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -136,6 +136,9 @@ var cp = {
 							html += '<option value="rightbottom">Jobb alul</option>';
 						html += '</select>';
 					html += '</p>';
+					html += '<p class="sub">';
+						html += '<label><input type="checkbox" id="show_navigation_buttons_night"> Éjszakai / szemkímélő mód kapcsoló</label><br>';
+					html += '</p>';
 					html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
 					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
@@ -171,6 +174,11 @@ var cp = {
 					html += '</p>';
 					html += '<div class="button" id="better_yt_embed"></div>';
 				html += '</div>';
+/*				html += '<div>';
+					html += '<h3>Gyors beszúrás</h3>';
+					html += '<p>Kommentíró mezőbe vágólapról másoláskor a linkeket, képeket, videókat automatikusan beilleszti.</p>';
+					html += '<div class="button" id="quick_insertion"></div>';
+				html += '</div>';*/
 			html += '</div>';
 
 			html += '<div class="settings_page">';

@@ -17,7 +17,9 @@
 			if( typeof localStorage['blocks_config']						== 'undefined') localStorage['blocks_config']						= '';
 			if( typeof localStorage['hide_blocks_buttons']					== 'undefined') localStorage['hide_blocks_buttons']					= 'false';
 			if( typeof localStorage['show_navigation_buttons']				== 'undefined') localStorage['show_navigation_buttons']				= 'true';
+			if( typeof localStorage['show_navigation_buttons_night']		== 'undefined') localStorage['show_navigation_buttons_night']		= 'false';
 			if( typeof localStorage['navigation_buttons_position']			== 'undefined') localStorage['navigation_buttons_position']			= 'leftcenter';
+			if( typeof localStorage['navigation_button_night_state']		== 'undefined') localStorage['navigation_button_night_state']		= 'false';
 			if( typeof localStorage['remove_ads']							== 'undefined') localStorage['remove_ads']							= 'false';
 			if( typeof localStorage['wysiwyg_editor']						== 'undefined') localStorage['wysiwyg_editor']						= 'false';
 			if( typeof localStorage['topic_whitelist']						== 'undefined') localStorage['topic_whitelist']						= '';
@@ -29,6 +31,7 @@
 			if( typeof localStorage['better_yt_embed']						== 'undefined') localStorage['better_yt_embed']						= 'true';
 			if( typeof localStorage['youtube_embed_limit']					== 'undefined') localStorage['youtube_embed_limit']					= '10';
 			if( typeof localStorage['quick_user_info']						== 'undefined') localStorage['quick_user_info']						= 'false';
+			if( typeof localStorage['quick_insertion']						== 'undefined') localStorage['quick_insertion']						= 'false';
 
 			// Message Center
 			if( typeof localStorage['message_center']						== 'undefined') localStorage['message_center']						= 'false';

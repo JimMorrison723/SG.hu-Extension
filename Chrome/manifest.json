@@ -1,6 +1,6 @@
 {
    "name": "SG Fórum tuning",
-   "version": "3.0.5.1",
+   "version": "3.0.6.3",
    "manifest_version" : 2,
    "description": "Az sg.hu nemhivatalos Chrome bővítménye.",
 
@@ -46,10 +46,13 @@
       "img/content/refresh_waiting.png",
       "img/content/search.png",
       "img/content/star.png",
+      "img/content/background.png",
       "img/settings/button.png",
       "img/settings/icon.png",
       "img/settings/icons.png",
       "img/settings/selected.png",
+      "img/content/lampOn.png",
+      "img/content/lampOff.png",
       "img/icons/icon.png",
       "css/content.css",
       "css/cleditor.css",
