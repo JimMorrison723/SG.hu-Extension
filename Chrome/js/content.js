@@ -639,6 +639,7 @@ var autoload_next_page = {
 				if(dataStore['columnify_comments'] == 'true') {
 					columnify_comments.activated();
 				}
+
 				if(dataStore['quick_user_info'] == 'true') {
 					quick_user_info.activated();
 				}
@@ -650,9 +651,10 @@ var autoload_next_page = {
 						better_yt_embed.activated();
 				}
 
-				if(dataStore['show_navigation_buttons_night'] == 'true') {
-					quick_user_info.activated();
-				}
+				/*//Night mode
+				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+					lights.forum_switchOn();
+				}*/
 		});
 	}
 
@@ -833,12 +835,12 @@ var show_navigation_buttons = {
 					buttons.push('ext_whitelist');
 				}
 
-				if($('#ext_nav_faves').length) {
-					buttons.push('ext_nav_faves');
-				}
-
 				if($('#ext_nightmode').length) {
 					buttons.push('ext_nightmode');
+				}
+
+				if($('#ext_nav_faves').length) {
+					buttons.push('ext_nav_faves');
 				}
 			
 			// Reverse the array order for bottom positioning
@@ -1067,6 +1069,9 @@ var lights = {
 		$('.msg-text > a').css({'color':'#F0DC82 !important'});
 		$('.msg-bottom').addClass('night_bottom')
 		$('.msg-replyto a').css({'color':'#CC7722 !important'});
+		$('#bottom-navig').addClass('night_bottom');
+		$('#msg-head').addClass('night_msg-head');
+		$('#footer-top').css({'opacity':'0.1'});
 	},
 	
 	topic_switchOff : function() {
@@ -1079,20 +1084,36 @@ var lights = {
 		$('.msg-text a').removeClass('night_p a');
 		$('.msg-bottom').removeClass('night_bottom');
 		$('.msg-replyto').removeClass('night_replyto');
+		$('#msg-head').removeClass('night_msg-head');
+		$('#bottom-navig').removeClass('night_bottom');
 	},
 
 	forum_switchOn : function() {
 
 		$('body').css('background-image', 'url('+chrome.extension.getURL('/img/content/background.png')+')');
 		$('.cikk-2').addClass('night_mainTable');
-		$('#center table').css({'background':'black'});
-		$('#center table tbody tr td[width=1]').css({'opacity':'0.1'});
+		$('#center table:nth-child(3)').css({'background':'black'});
+		$('#center table tbody tr td[width=1]').css({'opacity':'0.2'});
+
+		/*$('#center table:nth-child(1)').css({'background-color':'black'}); //Main menu background*/
+		/*$('#navigmenu a').css({'color':'#F5F5DC'}); */
+
+		$('#center table:nth-child(2)').css({'background':'black'}); //Menu
+
+		//Chat
+		/*setTimeout(function() {*/
+		$('td#chatablak').css({'background':'black', 'color':'#996600'});
+		$('#beiromezo').css({'background':'black', 'color':'rgb(155, 155, 155)'});
+		/*}, 4000);*/
+		
+
 		$('td#ext_left_sidebar').css({'background':'black','border-color':'#333'});
 		$('.night_mainTable table').css({'background':'none black','border-collapse':'collapse'});
 		$('.night_mainTable table tr').removeAttr('onmouseover');
+		$('.td-list2 ').css({'background-image':'url('+chrome.extension.getURL('/img/content/ext_hsep_bg.png')+')'});
 		/*$('td.td-list-over2').css({'background':'#696969'});*/
 		
-		$('table tr').css({'background':'black'});
+		$('#center table:nth-child(3) tr').css({'background':'black'});
 		$('.cikk-bal-etc2').css({'background':'black'});	//Favourites background
 		$('.cikk-bal-etc2 small').css({'color':'#993333'}); //New messege indicator
 		$('.std0 b').css({'color':'#996600'}); 				//Topic heads
@@ -1101,6 +1122,7 @@ var lights = {
 		$('#bottom-navig').css({'background':'none'});
 		$('#bottom-navig li').css({'background':'none'});
 		$('#footer-top').css({'background':'none'});
+
 	}
 }
 
@@ -1354,6 +1376,10 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 			if(dataStore['quick_user_info'] == 'true') {
 				quick_user_info.activated();
+			}
+
+			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+				lights.topic_switchOn();
 			}
 
 		});
@@ -1946,6 +1972,11 @@ var fetch_new_comments_in_topic = {
 					//Quick user info button
 					if(dataStore['quick_user_info'] == 'true') {
 						quick_user_info.activated();
+					}
+
+					//
+					if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+						lights.topic_switchOn();
 					}
 			}
 		});
@@ -3919,6 +3950,7 @@ function extInit() {
 			message_center.init();
 		}
 		
+		//Night mode
 		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 			lights.forum_switchOn();
 		}

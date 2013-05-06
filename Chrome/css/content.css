@@ -735,7 +735,7 @@ textarea[name="message"] {
 }
 
 .night_p a {
-	color: #F0DC82 !important;
+	color: #e1bd1b !important;
 }
 
 .night_bottom {
@@ -744,4 +744,13 @@ textarea[name="message"] {
 
 .night_replyto {
 	color: #CC7722 !important;
+}
+
+.night_msg-head {
+	background-color: rgb(20, 20, 20) !important;
+}
+
+.night_bottom, .night_bottom li {
+	background: url() !important;
+	background-color:rgb(20, 20, 20) !important;
 }
