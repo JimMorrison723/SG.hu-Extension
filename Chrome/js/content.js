@@ -2389,6 +2389,9 @@ var remove_adds = {
 		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
 		$('.std0:contains("Hirdetés")').remove();
 		
+		// Under menu
+		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
+		
 		// Save init time in unix timestamp
 		var time = Math.round(new Date().getTime() / 1000)
 
