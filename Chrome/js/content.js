@@ -764,7 +764,7 @@ var show_navigation_buttons = {
 		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
 			var state = dataStore['navigation_button_night_state'];
-				console.log("topik:" + dataStore['navigation_button_night_state']);
+				//console.log("topik:" + dataStore['navigation_button_night_state']);
 
 			if (state == "true") {
 				state = "On"
@@ -1060,7 +1060,7 @@ var show_navigation_buttons = {
 var lights = {
 
 	topic_switchOn : function() {
-	
+
 		$('body').css('background-image', 'url('+chrome.extension.getURL('/img/content/background.png')+')');
 		$('#center > table').addClass('night_mainTable');
 		$('.oldal-path-2').addClass('night_mainTable');
@@ -1092,7 +1092,8 @@ var lights = {
 
 		$('body').css('background-image', 'url('+chrome.extension.getURL('/img/content/background.png')+')');
 		$('.cikk-2').addClass('night_mainTable');
-		$('#center table:nth-child(3)').css({'background':'black'});
+		//$('#center table:nth-child(3)').css({'background':'black'});
+		$('#center > table[width=850]').css({'background':'black'});
 		$('#center table tbody tr td[width=1]').css({'opacity':'0.2'});
 
 		/*$('#center table:nth-child(1)').css({'background-color':'black'}); //Main menu background*/
