@@ -1,9 +1,12 @@
 {
-	"id": "jid1-YEB8XVqrOsQYow",
-	"name": "sgforumtuning",
-	"fullName": "SG Fórum tuning",
-	"version": "3.0",
-	"author": "JimMorrison723", 
-    "description": "Az SG.hu nemhivatalos Firefox bővítménye", 
-    "license": "MIT"
+	"license": "",
+	"description": "",
+	"contributors": [],
+	"author": "JimMorrison723",
+	"url": "",
+	"dependencies": ["api-utils", "addon-kit"],
+	"version": "initial.rev125", "lib": "lib",
+	"fullName": "SG_forum_tuning", "main": "main",
+	"id": "jid0-lXuvrBz88C18gU77Igt8aau7ZyY",
+	"name": "sg_forum_tuning"
 }
