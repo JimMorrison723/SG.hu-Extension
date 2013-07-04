@@ -1,0 +1,67 @@
+{
+   "name": "SG Fórum tuning",
+   "version": "3.0.6.5",
+   "manifest_version" : 2,
+   "description": "Az sg.hu nemhivatalos Opera bővítménye.",
+
+   "background": {
+      "scripts" : ["js/background.js"]
+   },
+
+   "page_action": {
+      "default_icon": "img/icons/icon.png",
+      "default_title": "SG Fórum tuning"
+   },
+
+   "content_scripts": [{
+      "matches" : [ "http://www.sg.hu/*", "http://sg.hu/*" ],
+      "js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/settings.js", "js/cleditor.js", "js/cleditor_bbcode.js", "js/date.js", "js/content.js" ],
+      "css" : ["css/content.css", "css/cleditor.css", "css/settings.css"],
+      "run_at" : "document_start",
+      "all_frames": false
+   }],
+
+   "icons" : {
+      "16" : "img/icons/icon.png",
+      "48": "img/icons/icon.png",
+      "128": "img/icons/icon.png"
+   },
+   "web_accessible_resources": [
+      "img/blocks/close.png",
+      "img/blocks/down.png",
+      "img/blocks/left.png",
+      "img/blocks/right.png",
+      "img/blocks/minimalize.png",
+      "img/blocks/up.png",
+      "img/cleditor/buttons.gif",
+      "img/cleditor/toolbar.gif",
+      "img/content/comments_for_me_indicator.png",
+      "img/content/info.png",
+      "img/content/makereaded.png",
+      "img/content/makereaded_done.png",
+      "img/content/makereaded_waiting.png",
+      "img/content/overlay_close.png",
+      "img/content/refresh.png",
+      "img/content/refresh_done.png",
+      "img/content/refresh_waiting.png",
+      "img/content/search.png",
+      "img/content/star.png",
+      "img/content/background.png",
+      "img/content/ext_hsep_bg.png",
+      "img/settings/button.png",
+      "img/settings/icon.png",
+      "img/settings/icons.png",
+      "img/settings/selected.png",
+      "img/content/lampOn.png",
+      "img/content/lampOff.png",
+      "img/icons/icon.png",
+      "css/content.css",
+      "css/cleditor.css",
+      "css/settings.css"
+   ],
+   "permissions": [
+      "http://www.sg.hu/",
+      "http://sg.hu/",
+      "http://sgsync.dev.kreatura.hu/"
+   ]
+}
