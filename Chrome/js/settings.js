@@ -36,7 +36,7 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.0.6.5<br></p>';
+				html += '<p>Verzió: 3.0.7<br></p>';
 				html += '<p>Kiadás dátuma: 2013. 07. 01.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
@@ -174,11 +174,11 @@ var cp = {
 					html += '</p>';
 					html += '<div class="button" id="better_yt_embed"></div>';
 				html += '</div>';
-/*				html += '<div>';
+				html += '<div>';
 					html += '<h3>Gyors beszúrás</h3>';
 					html += '<p>Kommentíró mezőbe vágólapról másoláskor a linkeket, képeket, videókat automatikusan beilleszti.</p>';
 					html += '<div class="button" id="quick_insertion"></div>';
-				html += '</div>';*/
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';

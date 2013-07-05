@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	
+    
 	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 
 		// Welcome block

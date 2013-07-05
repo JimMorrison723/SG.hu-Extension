@@ -1,4 +1,4 @@
-﻿/**
+/**
  @preserve CLEditor BBCode Plugin v1.0.0
  http://premiumsoftware.net/cleditor
  requires CLEditor v1.3.0 or later
@@ -43,7 +43,7 @@
   // BBCode only supports a small subset of HTML, so remove
   // any toolbar buttons that are not currently supported.
   $.cleditor.defaultOptions.controls =
-	"bold italic underline | size color removeformat | " +
+    "bold italic underline | size color removeformat | " +
 	"alignleft center alignright | " +
 	"image link unlink | undo redo pastetext source";
 
