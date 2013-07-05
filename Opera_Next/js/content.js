@@ -1324,10 +1324,10 @@ function replyTo() {
 		e.preventDefault();
 		
 		// Get original link params
-		var _params = $(this).attr('href').split(':');
+		var _params = $(this).attr('href').match(/(msg)?\d+/g); 
 		
 		// Run replacement funciton
-		eval('ext_'+_params[1]+'');
+		ext_valaszmsg(_params[0], _params[1], _params[2], _params[3]); 
 	});
 }
 

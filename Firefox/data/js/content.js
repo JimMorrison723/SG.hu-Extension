@@ -1221,11 +1221,11 @@ function replyTo() {
 		e.preventDefault();
 		
 		// Get original link params
-		var _params = $(this).attr('href').split(':');
-		
+		var _params = $(this).attr('href').match(/(msg)?\d+/g); 
+
 		// Run replacement funciton
-		//eval('ext_'+_params[1]+'');
-        _params[1].val().replace('valaszmsg','ext_valaszmsg');
+        ext_valaszmsg(_params[0], _params[1], _params[2], _params[3]); 
+        
 	});
 }
 
@@ -1928,9 +1928,9 @@ var show_mentioned_comments = {
 		var target = $(ele).closest('.msg-text').next().next().attr('id');
 		
 		if(document.location.href.match('cikkek')) {
-			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);"); //Csere
+            ext_valaszmsg('"+target+"', "+id+", "+no+", 1);
 		} else {
-			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);"); //Csere
+            ext_valaszmsg('"+target+"', "+id+", "+no+", 2);
 		}
 	}
 };
