@@ -266,7 +266,7 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').die('click').live('click', function() {
+		$('#ext_show_filtered_faves').off('click').on('click', function() {
 		
 			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
@@ -1316,23 +1316,19 @@ var make_read_all_faves = {
 	}
 };
 
-
 function replyTo() {
-	$('.msg-replyto a').live('click', function(e) {
+	$('.msg-replyto a').on('click', function(e) {
 	
 		// Prevent default submisson
 		e.preventDefault();
 		
 		// Get original link params
-		//var _params = $(this).attr('href').split(':');
-
 		var _params = $(this).attr('href').match(/(msg)?\d+/g); 
 		
 		// Run replacement funciton
 		ext_valaszmsg(_params[0], _params[1], _params[2], _params[3]); 
 	});
 }
-
 
 function ext_valaszmsg(target, id, no, callerid) {
 	
@@ -1401,7 +1397,7 @@ var overlay_reply_to = {
 		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
 		
 		// Change the behavior the replyto button
-		$('.topichead a:contains("válasz")').live('click', function(e) {
+		$('.topichead a:contains("válasz")').on('click', function(e) {
 			
 			// Prevent default submission
 			e.preventDefault();
@@ -1417,7 +1413,7 @@ var overlay_reply_to = {
 	
 	disabled : function() {
 	
-		$('.topichead a:contains("válasz")').die('click');
+		$('.topichead a:contains("válasz")').off('click');
 	
 	},
 	
@@ -1753,11 +1749,11 @@ var threaded_comments = {
 			$('<span class="thread_next">&raquo;</span>').insertAfter( $('.ext_new_comment') );
 			
 			// Bind events
-			$('.thread_prev').live('click', function() {
+			$('.thread_prev').on('click', function() {
 				threaded_comments.prev(this);
 			});
 
-			$('.thread_next').live('click', function() {
+			$('.thread_next').on('click', function() {
 				threaded_comments.next(this);
 			});
 		}
@@ -3331,7 +3327,7 @@ var textarea_auto_resize = {
 		$('<div id="ext_textheight"></div>').prependTo('body');
 		
 		// Create the keyup event
-		$('form[name="newmessage"] textarea').live('keyup', function() {
+		$('form[name="newmessage"] textarea').on('keyup', function() {
 			textarea_auto_resize.setHeight(this);
 		});
 		
@@ -3509,7 +3505,7 @@ var add_to_list = {
 		});
 
 		// Create dropdown event
-		$('.ext_dropdown').die().live('click', function() {
+		$('.ext_dropdown').off().on('click', function() {
 			
 			if( $(this).find('ul').css('display') == 'none') {
 				$(this).find('ul').css('top', $(this).closest('.topichead').height() ).slideDown();
@@ -3524,12 +3520,12 @@ var add_to_list = {
 		add_to_list.buildList();
 
 		// Create events for blocklist
-		$('.ext_addtoblocklist').die().live('click', function() {
+		$('.ext_addtoblocklist').off().on('click', function() {
 			blocklist.block(this);
 		});
 		
 		// Create events for lists
-		$('.ext_addtolist').die().live('click', function() {
+		$('.ext_addtolist').off().on('click', function() {
 			add_to_list.addToList( $(this).attr('class').match(/\d+/g), this );
 		});
 	},
@@ -3783,7 +3779,7 @@ var better_yt_embed = {
 
 			var uw = window.wrappedJSObject;
 			if (window.navigator.vendor.indexOf('Google') >= 0) {
-				var e = document.createElement('div');
+				var e = document.createElement('div');~
 				e.setAttribute('onclick', 'return window;');
 				uw = e.onclick();
 			}
@@ -3802,12 +3798,54 @@ var better_yt_embed = {
 var quick_insertion = {
 
 	activated : function() {
-		$("textarea[name=message]").live('paste',function(e){
-		     var self = this;
-		          setTimeout(function(e) {
-		            alert($(self).val());
-		          }, 10);
+
+		var ta;
+		if(dataStore['wysiwyg_editor'] == 'true')
+		{
+			ta = $();
+		}
+		else
+		{
+			ta = $('form[name="newmessage"] textarea');
+		}
+
+		$(ta).on('paste', function(e){
+
+			var taval = ta.val();
+	
+			var data = e.originalEvent.clipboardData.getData('Text');
+	
+			if (data.length > 10) {
+	
+				 var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+				 var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
+				console.log(data);
+
+				if (urlpattern.test(data)) {
+					console.log(ta.val() + '[url]' + data + '[/url]');
+					ta.val(taval + '[url]' + data + '[/url]');
+				} else if (imgpattern.test(data)) {
+					ta.val(taval + '[img]' + data + '[/img]');
+				} else {
+
+					ta.val(ta.val() + data)
+				}
+			} else {
+				return true;
+			}
+
 		});
+	}
+
+}
+
+var tempScript = {
+
+	activated : function() {
+		$(".msg-text").each(function(){
+        	var msg=$(this).html();
+        	$(this).html(msg.replace(/(&amp;|&)<a href="JavaScript.+?(#\d+)<\/a>.+?;/g,'&$2;'));
+    	});
 	}
 }
 
@@ -3899,6 +3937,11 @@ function extInit() {
 		if(dataStore['columnify_comments'] == 'true') {
 			columnify_comments.activated();
 		}
+
+		//Pasted text will be a hyperlink, picture, video automatically
+		//if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
+		//	quick_insertion.activated();
+		//}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -4070,10 +4113,12 @@ function extInit() {
 					better_yt_embed.activated();
 			}
 
-/*			//Pasted text will be a hyperlink, picture, video automatically
-			if(dataStore['quick_insertion'] == 'true') {
-				quick_insertion.activated();
-			}*/
+			//Pasted text will be a hyperlink, picture, video automatically
+			//if(dataStore['quick_insertion'] == 'true') {
+			//	quick_insertion.activated();
+			//}
+
+			tempScript.activated();
 
 		// Topic if whitelisted, show the navigation
 		// buttons for removal

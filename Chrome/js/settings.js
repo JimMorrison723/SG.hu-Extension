@@ -174,11 +174,6 @@ var cp = {
 					html += '</p>';
 					html += '<div class="button" id="better_yt_embed"></div>';
 				html += '</div>';
-				html += '<div>';
-					html += '<h3>Gyors beszúrás</h3>';
-					html += '<p>Kommentíró mezőbe vágólapról másoláskor a linkeket, képeket, videókat automatikusan beilleszti.</p>';
-					html += '<div class="button" id="quick_insertion"></div>';
-				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';
