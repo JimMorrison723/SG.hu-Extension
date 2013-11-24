@@ -532,11 +532,11 @@
 }
 
 .ext_mc_tabs:nth-child(3) {
-	width: 200px
+	width: 340px
 }
 
 .ext_mc_pages {
-	width: 480px;
+	width: 620px;
 	display: none;
 	overflow-y: auto;
 }
