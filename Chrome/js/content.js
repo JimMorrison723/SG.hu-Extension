@@ -1093,7 +1093,7 @@ var lights = {
 		$('body').css('background-image', 'url('+chrome.extension.getURL('/img/content/background.png')+')');
 		$('.cikk-2').addClass('night_mainTable');
 		//$('#center table:nth-child(3)').css({'background':'black'});
-		$('#center > table[width=850]').css({'background':'black'});
+		$('#center > table[width=980]').css({'background':'black'});
 		$('#center table tbody tr td[width=1]').css({'opacity':'0.2'});
 
 		/*$('#center table:nth-child(1)').css({'background-color':'black'}); //Main menu background*/
