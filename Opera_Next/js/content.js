@@ -1509,7 +1509,8 @@ var overlay_reply_to = {
 			textarea_clone.find('a:eq(3)').css({ display: 'none' });
 			textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
 			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270, right : 'auto' });
-			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
+			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, left : 360 }); //spoiler button
+			textarea_clone.find('a:eq(7)').css({ position : 'absolute', top : 220, right : 0 });
 				
 			// Fix smile list
 			if(document.location.href.match('cikkek')) {
@@ -2446,6 +2447,8 @@ var wysiwyg_editor = {
 		$('form[name="newmessage"] a:eq(4)').css({ 'position' : 'absolute', 'left' : 200 });
 		$('form[name="newmessage"] a:eq(5)').css({ 'position' : 'absolute', 'left' : 290 });
 		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });		
+		$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
+		$('#spoilerButton').css({  'position' : 'absolute', 'left' : 380 , 'cursor': 'pointer'});
 
 		
 		// Insert video
@@ -2667,6 +2670,21 @@ var wysiwyg_editor = {
 			$('textarea[name="message"]:first').cleditor()[0].focus();
 		});
 		
+		// Add click event to the spoiler button
+		$('#spoilerButton').click(function(e) {
+
+			e.preventDefault();
+				
+			var bhtml = '[spoiler][/spoiler]';
+
+			var tarea = $('textarea[name="message"]:first').val() + bhtml;
+			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + bhtml;
+
+			$('textarea[name="message"]:first').val(tarea);
+			$('textarea[name="message"]:first').cleditor()[0].focus();
+			$('.cleditorMain:first iframe').contents().find('body').html(imod);
+			$('textarea[name="message"]:first').cleditor()[0].focus();
+		});
 	}
 
 };

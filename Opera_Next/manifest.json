@@ -1,6 +1,6 @@
 {
    "name": "SG Fórum tuning",
-   "version": "3.0.7.2",
+   "version": "3.0.7.3",
    "manifest_version" : 2,
    "description": "Az sg.hu nemhivatalos Opera bővítménye.",
 
@@ -48,6 +48,7 @@
       "img/content/star.png",
       "img/content/background.png",
       "img/content/ext_hsep_bg.png",
+      "img/content/spoiler.png",
       "img/settings/button.png",
       "img/settings/icon.png",
       "img/settings/icons.png",
