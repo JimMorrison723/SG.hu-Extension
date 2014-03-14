@@ -2675,10 +2675,12 @@ var wysiwyg_editor = {
 
 			e.preventDefault();
 				
-			var bhtml = '[spoiler][/spoiler]';
+			var bhtml = '[spoiler] [/spoiler]';
+			var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'">';
+			var ihtml2 = '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
 
 			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + bhtml;
+			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' + ihtml2;
 
 			$('textarea[name="message"]:first').val(tarea);
 			$('textarea[name="message"]:first').cleditor()[0].focus();

@@ -279,7 +279,10 @@
 		[/<img.*?src.*kep\/faces\/wow2.gif".*?>/gmi, "[#wow2]"],
 		[/<img.*?src.*kep\/faces\/guluszem1.gif".*?>/gmi, "[#guluszem1]"],
 		[/<img.*?src.*kep\/faces\/vigyor3.gif".*?>/gmi, "[#vigyor3]"],
-		[/<img.*?src.*kep\/faces\/love12.gif".*?>/gmi, "[#love12]"],   
+		[/<img.*?src.*kep\/faces\/love12.gif".*?>/gmi, "[#love12]"], 
+
+//		[/<img.*?src.*img\/content\/warning.png".*?>/gmi, "[spoiler]"],  
+//		[/<img.*?src.*img\/content\/warning2.png".*?>/gmi, "[/spoiler]"],  
 
 		// Anchor and images
 		[/<a.*?href="(.*?)".*?>(.*?)<\/a>/gi, "[url=$1]$2[/url]"],
@@ -439,7 +442,10 @@
 		[/\[#wow2]/gmi, '<img src="kep/faces/wow2.gif">'],
 		[/\[#guluszem1]/gmi, '<img src="kep/faces/guluszem1.gif">'],
 		[/\[#vigyor3]/gmi, '<img src="kep/faces/vigyor3.gif">'],
-		[/\[#love12]/gmi, '<img src="kep/faces/love12.gif">'],  
+		[/\[#love12]/gmi, '<img src="kep/faces/love12.gif">'],
+
+//		[/\[spoiler]/gmi, '<img src=".*?/gmi/img/content/warning.png">'],
+		//[/\[/spoiler]/gmi, '<img src=".*?/gmi/img/content/warning2.png">'],
 
 		// Anchor and images
 		[/\[url=(.*?)\](.*?)\[\/url\]/gi, "<a href=\"$1\">$2</a>"],
