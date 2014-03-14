@@ -3686,7 +3686,8 @@ var quick_user_info = {
 			    $('img.ext_quick_user_info_btn').click(function(e) {
 
 			    	//Get user profile URL
-					var url = $(this).closest("tr").find('a[href^="forumuserinfo"]').attr('href'); 
+					var url = $(this).closest('tr').find('td:eq(0)').find('a[href^="/forumuserinfo"]').attr('href'); 
+					console.log(url);
 
 					//Fix for vip, non vip topichead height
 					var th_height = $(this).closest('.topichead').css('height').replace('px', '');
@@ -3707,7 +3708,7 @@ var quick_user_info = {
 					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
 
 					//Show user information in infobox
-				    $('.infobox').load(url + " .std1 table"); 
+				    $('.infobox').load(url + ' .std1 table'); 
 
 				});
 

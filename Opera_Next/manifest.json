@@ -60,7 +60,8 @@
       "img/icons/icon.png",
       "css/content.css",
       "css/cleditor.css",
-      "css/settings.css"
+      "css/settings.css",
+      "js/jquery-1.10.2.min.map"
    ],
    "permissions": [
       "http://www.sg.hu/",
