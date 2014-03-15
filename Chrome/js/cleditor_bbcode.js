@@ -283,6 +283,9 @@
 
 //		[/<img.*?src.*img\/content\/warning.png".*?>/gmi, "[spoiler]"],  
 //		[/<img.*?src.*img\/content\/warning2.png".*?>/gmi, "[/spoiler]"],  
+		
+      	[/<img.*?src.*chrome-extension:\/\/kclomjbablonlkaedhdkcplahebcgmlf\/img\/content\/warning.png".*?>/gmi, "[spoiler]"],  
+      	[/<img.*?src.*chrome-extension:\/\/kclomjbablonlkaedhdkcplahebcgmlf\/img\/content\/warning2.png".*?>/gmi, "[/spoiler]"],  
 
 		// Anchor and images
 		[/<a.*?href="(.*?)".*?>(.*?)<\/a>/gi, "[url=$1]$2[/url]"],
@@ -444,8 +447,9 @@
 		[/\[#vigyor3]/gmi, '<img src="kep/faces/vigyor3.gif">'],
 		[/\[#love12]/gmi, '<img src="kep/faces/love12.gif">'],
 
-//		[/\[spoiler]/gmi, '<img src=".*?/gmi/img/content/warning.png">'],
-		//[/\[/spoiler]/gmi, '<img src=".*?/gmi/img/content/warning2.png">'],
+		//Spoiler
+		[/\[spoiler]/gmi, '<img src="chrome-extension://kclomjbablonlkaedhdkcplahebcgmlf/img/content/warning.png">'],
+		[/\[\/spoiler]/gmi, '<img src="chrome-extension://kclomjbablonlkaedhdkcplahebcgmlf/img/content/warning2.png">'],
 
 		// Anchor and images
 		[/\[url=(.*?)\](.*?)\[\/url\]/gi, "<a href=\"$1\">$2</a>"],

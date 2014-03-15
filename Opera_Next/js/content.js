@@ -2675,10 +2675,12 @@ var wysiwyg_editor = {
 
 			e.preventDefault();
 				
-			var bhtml = '[spoiler][/spoiler]';
+			var bhtml = '[spoiler][/spoiler] ';
+			var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'">';
+			var ihtml2= '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
 
 			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + bhtml;
+			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' + ihtml2;
 
 			$('textarea[name="message"]:first').val(tarea);
 			$('textarea[name="message"]:first').cleditor()[0].focus();
@@ -3684,7 +3686,8 @@ var quick_user_info = {
 			    $('img.ext_quick_user_info_btn').click(function(e) {
 
 			    	//Get user profile URL
-					var url = $(this).closest("tr").find('a[href^="forumuserinfo"]').attr('href'); 
+					var url = $(this).closest('tr').find('td:eq(0)').find('a[href^="/forumuserinfo"]').attr('href'); 
+					console.log(url);
 
 					//Fix for vip, non vip topichead height
 					var th_height = $(this).closest('.topichead').css('height').replace('px', '');
@@ -3705,7 +3708,7 @@ var quick_user_info = {
 					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
 
 					//Show user information in infobox
-				    $('.infobox').load(url + " .std1 table"); 
+				    $('.infobox').load(url + ' .std1 table'); 
 
 				});
 
