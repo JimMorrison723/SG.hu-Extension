@@ -174,6 +174,11 @@ var cp = {
 					html += '</p>';
 					html += '<div class="button" id="better_yt_embed"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Gyors beszúrás</h3>';
+					html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
+					html += '<div class="button" id="quick_insertion"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';

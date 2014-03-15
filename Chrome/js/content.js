@@ -3823,7 +3823,7 @@ var quick_insertion = {
 		var ta;
 		if(dataStore['wysiwyg_editor'] == 'true')
 		{
-			ta = $();
+			ta = $('.cleditorMain textarea');
 		}
 		else
 		{
@@ -3831,26 +3831,23 @@ var quick_insertion = {
 		}
 
 		$(ta).on('paste', function(e){
-
+			
 			var taval = ta.val();
 	
 			var data = e.originalEvent.clipboardData.getData('Text');
-	
+			
 			if (data.length > 10) {
 	
-				 var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-				 var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
-				console.log(data);
+				var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+				var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
 
-				if (urlpattern.test(data)) {
-					console.log(ta.val() + '[url]' + data + '[/url]');
-					ta.val(taval + '[url]' + data + '[/url]');
-				} else if (imgpattern.test(data)) {
+				if (imgpattern.test(data)) {
+					e.preventDefault();
 					ta.val(taval + '[img]' + data + '[/img]');
-				} else {
-
-					ta.val(ta.val() + data)
-				}
+				} else if (urlpattern.test(data)) {
+					e.preventDefault();
+					ta.val(taval + '[url=' + data + ']' + data + '[/url]');
+				} 
 			} else {
 				return true;
 			}
@@ -4135,9 +4132,9 @@ function extInit() {
 			}
 
 			//Pasted text will be a hyperlink, picture, video automatically
-			//if(dataStore['quick_insertion'] == 'true') {
-			//	quick_insertion.activated();
-			//}
+			if(dataStore['quick_insertion'] == 'true') {
+				quick_insertion.activated();
+			}
 
 			tempScript.activated();
 
