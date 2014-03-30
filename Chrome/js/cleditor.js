@@ -1,18 +1,13 @@
-﻿/**
- @preserve CLEditor WYSIWYG HTML Editor v1.3.0
- http://premiumsoftware.net/cleditor
+﻿/*!
+ CLEditor WYSIWYG HTML Editor v1.4.4
+ http://premiumsoftware.net/CLEditor
  requires jQuery v1.4.2 or later
 
  Copyright 2010, Chris Landowski, Premium Software, LLC
  Dual licensed under the MIT or GPL Version 2 licenses.
 */
 
-// ==ClosureCompiler==
-// @compilation_level SIMPLE_OPTIMIZATIONS
-// @output_file_name jquery.cleditor.min.js
-// ==/ClosureCompiler==
-
-(function($) {
+(function ($) {
 
   //==============
   // jQuery Plugin
@@ -31,7 +26,6 @@
                     "rule image link unlink | cut copy paste pastetext | print source",
       colors:       // colors in the color popup
                     "FF0000 FF00FF 800080 0000FF 00FFFF 00FF00 008000 FFFF00 FFA500",
-
       fonts:        // font names in the font popup
                     "Arial,Arial Black,Comic Sans MS,Courier New,Narrow,Garamond," +
                     "Georgia,Impact,Sans Serif,Serif,Tahoma,Trebuchet MS,Verdana",
@@ -52,7 +46,7 @@
 
     // Define all usable toolbar buttons - the init string property is 
     //   expanded during initialization back into the buttons object and 
-    //   seperate object properties are created for each button.
+    //   separate object properties are created for each button.
     //   e.g. buttons.size.title = "Font Size"
     buttons: {
       // name,title,command,popupName (""=use name)
@@ -104,7 +98,7 @@
 
     // Loop through all matching textareas and create the editors
     this.each(function(idx, elem) {
-      if (elem.tagName == "TEXTAREA") {
+      if (elem.tagName.toUpperCase() === "TEXTAREA") {
         var data = $.data(elem, CLEDITOR);
         if (!data) data = new cleditor(elem, options);
         $result = $result.add(data);
@@ -124,6 +118,7 @@
 
   // Misc constants
   BACKGROUND_COLOR = "backgroundColor",
+  BLURRED          = "blurred",
   BUTTON           = "button",
   BUTTON_NAME      = "buttonName",
   CHANGE           = "change",
@@ -131,6 +126,7 @@
   CLICK            = "click",
   DISABLED         = "disabled",
   DIV_TAG          = "<div>",
+  FOCUSED          = "focused",
   TRANSPARENT      = "transparent",
   UNSELECTABLE     = "unselectable",
 
@@ -147,12 +143,15 @@
   PROMPT_CLASS     = "cleditorPrompt",  // prompt popup divs inside body
   MSG_CLASS        = "cleditorMsg",     // message popup div inside body
 
-  // Test for ie
-  ie = $.browser.msie,
-  ie6 = /msie\s6/i.test(navigator.userAgent),
+  // Browser detection
+  ua = navigator.userAgent.toLowerCase(),
+  ie = /msie/.test(ua),
+  ie6 = /msie\s6/.test(ua),
+  iege11 = /(trident)(?:.*rv:([\w.]+))?/.test(ua),
+  webkit = /webkit/.test(ua),
 
   // Test for iPhone/iTouch/iPad
-  iOS = /iphone|ipad|ipod/i.test(navigator.userAgent),
+  iOS = /iphone|ipad|ipod/i.test(ua),
 
   // Popups are created once as needed and shared by all editor instances
   popups = {},
@@ -218,18 +217,25 @@
     var $group = $(DIV_TAG)
       .addClass(GROUP_CLASS)
       .appendTo($toolbar);
+
+    // Initialize the group width
+    var groupWidth = 0;
     
     // Add the buttons to the toolbar
     $.each(options.controls.split(" "), function(idx, buttonName) {
       if (buttonName === "") return true;
 
       // Divider
-      if (buttonName == "|") {
+      if (buttonName === "|") {
 
         // Add a new divider to the group
         var $div = $(DIV_TAG)
           .addClass(DIVIDER_CLASS)
           .appendTo($group);
+
+        // Update the group width
+        $group.width(groupWidth + 1);
+        groupWidth = 0;
 
         // Create a new group
         $group = $(DIV_TAG)
@@ -252,6 +258,10 @@
           .bind(CLICK, $.proxy(buttonClick, editor))
           .appendTo($group)
           .hover(hoverEnter, hoverLeave);
+
+        // Update the group width
+        groupWidth += 24;
+        $group.width(groupWidth + 1);
 
         // Prepare the button image
         var map = {};
@@ -290,7 +300,7 @@
 
     // Bind the window resize event when the width or height is auto or %
     if (/auto|%/.test("" + options.width + options.height))
-      $(window).resize(function() {refresh(editor);});
+      $(window).bind('resize.cleditor', function () { refresh(editor); });
 
     // Create the iframe and resize the controls
     refresh(editor);
@@ -332,11 +342,24 @@
       return editor;
     };
   });
+  
+  // blurred - shortcut for .bind("blurred", handler) or .trigger("blurred")
+  fn.blurred = function(handler) {
+    var $this = $(this);
+    return handler ? $this.bind(BLURRED, handler) : $this.trigger(BLURRED);
+  };
 
   // change - shortcut for .bind("change", handler) or .trigger("change")
-  fn.change = function(handler) {
+  fn.change = function change(handler) {
+    console.log('change test');
     var $this = $(this);
     return handler ? $this.bind(CHANGE, handler) : $this.trigger(CHANGE);
+  };
+
+  // focused - shortcut for .bind("focused", handler) or .trigger("focused")
+  fn.focused = function(handler) {
+    var $this = $(this);
+    return handler ? $this.bind(FOCUSED, handler) : $this.trigger(FOCUSED);
   };
 
   //===============
@@ -354,7 +377,7 @@
         popup = popups[popupName];
 
     // Check if disabled
-    if (editor.disabled || $(buttonDiv).attr(DISABLED) == DISABLED)
+    if (editor.disabled || $(buttonDiv).attr(DISABLED) === DISABLED)
       return;
 
     // Fire the buttonClick event
@@ -372,7 +395,7 @@
       return false;
 
     // Toggle source
-    if (buttonName == "source") {
+    if (buttonName === "source") {
 
       // Show the iframe
       if (sourceMode(editor)) {
@@ -403,11 +426,12 @@
         var $popup = $(popup);
 
         // URL
-        if (popupName == "url") {
+        if (popupName === "url") {
 
           // Check for selection before showing the link url popup
-          if (buttonName == "link" && selectedText(editor) === "") {
+          if (buttonName === "link" && selectedText(editor) === "") {
             showMessage(editor, "Előbb jelölj ki egy szöveget amit linkké szeretnél alakítani!", buttonDiv);
+
             return false;
           }
 
@@ -432,7 +456,7 @@
         }
 
         // Paste as Text
-        else if (popupName == "pastetext") {
+        else if (popupName === "pastetext") {
 
           // Wire up the submit button click event handler
           $popup.children(":button")
@@ -460,13 +484,13 @@
           return false; // stop propagination to document click
         }
 
-        // propaginate to documnt click
+        // propaginate to document click
         return;
 
       }
 
       // Print
-      else if (buttonName == "print")
+      else if (buttonName === "print")
         editor.$frame[0].contentWindow.print();
 
       // All other buttons
@@ -511,19 +535,19 @@
         useCSS = editor.options.useCSS;
 
     // Get the command value
-    if (buttonName == "font")
+    if (buttonName === "font")
       // Opera returns the fontfamily wrapped in quotes
       value = target.style.fontFamily.replace(/"/g, "");
-    else if (buttonName == "size") {
-      if (target.tagName == "DIV")
+    else if (buttonName === "size") {
+      if (target.tagName.toUpperCase() === "DIV")
         target = target.children[0];
       value = target.innerHTML;
     }
-    else if (buttonName == "style")
+    else if (buttonName === "style")
       value = "<" + target.tagName + ">";
-    else if (buttonName == "color")
+    else if (buttonName === "color")
       value = hex(target.style.backgroundColor);
-    else if (buttonName == "highlight") {
+    else if (buttonName === "highlight") {
       value = hex(target.style.backgroundColor);
       if (ie) command = 'backcolor';
       else useCSS = true;
@@ -595,7 +619,7 @@
       $popup.html(popupContent);
 
     // Color
-    else if (popupName == "color") {
+    else if (popupName === "color") {
       var colors = options.colors.split(" ");
       if (colors.length < 10)
         $popup.width("auto");
@@ -607,7 +631,7 @@
     }
 
     // Font
-    else if (popupName == "font")
+    else if (popupName === "font")
       $.each(options.fonts.split(","), function(idx, font) {
         $(DIV_TAG).appendTo($popup)
           .css("fontFamily", font)
@@ -615,28 +639,28 @@
       });
 
     // Size
-    else if (popupName == "size")
+    else if (popupName === "size")
       $.each(options.sizes.split(","), function(idx, size) {
         $(DIV_TAG).appendTo($popup)
-          .html("<font size=" + size + ">" + size + "</font>");
+          .html('<font size="' + size + '">' + size + '</font>');
       });
 
     // Style
-    else if (popupName == "style")
+    else if (popupName === "style")
       $.each(options.styles, function(idx, style) {
         $(DIV_TAG).appendTo($popup)
           .html(style[1] + style[0] + style[1].replace("<", "</"));
       });
 
     // URL
-    else if (popupName == "url") {
-      $popup.html('Link:<br><input type=text value="http://" size=35><br><input type=button value="Beszúrás">');
+    else if (popupName === "url") {
+      $popup.html('Link:<br /><input type="text" value="http://" size="35" /><br /><input type="button" value="Beszúrás" />');
       popupTypeClass = PROMPT_CLASS;
     }
 
     // Paste as Text
-    else if (popupName == "pastetext") {
-      $popup.html('Paste your content here and click submit.<br /><textarea cols=40 rows=3></textarea><br /><input type=button value=Submit>');
+    else if (popupName === "pastetext") {
+      $popup.html('Paste your content here and click submit.<br /><textarea cols="40" rows="3"></textarea><br /><input type="button" value="Submit" />');
       popupTypeClass = PROMPT_CLASS;
     }
 
@@ -705,12 +729,12 @@
     }
 
     // Execute the command and check for error
-    var success = true, description;
-    if (ie && command.toLowerCase() == "inserthtml")
+    var success = true, message;
+    if (ie && command.toLowerCase() === "inserthtml")
       getRange(editor).pasteHTML(value);
     else {
       try { success = editor.doc.execCommand(command, 0, value || null); }
-      catch (err) { description = err.description; success = false; }
+      catch (err) { message = err.message; success = false; }
       if (!success) {
         if ("cutcopypaste".indexOf(command) > -1)
           showMessage(editor, "For security reasons, your browser does not support the " +
@@ -718,13 +742,14 @@
             button);
         else
           showMessage(editor,
-            (description ? description : "Nem lehet végrehajtani a " + command + " parancsot."),
+            (message ? message : "Nem lehet végrehajtani a " + command + " parancsot."),
             button);
       }
     }
 
-    // Enable the buttons
+    // Enable the buttons and update the textarea
     refreshButtons(editor);
+    updateTextArea(editor, true);
     return success;
 
   }
@@ -733,7 +758,7 @@
   function focus(editor) {
     setTimeout(function() {
       if (sourceMode(editor)) editor.$area.focus();
-      else editor.$frame[0].contentDocument.body.focus();
+      else editor.$frame[0].contentWindow.focus();
       refreshButtons(editor);
     }, 0);
   }
@@ -747,22 +772,29 @@
   // getSelection - gets the current text range object
   function getSelection(editor) {
     if (ie) return editor.doc.selection;
-    return editor.$frame[0].contentDocument.getSelection();
+    return editor.$frame[0].contentWindow.getSelection();
   }
 
-  // Returns the hex value for the passed in string.
-  //   hex("rgb(255, 0, 0)"); // #FF0000
-  //   hex("#FF0000"); // #FF0000
-  //   hex("#F00"); // #FF0000
+  // hex - returns the hex value for the passed in color string
   function hex(s) {
-    var m = /rgba?\((\d+), (\d+), (\d+)/.exec(s),
-      c = s.split("");
+
+    // hex("rgb(255, 0, 0)") returns #FF0000
+    var m = /rgba?\((\d+), (\d+), (\d+)/.exec(s);
     if (m) {
-      s = ( m[1] << 16 | m[2] << 8 | m[3] ).toString(16);
+      s = (m[1] << 16 | m[2] << 8 | m[3]).toString(16);
       while (s.length < 6)
         s = "0" + s;
+      return "#" + s;
     }
-    return "#" + (s.length == 6 ? s : c[1] + c[1] + c[2] + c[2] + c[3] + c[3]);
+
+    // hex("#F00") returns #FF0000
+    var c = s.split("");
+    if (s.length === 4)
+      return "#" + c[1] + c[1] + c[2] + c[2] + c[3] + c[3];
+
+    // hex("#FF0000") returns #FF0000
+    return s;
+
   }
 
   // hidePopups - hides all popups
@@ -777,9 +809,8 @@
 
   // imagesPath - returns the path to the images folder
   function imagesPath() {
-    var cssFile = "jquery.cleditor.css",
-        href = $("link[href$='" + cssFile +"']").attr("href");
-    return href.substr(0, href.length - cssFile.length) + "images/";
+    var href = $("link[href*=cleditor]").attr("href");
+    return href.replace(/^(.*\/)[^\/]+$/, '$1') + "images/";
   }
 
   // imageUrl - Returns the css url string for a filemane
@@ -798,13 +829,13 @@
       editor.$frame.remove();
 
     // Create a new iframe
-    var $frame = editor.$frame = $('<iframe frameborder="0" src="javascript:true;">')
+    var $frame = editor.$frame = $('<iframe frameborder="0" src="javascript:true;" />')
       .hide()
       .appendTo($main);
 
     // Load the iframe document content
-    var contentWindow = $frame[0].contentDocument.body;
-      doc = editor.doc = $frame[0].contentDocument,
+    var contentWindow = $frame[0].contentWindow,
+      doc = editor.doc = contentWindow.document,
       $doc = $(doc);
 
     doc.open();
@@ -818,14 +849,14 @@
 
     // Work around for bug in IE which causes the editor to lose
     // focus when clicking below the end of the document.
-    if (ie)
+    if (ie || iege11)
       $doc.click(function() {focus(editor);});
 
     // Load the content
     updateFrame(editor);
 
     // Bind the ie specific iframe event handlers
-    if (ie) {
+    if (ie || iege11) {
 
       // Save the current user selection. This code is needed since IE will
       // reset the selection just after the beforedeactivate event and just
@@ -833,19 +864,19 @@
       $doc.bind("beforedeactivate beforeactivate selectionchange keypress", function(e) {
         
         // Flag the editor as inactive
-        if (e.type == "beforedeactivate")
+        if (e.type === "beforedeactivate")
           editor.inactive = true;
-        
-        // Get rid of the bogus selection and flag the editor as active
-        else if (e.type == "beforeactivate") {
+
+          // Get rid of the bogus selection and flag the editor as active
+        else if (e.type === "beforeactivate") {
           if (!editor.inactive && editor.range && editor.range.length > 1)
             editor.range.shift();
           delete editor.inactive;
         }
 
-        // Save the selection when the editor is active
+          // Save the selection when the editor is active
         else if (!editor.inactive) {
-          if (!editor.range) 
+          if (!editor.range)
             editor.range = [];
           editor.range.unshift(getRange(editor));
 
@@ -856,27 +887,31 @@
 
       });
 
-      // Restore the text range when the iframe gains focus
+      // Restore the text range and trigger focused event when the iframe gains focus
       $frame.focus(function() {
         restoreRange(editor);
+        $(editor).triggerHandler(FOCUSED);
+      });
+
+      // Trigger blurred event when the iframe looses focus
+      $frame.blur(function() {
+        $(editor).triggerHandler(BLURRED);
       });
 
     }
 
-    // Update the textarea when the iframe loses focus
-    ($.browser.mozilla ? $doc : $(contentWindow)).keyup(function() {
-      updateTextArea(editor, true);
-    });
+      // Trigger focused and blurred events for all other browsers
+    else {
+      $(editor.$frame[0].contentWindow)
+        .focus(function () { $(editor).triggerHandler(FOCUSED); })
+        .blur(function () { $(editor).triggerHandler(BLURRED); });
+    }
 
-	
-	setInterval(function() {
-		updateTextArea(editor, true);	
-	}, 500, editor);
-	
-    // Enable the toolbar buttons as the user types or clicks
+    // Enable the toolbar buttons and update the textarea as the user types or clicks
     $doc.click(hidePopups)
       .bind("keyup mouseup", function() {
         refreshButtons(editor);
+        updateTextArea(editor, true);
       });
 
     // Show the textarea for iPhone/iTouch/iPad or
@@ -896,7 +931,7 @@
       $toolbar.height(hgt);
 
       // Resize the iframe
-      hgt = (/%/.test("" + options.height) ? $main.height() : parseInt(options.height)) - hgt;
+      hgt = (/%/.test("" + options.height) ? $main.height() : parseInt(options.height, 10)) - hgt;
       $frame.width(wid).height(hgt);
 
       // Resize the textarea. IE6 textareas have a 1px top
@@ -917,8 +952,8 @@
   function refreshButtons(editor) {
 
     // Webkit requires focus before queryCommandEnabled will return anything but false
-    if (!iOS && $.browser.webkit && !editor.focused) {
-      editor.$frame[0].contentDocument.body.focus();
+    if (!iOS && webkit && !editor.focused) {
+      editor.$frame[0].contentWindow.focus();
       window.focus();
       editor.focused = true;
     }
@@ -953,14 +988,14 @@
         if (enabled === undefined)
           enabled = true;
       }
-      else if (((inSourceMode || iOS) && button.name != "source") ||
-      (ie && (command == "undo" || command == "redo")))
+      else if (((inSourceMode || iOS) && button.name !== "source") ||
+      (ie && (command === "undo" || command === "redo")))
         enabled = false;
-      else if (command && command != "print") {
-        if (ie && command == "hilitecolor")
+      else if (command && command !== "print") {
+        if (ie && command === "hilitecolor")
           command = "backcolor";
         // IE does not support inserthtml, so it's always enabled
-        if (!ie || command != "inserthtml") {
+        if (!ie || command !== "inserthtml") {
           try {enabled = queryObj.queryCommandEnabled(command);}
           catch (err) {enabled = false;}
         }
@@ -981,8 +1016,12 @@
 
   // restoreRange - restores the current ie selection
   function restoreRange(editor) {
-    if (ie && editor.range)
-      editor.range[0].select();
+    if (editor.range) {
+      if (ie)
+        editor.range[0].select();
+      else if (iege11)
+        getSelection(editor).addRange(editor.range[0]);
+    }
   }
 
   // select - selects all the text in either the textarea or iframe
@@ -1074,7 +1113,7 @@
     // of potentially heavy updateFrame callbacks.
     if (updateFrameCallback) {
       var sum = checksum(code);
-      if (checkForChange && editor.areaChecksum == sum)
+      if (checkForChange && editor.areaChecksum === sum)
         return;
       editor.areaChecksum = sum;
     }
@@ -1090,7 +1129,7 @@
       editor.frameChecksum = checksum(html);
 
     // Update the iframe and trigger the change event
-    if (html != $body.html()) {
+    if (html !== $body.html()) {
       $body.html(html);
       $(editor).triggerHandler(CHANGE);
     }
@@ -1099,6 +1138,7 @@
 
   // updateTextArea - updates the textarea with the iframe contents
   function updateTextArea(editor, checkForChange) {
+
     var html = $(editor.doc.body).html(),
       options = editor.options,
       updateTextAreaCallback = options.updateTextArea,
@@ -1108,7 +1148,7 @@
     // of potentially heavy updateTextArea callbacks.
     if (updateTextAreaCallback) {
       var sum = checksum(html);
-      if (checkForChange && editor.frameChecksum == sum)
+      if (checkForChange && editor.frameChecksum === sum)
         return;
       editor.frameChecksum = sum;
     }
@@ -1121,7 +1161,7 @@
       editor.areaChecksum = checksum(code);
 
     // Update the textarea and trigger the change event
-    if (code != $area.val()) {
+    if (code !== $area.val()) {
       $area.val(code);
       $(editor).triggerHandler(CHANGE);
     }

@@ -2671,16 +2671,16 @@ var wysiwyg_editor = {
 		});
 		
 		// Add click event to the spoiler button
-		$('#spoilerButton').click(function(e) {
+		$('#spoilerButton img').click(function(e) {
 
 			e.preventDefault();
 				
-			var bhtml = '[spoiler][/spoiler] ';
+			var bhtml = '[spoiler] [/spoiler]';
 			var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'">';
 			var ihtml2= '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
 
 			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' + ihtml2;
+			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' +ihtml2;
 
 			$('textarea[name="message"]:first').val(tarea);
 			$('textarea[name="message"]:first').cleditor()[0].focus();
@@ -3823,7 +3823,7 @@ var quick_insertion = {
 		var ta;
 		if(dataStore['wysiwyg_editor'] == 'true')
 		{
-			ta = $('.cleditorMain textarea');
+			ta = $('.cleditorMain textarea'); //textarea
 		}
 		else
 		{
