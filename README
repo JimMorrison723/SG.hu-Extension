@@ -46,6 +46,8 @@ A bővítmény funkciói:
 	- Beállítások szinkronizálása
 	- Topikon belül lekérhető a felhasználó adatlapja
     - YouTube videókat nem tölti be egyből, hogy ha sok videó van egy oldalon zökkenőmentes legyen az oldalbetöltés (szabályozható)
+    - Gyors beszúrás: Vágólapról bemásolt linkeket/képeket autómatikusan BBCODE-ok közé illeszti
+    - Dedikált spoiler gomb
 
 Credits:
 	Fejlesztő: Gera János "dzsani", http://kreaturamedia.com
