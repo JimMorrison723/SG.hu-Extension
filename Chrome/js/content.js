@@ -3821,33 +3821,59 @@ var quick_insertion = {
 	activated : function() {
 
 		var ta;
-		if(dataStore['wysiwyg_editor'] == 'true')
-		{
-			ta = $('.cleditorMain textarea'); //textarea
+		var ta2;
+		if(dataStore['wysiwyg_editor'] == 'true') {
+			ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea
+			ta2 = $('.cleditorMain:first textarea[name="message"]');
 		}
-		else
-		{
+		else {
 			ta = $('form[name="newmessage"] textarea');
 		}
 
-		$(ta).on('paste', function(e){
+		// Paste event on WYSIWYG view and source view
+		$(ta).add(ta2).on('paste', function(e) {
 			
-			var taval = ta.val();
-	
 			var data = e.originalEvent.clipboardData.getData('Text');
-			
 			if (data.length > 10) {
 	
 				var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
 				var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
 
+				var bhtml;
+				var ihtml;
+
 				if (imgpattern.test(data)) {
 					e.preventDefault();
-					ta.val(taval + '[img]' + data + '[/img]');
-				} else if (urlpattern.test(data)) {
-					e.preventDefault();
-					ta.val(taval + '[url=' + data + ']' + data + '[/url]');
+					bhtml = '[img]' + data + '[/img]';
+					ihtml = '<img src="' + data + '">';
 				} 
+				else if (urlpattern.test(data)) {
+					e.preventDefault();
+
+					var a = document.createElement('a'); // Create a dummy <a> element
+					a.href = data;                       // Assign link, let the browser parse it
+					var url_pathname = a.pathname.substring(1, data.length);
+					if (url_pathname.length == 0) {
+						url_pathname = data;
+					}
+					bhtml = '[url=' + data + ']' + url_pathname + '[/url]';
+					ihtml = '<a href="' + data + '">' + url_pathname +'</a>';
+				} 
+
+				var tarea = $('textarea[name="message"]:first').val() + bhtml;
+				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
+
+				// Otherwise when wysiwyg editor will appear even if it's disabled
+				if(dataStore['wysiwyg_editor'] == 'true') {
+					$('textarea[name="message"]:first').val(tarea);
+					$('textarea[name="message"]:first').cleditor()[0].focus();
+					$('.cleditorMain:first iframe').contents().find('body').html(imod);
+					$('textarea[name="message"]:first').cleditor()[0].focus();
+
+				} else {
+					$('textarea[name="message"]:first').val(tarea);
+				}
+
 			} else {
 				return true;
 			}
@@ -3957,9 +3983,9 @@ function extInit() {
 		}
 
 		//Pasted text will be a hyperlink, picture, video automatically
-		//if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
-		//	quick_insertion.activated();
-		//}
+		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
+			quick_insertion.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
