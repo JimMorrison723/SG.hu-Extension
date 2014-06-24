@@ -3860,18 +3860,20 @@ var quick_insertion = {
 					ihtml = '<a href="' + data + '">' + url_pathname +'</a>';
 				} 
 
-				var tarea = $('textarea[name="message"]:first').val() + bhtml;
-				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
+				if (bhtml != undefined) {
+					var tarea = $('textarea[name="message"]:first').val() + bhtml;
+					var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
 
-				// Otherwise when wysiwyg editor will appear even if it's disabled
-				if(dataStore['wysiwyg_editor'] == 'true') {
-					$('textarea[name="message"]:first').val(tarea);
-					$('textarea[name="message"]:first').cleditor()[0].focus();
-					$('.cleditorMain:first iframe').contents().find('body').html(imod);
-					$('textarea[name="message"]:first').cleditor()[0].focus();
+					// Otherwise when wysiwyg editor will appear even if it's disabled
+					if(dataStore['wysiwyg_editor'] == 'true') {
+						$('textarea[name="message"]:first').val(tarea);
+						$('textarea[name="message"]:first').cleditor()[0].focus();
+						$('.cleditorMain:first iframe').contents().find('body').html(imod);
+						$('textarea[name="message"]:first').cleditor()[0].focus();
 
-				} else {
-					$('textarea[name="message"]:first').val(tarea);
+					} else {
+						$('textarea[name="message"]:first').val(tarea);
+					}
 				}
 
 			} else {
