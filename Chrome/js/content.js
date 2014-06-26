@@ -2460,7 +2460,7 @@ var wysiwyg_editor = {
 		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(4)').css({ 'position' : 'absolute', 'left' : 200 });
 		$('form[name="newmessage"] a:eq(5)').css({ 'position' : 'absolute', 'left' : 290 });
-		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });	// 'right' : 22 	
+		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });	
 
 		// Insert video
 		$('form[name="newmessage"] a:eq(4)').click(function(e) {
@@ -2470,7 +2470,7 @@ var wysiwyg_editor = {
 			
 			
 			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: http://www.youtube.com/watch?v=sUntx0pe_qI)", "http://www.youtube.com/watch?v=sUntx0pe_qI");
-				
+
 			if (thisURL && (((thisURL.length>25 && thisURL.substring(0,20) == "http://www.youtu.be/") || (thisURL.length>25 && thisURL.substring(0,16) == "http://youtu.be/") || thisURL.length>25 && thisURL.substring(0,25) == "http://www.youtube.com/v/") || (thisURL.length>31 && thisURL.substring(0,31) == "http://www.youtube.com/watch?v="))) {
 					
 				var maxurlhossz = thisURL.search("&");
@@ -2478,7 +2478,7 @@ var wysiwyg_editor = {
 				if (maxurlhossz === -1) {
 						maxurlhossz = 2000; 
 				}
-                
+
 				kezdhossz=31;
 					
 				if (thisURL.substring(0,25)=="http://www.youtube.com/v/") {
@@ -2492,9 +2492,13 @@ var wysiwyg_editor = {
 				}
               	
 				var videocode = "[flash]http://www.youtube.com/v/"+thisURL.substring(kezdhossz,maxurlhossz)+"&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
-				
+
 				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + videocode;
 				$('.cleditorMain:first iframe').contents().find('body').html(imod);
+
+				// Without this, sometimes it doesn't insert the video link into the WYSIWYG editor
+				var tarea = $('textarea[name="message"]:first').val() + videocode;
+				$('textarea[name="message"]:first').val(tarea);
 			}
 
 		});
@@ -3873,7 +3877,7 @@ var quick_insertion = {
 			} else {
 				return true;
 			}
-
+1
 		});
 	}
 
