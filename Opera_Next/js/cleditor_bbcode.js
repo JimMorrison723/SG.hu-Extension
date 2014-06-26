@@ -283,7 +283,7 @@
 
 //		[/<img.*?src.*img\/content\/warning.png".*?>/gmi, "[spoiler]"],  
 //		[/<img.*?src.*img\/content\/warning2.png".*?>/gmi, "[/spoiler]"],  
-
+		
       	[/<img.*?src.*chrome-extension:\/\/kclomjbablonlkaedhdkcplahebcgmlf\/img\/content\/warning.png".*?>/gmi, "[spoiler]"],  
       	[/<img.*?src.*chrome-extension:\/\/kclomjbablonlkaedhdkcplahebcgmlf\/img\/content\/warning2.png".*?>/gmi, "[/spoiler]"],  
 

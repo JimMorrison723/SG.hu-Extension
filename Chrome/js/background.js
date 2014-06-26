@@ -32,6 +32,7 @@
 			if( typeof localStorage['youtube_embed_limit']					== 'undefined') localStorage['youtube_embed_limit']					= '10';
 			if( typeof localStorage['quick_user_info']						== 'undefined') localStorage['quick_user_info']						= 'false';
 			if( typeof localStorage['quick_insertion']						== 'undefined') localStorage['quick_insertion']						= 'false';
+			if( typeof localStorage['spoiler_button']						== 'undefined') localStorage['spoiler_button']						= 'false';
 
 			// Message Center
 			if( typeof localStorage['message_center']						== 'undefined') localStorage['message_center']						= 'false';

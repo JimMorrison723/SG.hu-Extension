@@ -1500,8 +1500,8 @@ var overlay_reply_to = {
 				
 			// Apply some styles
 			textarea_clone.css({'background' : 'none', 'border' : 'none' });
-				
-				
+
+
 			// Fix buttons
 			textarea_clone.find('a:eq(0)').css({ position : 'absolute', top : 220, left : 0 });
 			textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90, visibility : 'visible' });
@@ -1509,8 +1509,14 @@ var overlay_reply_to = {
 			textarea_clone.find('a:eq(3)').css({ display: 'none' });
 			textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
 			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270, right : 'auto' });
-			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, left : 360 }); //spoiler button
-			textarea_clone.find('a:eq(7)').css({ position : 'absolute', top : 220, right : 0 });
+
+			if(dataStore['spoiler_button'] == 'true') {
+//				textarea_clone.find('a:eq(1)').css({ left : 360 });
+				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, left : 90 }); //spoiler button 360
+				textarea_clone.find('a:eq(7)').css({ position : 'absolute', top : 220, right : 0 });
+			} else {
+				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
+			}
 				
 			// Fix smile list
 			if(document.location.href.match('cikkek')) {
@@ -1573,15 +1579,22 @@ var overlay_reply_to = {
 		
 			// Copy textarea original comment to the tmp element
 			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
-				
+
 			// Fix buttons
 			textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
-			textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 });
+			textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 }); // Makrók 90
 			textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
 			textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
 			textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
 			textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
-			textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
+
+			if(dataStore['spoiler_button'] == 'true') {
+				textarea_clone.find('a:eq(1)').css({ position : 'absolute', left : 540 });
+				textarea_clone.find('a:eq(6)').css({ position : 'absolute', left : 90 , 'margin-left' : 0 }); //spoiler button 360
+				textarea_clone.find('a:eq(7)').css({ position : 'absolute', right : 0 });
+			} else {
+				textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
+			}
 		}
 		
 		// Textarea position
@@ -2438,19 +2451,17 @@ var wysiwyg_editor = {
 			// CLEditor init
 			$('textarea[name="message"]').cleditor();
 		}
+ 
 		
 		$('form[name="newmessage"]').css('position', 'relative');
-		$('form[name="newmessage"] a:eq(0)').css({ 'position' : 'absolute', 'left' : 20 });
-		$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 110 });
+		$('form[name="newmessage"] a:eq(0)').css({ 'position' : 'absolute', 'left' : 20  });
+		$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 110 }); // 380
 		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(4)').css({ 'position' : 'absolute', 'left' : 200 });
 		$('form[name="newmessage"] a:eq(5)').css({ 'position' : 'absolute', 'left' : 290 });
-		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });		
-		$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
-		$('#spoilerButton').css({  'position' : 'absolute', 'left' : 380 , 'cursor': 'pointer'});
+		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });	// 'right' : 22 	
 
-		
 		// Insert video
 		$('form[name="newmessage"] a:eq(4)').click(function(e) {
 			e.preventDefault();
@@ -2669,24 +2680,7 @@ var wysiwyg_editor = {
 			$('.cleditorMain:first iframe').contents().find('body').html(imod);
 			$('textarea[name="message"]:first').cleditor()[0].focus();
 		});
-		
-		// Add click event to the spoiler button
-		$('#spoilerButton').click(function(e) {
 
-			e.preventDefault();
-				
-			var bhtml = '[spoiler][/spoiler] ';
-			var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'">';
-			var ihtml2= '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
-
-			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' + ihtml2;
-
-			$('textarea[name="message"]:first').val(tarea);
-			$('textarea[name="message"]:first').cleditor()[0].focus();
-			$('.cleditorMain:first iframe').contents().find('body').html(imod);
-			$('textarea[name="message"]:first').cleditor()[0].focus();
-		});
 	}
 
 };
@@ -3821,36 +3815,61 @@ var quick_insertion = {
 	activated : function() {
 
 		var ta;
-		if(dataStore['wysiwyg_editor'] == 'true')
-		{
-			ta = $();
+		var ta2;
+		if(dataStore['wysiwyg_editor'] == 'true') {
+			ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea
+			ta2 = $('.cleditorMain:first textarea[name="message"]');
 		}
-		else
-		{
+		else {
 			ta = $('form[name="newmessage"] textarea');
 		}
 
-		$(ta).on('paste', function(e){
-
-			var taval = ta.val();
-	
+		// Paste event on WYSIWYG view and source view
+		$(ta).add(ta2).on('paste', function(e) {
+			
 			var data = e.originalEvent.clipboardData.getData('Text');
-	
 			if (data.length > 10) {
 	
-				 var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-				 var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
-				console.log(data);
+				var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+				var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
 
-				if (urlpattern.test(data)) {
-					console.log(ta.val() + '[url]' + data + '[/url]');
-					ta.val(taval + '[url]' + data + '[/url]');
-				} else if (imgpattern.test(data)) {
-					ta.val(taval + '[img]' + data + '[/img]');
-				} else {
+				var bhtml;
+				var ihtml;
 
-					ta.val(ta.val() + data)
+				if (imgpattern.test(data)) {
+					e.preventDefault();
+					bhtml = '[img]' + data + '[/img]';
+					ihtml = '<img src="' + data + '">';
+				} 
+				else if (urlpattern.test(data)) {
+					e.preventDefault();
+
+					var a = document.createElement('a'); // Create a dummy <a> element
+					a.href = data;                       // Assign link, let the browser parse it
+					var url_pathname = a.pathname.substring(1, data.length);
+					if (url_pathname.length == 0) {
+						url_pathname = data;
+					}
+					bhtml = '[url=' + data + ']' + url_pathname + '[/url]';
+					ihtml = '<a href="' + data + '">' + url_pathname +'</a>';
+				} 
+
+				if (bhtml != undefined) {
+					var tarea = $('textarea[name="message"]:first').val() + bhtml;
+					var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
+
+					// Otherwise when wysiwyg editor will appear even if it's disabled
+					if(dataStore['wysiwyg_editor'] == 'true') {
+						$('textarea[name="message"]:first').val(tarea);
+						$('textarea[name="message"]:first').cleditor()[0].focus();
+						$('.cleditorMain:first iframe').contents().find('body').html(imod);
+						$('textarea[name="message"]:first').cleditor()[0].focus();
+
+					} else {
+						$('textarea[name="message"]:first').val(tarea);
+					}
 				}
+
 			} else {
 				return true;
 			}
@@ -3858,6 +3877,55 @@ var quick_insertion = {
 		});
 	}
 
+}
+
+var spoiler_button = {
+
+	activated : function() {
+
+		if(dataStore['wysiwyg_editor'] == 'true') {
+			
+			// Place makro button somewhere else
+			$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 380 , 'width' : '17px'}); // 380
+
+			// Add spoiler button
+			$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
+			$('#spoilerButton').css({  'position' : 'absolute', 'left' : 110 , 'cursor': 'pointer'}); // 380
+		}
+		else {
+			// Make macro image smaller
+			$('form[name="newmessage"] a:eq(1) img').attr('src', chrome.extension.getURL('img/content/makro_button.png')).css({ 'width' : '17px' });
+			$('form[name="newmessage"] a:eq(1)').css({ 'left' : 360 }); //'position' : 'absolute'
+
+			// Add spoiler button
+			$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
+			$('#spoilerButton').css({  'margin-left' : 5, 'cursor': 'pointer'}); // 'position' : 'absolute', 'left' : 360
+		}
+
+		// Add click event to the spoiler button
+		$('#spoilerButton img').click(function(e) {
+
+			e.preventDefault();
+					
+			var bhtml = '[spoiler] [/spoiler]';
+
+			var tarea = $('textarea[name="message"]:first').val() + bhtml;
+			
+			// Otherwise cleditor will apear even if it's turned off
+			if(dataStore['wysiwyg_editor'] == 'true') {
+				var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'"> ';
+				var ihtml2= '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
+
+				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' +ihtml2;
+
+				$('textarea[name="message"]:first').cleditor()[0].focus();
+				$('.cleditorMain:first iframe').contents().find('body').html(imod);
+				$('textarea[name="message"]:first').cleditor()[0].focus();
+			}
+			$('textarea[name="message"]:first').val(tarea);
+
+		});
+	}
 }
 
 var tempScript = {
@@ -3960,9 +4028,14 @@ function extInit() {
 		}
 
 		//Pasted text will be a hyperlink, picture, video automatically
-		//if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
-		//	quick_insertion.activated();
-		//}
+		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
+			quick_insertion.activated();
+		}
+
+		// Dedicated spoiler button
+		if(dataStore['spoiler_button'] == 'true') {
+			spoiler_button.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -4135,9 +4208,14 @@ function extInit() {
 			}
 
 			//Pasted text will be a hyperlink, picture, video automatically
-			//if(dataStore['quick_insertion'] == 'true') {
-			//	quick_insertion.activated();
-			//}
+			if(dataStore['quick_insertion'] == 'true') {
+				quick_insertion.activated();
+			}
+
+			// Dedicated spoiler button
+			if(dataStore['spoiler_button'] == 'true') {
+				spoiler_button.activated();
+			}
 
 			tempScript.activated();
 

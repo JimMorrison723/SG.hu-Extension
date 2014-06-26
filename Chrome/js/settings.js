@@ -36,8 +36,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.0.8<br></p>';
-				html += '<p>Kiadás dátuma: 2014. 06. 24.</p>';
+				html += '<p>Verzió: 3.0.8.1<br></p>';
+				html += '<p>Kiadás dátuma: 2014. 06. 26.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -178,6 +178,11 @@ var cp = {
 					html += '<h3>Gyors beszúrás</h3>';
 					html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
 					html += '<div class="button" id="quick_insertion"></div>';
+				html += '</div>';
+				html += '<div>';
+					html += '<h3>Spoiler gomb</h3>';
+					html += '<p>Dedikált spoiler gomb.</p>';
+					html += '<div class="button" id="spoiler_button"></div>';
 				html += '</div>';
 			html += '</div>';
 
