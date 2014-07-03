@@ -1,4 +1,4 @@
-Az sg.hu nemhivatalos Chrome és Opera bővítménye.
+Az sg.hu nemhivatalos Chrome, Opera, Firefox, Maxthon bővítménye.
 
 Telepítés:
 
@@ -17,6 +17,10 @@ Telepítés:
 	Firefox:
 		Addon-SDK-t letöltöd a hivatalos oldalról, követed a linkben leírt instrukciókat:
 			https://addons.mozilla.org/en-US/developers/docs/sdk/1.0/dev-guide/addon-development/installation.html
+
+	Maxthon:
+		Maxthon mappában lévő .mxaddon-t letöltitek, behúzzátok maxthonba, majd megnyitás gombra nyomtok és telepítitek a kiegészítőt.
+			https://raw.githubusercontent.com/JimMorrison723/SG.hu-Extension/master/Maxthon/Sg-tuning.mxaddon
 		
 		
 A bővítmény funkciói:
