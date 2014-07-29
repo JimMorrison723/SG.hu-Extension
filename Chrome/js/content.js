@@ -29,12 +29,12 @@ function isLoggedIn() {
 	
 	
 	// Forum main page
-	} else if(document.location.href.match('forum.php')) {
-		return $('.std1').length ? true : false;
+	} else if(document.location.href.match('forum\/$')) {
+		return $('.user-hello').length ? true : false;
 	
 	// Topic page
-	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
-		return ( $('.std1').length > 1) ? true : false;
+	} else if(document.location.href.match('\/forum\/tema')) {
+		return ( $('.comments-login').length == 0) ? true : false;
 	}
 	
 }
@@ -46,13 +46,13 @@ function getUserName() {
 		return $('#msg-head b a').html();
 
 	// Forum main page
-	} else if(document.location.href.match('forum.php')) {
-		return $('.std1 b').text().match(/Szia (.*)!/)[1];
+	} else if(document.location.href.match('forum\/$')) {
+		return $('.user-hello').text().match(/Üdv, (.*)!/)[1];
 	
 	// Topic page
-	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
+	} else if(document.location.href.match('\/forum\/tema')) {
 	
-		return $('.std1:contains("Bejelentkezve")').text().replace('Bejelentkezve: ', '');
+		return $('#comments-login span').text();
 	}
 }
 
@@ -61,14 +61,12 @@ var chat_hide = {
 	
 	activated : function() {
 
-		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').hide();
-		$('table:eq(3) td:eq(2) br').hide();
+		$('#forum-chat').hide();
 	},
 	
 	disabled : function() {
 
-		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').show();
-		$('table:eq(3) td:eq(2) br').show();	
+		$('#forum-chat').show();
 	}
 }
 
@@ -77,19 +75,20 @@ var jump_unreaded_messages = {
 	
 	activated : function() {
 	
-		$('.ext_faves').next().find('a').each(function() {
+		$('#favorites-list').find('a').each(function() { //.ext_faves'
 			
 			// If theres a new message
-			if($(this).find('small').length > 0) {
+			if($(this).find('span[class*=new]').length > 0) {
 			
 				// Get the new messages count
-				var newMsg = parseInt($(this).find('small').html().match(/\d+/g));
-				
+				var newMsg = parseInt($(this).html().match(/\d+/g));
+				console.log(newMsg);
 				// Get last msn's page number
 				var page = Math.ceil( newMsg / 80 );
 				
 				// Rewrite the url
-				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
+				//$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
+				$(this).attr('href', $(this).attr('href') + '#last-read');
 			
 			// Remove newmsg var from link
 			} else if( $(this).attr('href').indexOf('&order') != -1) {
@@ -103,14 +102,14 @@ var jump_unreaded_messages = {
 	
 	disabled : function() {
 	
-		$('.ext_faves').next().find('a').each(function() {
+		$('#favorites-list').find('a').each(function() {
 			
-			if( $(this).attr('href').indexOf('&order') != -1) {
+/*			if( $(this).attr('href').indexOf('&order') != -1) {
 				
 				var start = $(this).attr('href').indexOf('&order');
 				
 				$(this).attr('href', $(this).attr('href').substring(0, start));
-			}
+			}*/
 		});
 	},
 	
@@ -681,7 +680,7 @@ var show_navigation_buttons = {
 			if(document.location.href.match('cikkek')) {
 				document.location.href = 'index.php';
 			} else {
-				document.location.href = 'forum.php';
+				document.location.href = 'http://sg.hu/forum/';
 			}
 		});
 		
@@ -2401,6 +2400,9 @@ var remove_adds = {
 		// Home sidebar
 		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
 		$('.std0:contains("Hirdetés")').remove();
+
+		// Home facebook widget
+		$('#forum-fb-likebox').remove();
 		
 		// Under menu
 		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
@@ -4042,7 +4044,7 @@ function extInit() {
 		}
 
 	// FORUM.PHP
-	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
+	} else if(document.location.href.match('forum\/$')) {
 
 
 		// Settings
@@ -4104,7 +4106,7 @@ function extInit() {
 	}
 	
 	// LISTAZAS.PHP
-	else if(document.location.href.match(/listazas.php3\?id/gi) || document.location.href.match('listazas_msg.php')) {
+	else if(document.location.href.match('\/forum\/tema')) {
 
 		// Settings
 		cp.init(2);
