@@ -661,10 +661,12 @@ textarea[name="message"] {
 }
 
 .ext_dropdown ul li {
-	padding-left: 5px;
+	padding-left: 5px !important;
 	cursor: pointer;
-	color: #fff;
+	/* color: #fff; */
 	font: normal normal normal 12px/16px Arial, serif;
+	margin-bottom: 5px !important;
+	background-color: inherit !important;
 }
 
 .ext_dropdown ul li.ident {
@@ -687,6 +689,7 @@ textarea[name="message"] {
 .ext_dropdown ul hr {
 	border-top: 1px solid #fff;
 	border-bottom: 1px solid #e0e0e0;
+	margin: 0 0;
 }
 
 /* INFO button*/
@@ -694,6 +697,7 @@ textarea[name="message"] {
 	cursor: pointer;
 	position: relative;
 	vertical-align: middle;
+	margin-left: 5px;
 }
 
 .infobox {

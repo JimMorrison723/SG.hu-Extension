@@ -82,7 +82,7 @@ var jump_unreaded_messages = {
 			
 				// Get the new messages count
 				var newMsg = parseInt($(this).html().match(/\d+/g));
-				console.log(newMsg);
+
 				// Get last msn's page number
 				var page = Math.ceil( newMsg / 80 );
 				
@@ -193,7 +193,7 @@ var jump_unreaded_messages = {
 	
 };
 
-var fav_show_only_unreaded = {
+/*var fav_show_only_unreaded = {
 
 	opened : false,
 	
@@ -319,23 +319,23 @@ var fav_show_only_unreaded = {
 		$('#ext_refresh_faves').css('right', 0);
 		$('#ext_read_faves').css('right', 18);
 	}
-};
+};*/
 
 
 var short_comment_marker = {
 	
 	activated : function() {
 	
-		$('.ext_faves').next().find('div a').each(function() {
+		$('#favorites-list').find('a').each(function() {
 		
-			if( $(this).find('small').length > 0) {
+			if($(this).find('span[class*=new]').length > 0) {
 			
 				// Received new messages counter
-				var newMsg = parseInt( $(this).find('small').html().match(/\d+/g) );
+				var newMsg = parseInt( $(this).find('span').html().match(/\d+/g) ); // \d - non-digit character
 			
 				// Remove the old marker text
-				$(this).find('br').hide();
-				$(this).find('font:last').hide();
+				$(this).find('span[class*=new]').hide();
+				/*$(this).find('font:last').hide();*/
 			
 				// Add the new marker after the topic title
 				$(this).html( $(this).html() + ' <span class="ext_short_comment_marker" style="color: red;">'+newMsg+'</span>');
@@ -345,13 +345,13 @@ var short_comment_marker = {
 	
 	disabled : function() {
 	
-		$('.ext_faves').next().find('div a').each(function() {
+		$('#favorites-list').find('a').each(function() {
 		
-			if( $(this).find('small').length > 0) {
+			if($(this).find('span[class*=new]').length > 0) {
 						
 				// Remove the old marker text
-				$(this).find('br').show();
-				$(this).find('font:last').show();
+				$(this).find('span[class*=new]').show();
+				/*$(this).find('font:last').show();*/
 			
 				// Add the new marker after the topic title
 				
@@ -936,7 +936,7 @@ var show_navigation_buttons = {
 				}
 					
 				// Hide topics that doesnt have unreaded messages
-				fav_show_only_unreaded.activated();
+				/*fav_show_only_unreaded.activated();*/
 						
 				// Faves: short comment marker
 				if(dataStore['short_comment_marker'] == 'true' ) {
@@ -1177,9 +1177,9 @@ var update_fave_list = {
 				$('.ext_faves:first').next().html(data);
 				
 				// Faves: show only with unreaded messages
-				if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+				/*if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 					fav_show_only_unreaded.activated();
-				}
+				}*/
 
 				// Faves: short comment marker
 				if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
@@ -1296,9 +1296,9 @@ var make_read_all_faves = {
 					}, 2000);
 					
 					// Faves: show only with unreaded messages
-					if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+					/*if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 						fav_show_only_unreaded.activated();
-					}
+					}*/
 
 					// Reset faves newmsg vars
 					if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
@@ -1509,13 +1509,7 @@ var overlay_reply_to = {
 			textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
 			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270, right : 'auto' });
 
-			if(dataStore['spoiler_button'] == 'true') {
-//				textarea_clone.find('a:eq(1)').css({ left : 360 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, left : 90 }); //spoiler button 360
-				textarea_clone.find('a:eq(7)').css({ position : 'absolute', top : 220, right : 0 });
-			} else {
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
-			}
+			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 				
 			// Fix smile list
 			if(document.location.href.match('cikkek')) {
@@ -1587,13 +1581,8 @@ var overlay_reply_to = {
 			textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
 			textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
 
-			if(dataStore['spoiler_button'] == 'true') {
-				textarea_clone.find('a:eq(1)').css({ position : 'absolute', left : 540 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', left : 90 , 'margin-left' : 0 }); //spoiler button 360
-				textarea_clone.find('a:eq(7)').css({ position : 'absolute', right : 0 });
-			} else {
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
-			}
+
+			textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
 		}
 		
 		// Textarea position
@@ -2393,22 +2382,22 @@ var custom_blocks = {
 var remove_adds = {
 
 	activated : function() {
-		
-		// Page top
+
+/*		// Page top
 		$('img[src*="hirdetes.gif"]').parent().remove();
 		
 		// Home sidebar
 		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
-		$('.std0:contains("Hirdetés")').remove();
+		$('.std0:contains("Hirdetés")').remove();*/
 
 		// Home facebook widget
 		$('#forum-fb-likebox').remove();
 		
 		// Under menu
-		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
+/*		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
 		
 		// Save init time in unix timestamp
-		var time = Math.round(new Date().getTime() / 1000)
+		var time = Math.round(new Date().getTime() / 1000) 
 
 		// Text ads
 		var interval = setInterval(function() {
@@ -2430,7 +2419,7 @@ var remove_adds = {
 			if( (time+5) < newTime ) {
 				clearInterval(interval);
 			}
-		}, 500, interval);
+		}, 500, interval);*/
 		
 	},
 };
@@ -3307,8 +3296,8 @@ var topic_whitelist = {
 	execute : function(ele) {
 		
 		// Get topic ID
-		var id = $('select[name="id"] option:selected').val();
-		
+		var id = $('nav#breadcrumb select option:selected').val();
+
 		// Add topic to whitelist
 		if($(ele).html() == '+') {
 			
@@ -3394,13 +3383,13 @@ var disable_point_system = {
 
 	activated : function() {
 		
-		$('.topichead .ertekelkep, .topichead span[id*="rates"]').hide();
-		$('.msg-text').show();
-		$('.msg-text').each(function() {
+		$('#forum-posts-list ul li .forum-post-rate').hide();
+		$('#forum-posts-list ul li .forum-post-rate-place span').hide();
+/*		$('.msg-text').each(function() {
 			if( $(this).next().attr('id') == 'leful') {
 				$(this).next().hide();
 			}
-		});
+		});*/
 	}
 };
 
@@ -3417,7 +3406,7 @@ var profiles = {
 		}
 		
 		// Iterate over the comments
-		$('.topichead:not(.checked)').each(function() {
+		$('#forum-posts-list ul li:not(.checked)').each(function() {
 
 			// Create the wrapper if not any
 			if( !$(this).next().is('.wrapper') ) {
@@ -3436,7 +3425,7 @@ var profiles = {
 
 			} else {
 
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("header a img").length == 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
@@ -3445,8 +3434,8 @@ var profiles = {
 			$(this).find('.titles').remove();
 			
 			// Set the background to default and remove paddings
-			$(this).next().find('.msg-text:first').css('background-color', '#F0F0F0');
-			$(this).next().find('.msg-text:first').css('padding', 3);
+			$(this).next().find('section.body').css('background-color', '#F0F0F0');
+			$(this).next().find('section.body').css('padding', 3);
 			
 			// Iterate over the profile settings
 			// Search for nickname match
@@ -3464,16 +3453,16 @@ var profiles = {
 						var width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8;
 						
 						// Border
-						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('.msg-text:first') );
+						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('section.body') );
 							outline.css({ width : 6, height : '100%', position : 'absolute', left : width, top : 0, backgroundColor : '#'+profiles[c]['color'][0] });
 						
 						// Background
 						if(profiles[c]['background']) {
-							$(this).parent().find('.msg-text:first').css('background-color', '#'+profiles[c]['color'][1]);
+							$(this).parent().find('section.body').css('background-color', '#'+profiles[c]['color'][1]);
 						}
 						
 						// Fix msg-text
-						$(this).parent().find('.msg-text:first').css('padding-left', (width+3+8));	
+						$(this).parent().find('section.body').css('padding-left', (width+3+8));	
 					}
 				}
 			}
@@ -3500,19 +3489,19 @@ var add_to_list = {
 		
 		
 		// Create dropdowns
-		$('.topichead:not(.ext_add_to_list_topichead) a:contains("#")').each(function() {
+		$('#forum-posts-list ul li header:not(.ext_add_to_list_topichead) a:contains("#")').each(function() {
 
 			// Insert separator
-			var separator = $('<span> | </span>').insertAfter(this);
+			var separator = $('<span class="separator pull-right"></span>').insertBefore(this);
 			
 			// Insert dropdow placeholder
-			var dropdown = $('<div class="ext_dropdown"><span>&#9660;</span></div>').insertAfter(separator);
+			var dropdown = $('<div class="ext_dropdown pull-right"><span>&#9660;</span></div>').insertBefore(separator);
 			
 			// Insert dropdown list
 			var list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list');
 			
 			// Set dropdown background color
-			var color_id = $(this).closest('.topichead').css('background-image').match(/\d+/g);
+			var color_id = $(this).closest('#forum-posts-list ul li').css('background-image').match(/\d+/g);
 
 				if(color_id) {
 					list.css('background-color', '#' + add_to_list.colors[color_id]);
@@ -3521,14 +3510,15 @@ var add_to_list = {
 				}
 			
 			// Set relative position to the container
-			$(this).closest('.topichead').css('position', 'relative').addClass('ext_add_to_list_topichead');
+			$(this).closest('#forum-posts-list ul li header').css('position', 'relative').addClass('ext_add_to_list_topichead');
+
 		});
 
 		// Create dropdown event
 		$('.ext_dropdown').off().on('click', function() {
 			
 			if( $(this).find('ul').css('display') == 'none') {
-				$(this).find('ul').css('top', $(this).closest('.topichead').height() ).slideDown();
+				$(this).find('ul').css('top', $(this).closest('#forum-posts-list ul li header').height() ).slideDown();
 			} else {
 				$(this).find('ul').slideUp();
 			}
@@ -3557,7 +3547,7 @@ var add_to_list = {
 		$('<li><h3>Hozzáadás listához</h3></li>').appendTo('.ext_addtolist_list');
 
 		// Insert separator
-		$('<li><hr></li>').appendTo('.ext_addtolist_list');
+		$('<li></li>').appendTo('.ext_addtolist_list');
 
 		// Add blocklist option
 		$('<li class="ident ext_addtoblocklist">Tiltólista</li>').appendTo('.ext_addtolist_list');
@@ -3584,7 +3574,7 @@ var add_to_list = {
 		var list = JSON.parse(dataStore['profiles']);
 		
 		// Get user's nick
-		var anchor = $(ele).closest('.topichead').find('a[href*="forumuserinfo.php"]');
+		var anchor = $(ele).closest('#forum-posts-list ul li header').find('a[href*="felhasznalo"]');
 
 		if(anchor.children('img').length > 0) {
 			var nick = anchor.children('img').attr('title').replace(" - VIP", "");
@@ -3611,15 +3601,15 @@ var add_to_list = {
 		
 		
 		// Remove checked class for update
-		$(".topichead").each( function() {
+		$("#forum-posts-list ul li").each( function() {
 			
 			if(document.location.href.match('cikkek')) {
 			
 				var nick_2 = $(this).find('a:first').html();
 
 			} else {
-			
-				var nick_2 = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+			/* BUG avatar nélküli felhasználóknál nem működik.     $(this).find("header a")[0]  undefined */ 
+				var nick_2 = ($(this).find("header a img").length == 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0].innerHTML;
 					nick_2 = nick_2.replace(/ - VIP/, "");
 			}
 			
@@ -3641,14 +3631,14 @@ var columnify_comments = {
 	
 	activated : function() {
 
-		$('.topichead:not(.columnify)').each(function() {
+		$('#forum-posts-list ul li header:not(.columnify)').each(function() {
 			
 			// Get the message element
-			var target = $(this).closest('center').find('.msg-text:first');
+			var target = $(this).next('section.body');
 			
 			// Add multi column when the text is larder than 200px
 			if( target.html().length > 800) {
-				target.css({ '-webkit-column-width' : 200, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
+				target.css({ '-webkit-column-width' : 296, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
 			}
 			
 			// Add 'columnify' class
@@ -3658,8 +3648,8 @@ var columnify_comments = {
 	
 	disabled : function() {
 		
-		$('.topichead').each(function() {
-			$(this).next().find('.msg-text').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
+		$('#forum-posts-list ul li header').each(function() {
+			$(this).next().find('section.body').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
 		});
 	}
 	
@@ -3669,7 +3659,7 @@ var quick_user_info = {
 	
 	activated : function() {
 
-		$('.topichead').closest('table').each(function() {
+		$('#forum-posts-list ul li').each(function() {
 
 			//Do not add the mouseenter function again if the element already has it
 			if(!$(this).data('events')) {
@@ -3678,7 +3668,7 @@ var quick_user_info = {
 				if ($(this).not('.quick_user_info'))
 				{
 					//Place info image
-				    $(this).addClass('quick_user_info').find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
+				    $(this).addClass('quick_user_info').find('span.icons').after('<span class=""><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></span>');
 				}
 			    $(this).append('<div class=\"infobox\"></div>');
 
@@ -3686,21 +3676,20 @@ var quick_user_info = {
 			    $('img.ext_quick_user_info_btn').click(function(e) {
 
 			    	//Get user profile URL
-					var url = $(this).closest('tr').find('td:eq(0)').find('a[href^="/forumuserinfo"]').attr('href'); 
-					console.log(url);
+					var url = $(this).closest('header').find('a[href^="/felhasznalo"]').attr('href'); 
 
 					//Fix for vip, non vip topichead height
-					var th_height = $(this).closest('.topichead').css('height').replace('px', '');
+					var th_height = $(this).closest('header').css('height').replace('px', '');
 
 					//Get topichead pos from the top of the page
-					var fromTop = $(this).parents('.topichead').offset().top;
+					var fromTop = $(this).parents('header').offset().top;
 					
 					//If "highlight_comments_for_me" is on we need to change the fromTop to the comment position
-					if ($(this).closest('center').css('position') !== 'static')
+/*					if ($(this).closest('center').css('position') !== 'static')
 					{
 						//Correct according a default padding on the messages
 						fromTop = $(this).closest('.topichead').parent('div').css('padding-top').replace('px', '');
-					}
+					}*/
 					
 					var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 
@@ -3708,7 +3697,7 @@ var quick_user_info = {
 					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
 
 					//Show user information in infobox
-				    $('.infobox').load(url + ' .std1 table'); 
+				    $('.infobox').load(url + ' table.data-table'); 
 
 				});
 
@@ -3885,55 +3874,6 @@ var quick_insertion = {
 
 }
 
-var spoiler_button = {
-
-	activated : function() {
-
-		if(dataStore['wysiwyg_editor'] == 'true') {
-			
-			// Place makro button somewhere else
-			$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 380 , 'width' : '17px'}); // 380
-
-			// Add spoiler button
-			$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
-			$('#spoilerButton').css({  'position' : 'absolute', 'left' : 110 , 'cursor': 'pointer'}); // 380
-		}
-		else {
-			// Make macro image smaller
-			$('form[name="newmessage"] a:eq(1) img').attr('src', chrome.extension.getURL('img/content/makro_button.png')).css({ 'width' : '17px' });
-			$('form[name="newmessage"] a:eq(1)').css({ 'left' : 360 }); //'position' : 'absolute'
-
-			// Add spoiler button
-			$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
-			$('#spoilerButton').css({  'margin-left' : 5, 'cursor': 'pointer'}); // 'position' : 'absolute', 'left' : 360
-		}
-
-		// Add click event to the spoiler button
-		$('#spoilerButton img').click(function(e) {
-
-			e.preventDefault();
-					
-			var bhtml = '[spoiler] [/spoiler]';
-
-			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			
-			// Otherwise cleditor will apear even if it's turned off
-			if(dataStore['wysiwyg_editor'] == 'true') {
-				var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'"> ';
-				var ihtml2= '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
-
-				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' +ihtml2;
-
-				$('textarea[name="message"]:first').cleditor()[0].focus();
-				$('.cleditorMain:first iframe').contents().find('body').html(imod);
-				$('textarea[name="message"]:first').cleditor()[0].focus();
-			}
-			$('textarea[name="message"]:first').val(tarea);
-
-		});
-	}
-}
-
 var tempScript = {
 
 	activated : function() {
@@ -4038,11 +3978,6 @@ function extInit() {
 			quick_insertion.activated();
 		}
 
-		// Dedicated spoiler button
-		if(dataStore['spoiler_button'] == 'true') {
-			spoiler_button.activated();
-		}
-
 	// FORUM.PHP
 	} else if(document.location.href.match('forum\/$')) {
 
@@ -4069,10 +4004,10 @@ function extInit() {
 		}
 		
 		// Faves: show only with unreaded messages
-		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+/*		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 			fav_show_only_unreaded.init();
 			fav_show_only_unreaded.activated();
-		}
+		}*/
 
 		// Faves: short comment marker
 		if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
@@ -4216,11 +4151,6 @@ function extInit() {
 			//Pasted text will be a hyperlink, picture, video automatically
 			if(dataStore['quick_insertion'] == 'true') {
 				quick_insertion.activated();
-			}
-
-			// Dedicated spoiler button
-			if(dataStore['spoiler_button'] == 'true') {
-				spoiler_button.activated();
 			}
 
 			tempScript.activated();

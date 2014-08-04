@@ -48,14 +48,14 @@ var cp = {
 					html += '<p>Ezzel az opcióval a fórum főoldalon levő közös chatet tüntethted el maradéktalanul.</p>';
 					html += '<div class="button" id="chat_hide"></div>';
 				html += '</div>';
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>Csak olvasatlan üzenttel rendelkező kedvencek mutatása</h3>';
 					html += '<p class="sub">';
 						html += '<label><input type="checkbox" id="fav_show_only_unreaded_remember"> Utolsó állapot megjegyzése</label><br>';
 					html += '</p>';
 					html += '<p>A fórum főoldalán található kedvencek listában csak az olvasatlan üzenettel rendelkező topikok lesznek listázva. A bővítmény létrehoz tovább egy kapcsolót a kedvencek cím mellett mellyel könnyen visszaválthatsz a régi nézetre.</p>';
 					html += '<div class="button" id="fav_show_only_unreaded"></div>';
-				html += '</div>';
+				html += '</div>';*/
 				html += '<div>';
 					html += '<h3>Rövid kommentjelzők</h3>';
 					html += '<p>A főoldali kedvencek listában nem jelenik meg helyet foglalva új sorban az "N új üzeneted érkezett" szöveg, ehelyett helytakarékos módon csak egy piros szám jelzi az új üzeneteket a topik neve mellett.</p>';
@@ -178,11 +178,6 @@ var cp = {
 					html += '<h3>Gyors beszúrás</h3>';
 					html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
 					html += '<div class="button" id="quick_insertion"></div>';
-				html += '</div>';
-				html += '<div>';
-					html += '<h3>Spoiler gomb</h3>';
-					html += '<p>Dedikált spoiler gomb.</p>';
-					html += '<div class="button" id="spoiler_button"></div>';
 				html += '</div>';
 			html += '</div>';
 
