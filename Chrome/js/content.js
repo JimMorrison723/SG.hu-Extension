@@ -373,7 +373,7 @@ var blocklist =  {
 	
 		var deletelist = dataStore['block_list'].split(',');
 
-		$(".topichead").each( function() {
+		$("#forum-posts-list ul li header").each( function() {
 			
 			if(document.location.href.match('cikkek')) {
 			
@@ -381,13 +381,13 @@ var blocklist =  {
 
 			} else {
 			
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
 			for(var i = 0; i < deletelist.length; i++) {
 				if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
-					$(this).closest('center').hide();
+					$(this).closest('li.forum-post').hide();
 				}
 			}
 		});
@@ -397,8 +397,8 @@ var blocklist =  {
 
 		var nick = '';
 
-		var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
-		var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
+		var anchor = $(el).closest('#forum-posts-list ul li header').find('a[href*="/felhasznalo"]');
+		var tmpUrl = anchor.attr('href');
 
 		if(anchor.children('img').length > 0) {
 			nick = anchor.children('img').attr('title').replace(" - VIP", "");
@@ -409,10 +409,10 @@ var blocklist =  {
 	
 		if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
 	
-			$('.topichead a[href="'+tmpUrl+'"]').each(function() {
+			$('#forum-posts-list ul li header a[href="'+tmpUrl+'"]').each(function() {
 	
 				// Remove the comment
-				$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+				$(this).closest('li.forum-post').animate({ height : 0, opacity : 0 }, 500, function() {
 					$(this).hide();
 				})
 			});
@@ -430,27 +430,27 @@ var blocklist =  {
 	
 	unblock : function(user) {
 
-		$(".topichead").each( function() {
+		$("#forum-posts-list ul li header").each( function() {
 			
 			if(document.location.href.match('cikkek')) {
 			
 				var nick = $(this).find('a:first').html();
 			} else {
 			
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 
 			if(nick.toLowerCase() == user.toLowerCase()) {
 
 				// Show temporary the comment height
-				$(this).closest('center').css({ display : 'block', height : 'auto' });
+				$(this).closest('li.forum-post').css({ display : 'block', height : 'auto' });
 				
 				// Get height
-				var height = $(this).closest('center').height();
+				var height = $(this).closest('li.forum-post').height();
 				
 				// Set back to invisible, then animate
-				$(this).closest('center').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
+				$(this).closest('li.forum-post').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
 			}
 		});
 	}
