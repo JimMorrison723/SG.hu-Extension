@@ -75,7 +75,7 @@ var jump_unreaded_messages = {
 	
 	activated : function() {
 	
-		$('#favorites-list').find('a').each(function() { //.ext_faves'
+		$('#favorites-lista').find('a').each(function() { //.ext_faves'
 			
 			// If theres a new message
 			if($(this).find('span[class*=new]').length > 0) {
@@ -493,7 +493,7 @@ var autoload_next_page = {
 			autoload_next_page.currPage = 1;
 			
 			// Get topic ID
-			var topic_id = $('.std2 a').attr('href').split('?id=')[1];
+			var topic_id = $('nav#breadcrumb select option:selected').val();
 			
 			// Get the topic page to determinate max page number
 			$.ajax({
@@ -552,7 +552,7 @@ var autoload_next_page = {
 			if(document.location.href.match('cikkek')) {
 			
 				// Get topic ID
-				var topic_id = $('.std2 a').attr('href').split('?id=')[1];		
+				var topic_id = $('nav#breadcrumb select option:selected').val();		
 				
 				// Url to call	
 				var url = 'listazas.php3?id='+topic_id;
@@ -678,15 +678,15 @@ var show_navigation_buttons = {
 		// Add event to back button
 		$('#ext_back').click(function() {
 			if(document.location.href.match('cikkek')) {
-				document.location.href = 'index.php';
+				document.location.href = 'http://sg.hu/';
 			} else {
 				document.location.href = 'http://sg.hu/forum/';
 			}
 		});
 		
 		
-		if(!document.location.href.match('cikkek') && !document.location.href.match('listazas_msg.php')) {
-			
+		if(!document.location.href.match('cikkek') && !document.location.href.match('\/uzenetek')) {
+
 			// Create search button
 			$('<div id="ext_search"></div>').prependTo('body');
 			
@@ -706,7 +706,7 @@ var show_navigation_buttons = {
 			});
 			
 			// Get topic ID
-			var id = $('select[name="id"] option:selected').val();
+			var id = $('nav#breadcrumb select option:selected').val();
 		
 			// Determining current status
 			var status, title = '';
@@ -734,7 +734,7 @@ var show_navigation_buttons = {
 	
 		
 		// Execute when the user is logged in
-		if(isLoggedIn() || document.location.href.match('listazas_msg.php')) {
+		if(isLoggedIn() || document.location.href.match('\/uzenetek')) {
 		
 			// Create faves button
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
@@ -922,8 +922,9 @@ var show_navigation_buttons = {
 	},
 	
 	showFaves : function() {
-		
-		$.ajax({
+		var url = "http://sg.hu/forum/";
+		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list');
+/*		$.ajax({
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
 			success : function(data) {
@@ -939,9 +940,9 @@ var show_navigation_buttons = {
 				/*fav_show_only_unreaded.activated();*/
 						
 				// Faves: short comment marker
-				if(dataStore['short_comment_marker'] == 'true' ) {
+			  	/*if(dataStore['short_comment_marker'] == 'true' ) {
 					short_comment_marker.activated();
-				}
+				}*/
 				
 				// Set position
 				show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
@@ -956,8 +957,8 @@ var show_navigation_buttons = {
 				
 				// Create the hiding overlay
 				show_navigation_buttons.createOverlay();
-			}
-		});
+			/*}*/
+		/*});*/
 	},
 	
 	findArrowPosition : function(ele, target) {
@@ -1396,14 +1397,14 @@ var overlay_reply_to = {
 		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
 		
 		// Change the behavior the replyto button
-		$('.topichead a:contains("válasz")').on('click', function(e) {
+		$('li[id*=post] header a:contains("válasz")').on('click', function(e) {
 			
 			// Prevent default submission
 			e.preventDefault();
 
 			// Get ref msg ID and comment element
 			var msgno = $(this).attr('href').match(/\d+/g);
-			var entry = $(this).closest('center');
+			var entry = $(this).closest('li');
 
 			// Call show method
 			overlay_reply_to.show(entry, msgno);
@@ -1412,7 +1413,7 @@ var overlay_reply_to = {
 	
 	disabled : function() {
 	
-		$('.topichead a:contains("válasz")').off('click');
+		$('li[id*=post] header a:contains("válasz")').off('click');
 	
 	},
 	
@@ -1434,10 +1435,10 @@ var overlay_reply_to = {
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 		
 		// Highlight the reply comment
-		var comment_clone = $(comment).clone().prependTo('body').addClass('ext_highlighted_comment');
+		var comment_clone = $(comment).clone().prependTo('#forum-posts-list').addClass('ext_highlighted_comment');
 		
 		// Maintain comment clone positions
-		comment_clone.css({ 'left' : comment.children('table:first').offset().left, 'top' : comment.children('table:first').offset().top });
+		comment_clone.css({ 'left' : comment.children('header').offset().left, 'top' : comment.children('header').offset().top });
 		
 		// Remove threaded view padding and border
 		comment_clone.css({ margin : 0 , padding : 0, border : 0 });
@@ -1446,10 +1447,10 @@ var overlay_reply_to = {
 		comment_clone.find('.ext_comments_for_me_indicator').remove();
 		
 		// Remove sub-center tags
-		comment_clone.find('center').remove();
+		comment_clone.find('ul.post-answer').remove();
 		
 		// Remove quoted subcomments
-		comment_clone.find('center').parent('div').remove();
+		comment_clone.find('ul.post-answer').remove(); /*.parent('div') */ 
 		
 		if(document.location.href.match('cikkek')) {
 			comment_clone.css('width', 700);
@@ -1498,7 +1499,7 @@ var overlay_reply_to = {
 
 				
 			// Apply some styles
-			textarea_clone.css({'background' : 'none', 'border' : 'none' });
+			/*textarea_clone.css({'background' : 'none', 'border' : 'none' });*/
 
 
 			// Fix buttons
@@ -1554,14 +1555,14 @@ var overlay_reply_to = {
 				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
 									
 			} else {
-	
-				var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+
+				var textarea_clone = $('form[name="newmessage"] textarea').closest('form').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 
 				// Add 'topic' class to the clone
 				textarea_clone.addClass('topic');
 					
 				// Remove username line
-				textarea_clone.find('.std1').remove();
+				textarea_clone.find('#comments-login').remove();
 			
 				// Create a container element around the textarea for box-shadow
 				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
@@ -1574,12 +1575,14 @@ var overlay_reply_to = {
 			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
 
 			// Fix buttons
-			textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
-			textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 }); // Makrók 90
-			textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
-			textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
-			textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
-			textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
+			textarea_clone.find('button:eq(0)').css({ position : 'absolute',  left : 0 });
+			textarea_clone.find('button:eq(1)').css({ position : 'absolute',  left : 90 });  //90   // Makrók 90
+			textarea_clone.find('button:eq(2)').css({ position : 'absolute',  left : 180 }); //180  
+			textarea_clone.find('button:eq(3)').css({ position : 'absolute',  left : 270 }); //270  
+			textarea_clone.find('button:eq(4)').css({ position : 'absolute',  left : 360 }); //360  
+			textarea_clone.find('button:eq(5)').css({ position : 'absolute',  left : 450 }); //450  
+			textarea_clone.find('button:eq(6)').css({ position : 'absolute',  left : 450 }); //450  
+			textarea_clone.find('button:eq(7)').css({ position : 'absolute',  left : 450 }); //450  
 
 
 			textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
@@ -1591,7 +1594,7 @@ var overlay_reply_to = {
 		if(document.location.href.match('cikkek')) {
 			var left = $(document).width() / 2 - 350;
 		} else {
-			var left = $(document).width() / 2 - 405;
+			var left = $(document).width() / 2 - 475;
 		}
 
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
@@ -1696,15 +1699,15 @@ var highlight_comments_for_me = {
 		}
 	
 		// Get the proper domnodes
-		var comment = $('.msg-replyto a:contains("' + userName + '")');
+		var comment = $('li[id*="post"] footer a:contains("' + userName + '")');
 
 		//We need exact match with the userName
 		var start_pos   = comment.text().indexOf('\'') + 1;
 		var end_pos     = comment.text().indexOf('\'',start_pos);
 		var TesTcomment = comment.text().substring(start_pos, end_pos);
-		
+	
 		if (TesTcomment == userName) {
-			var comments = comment.closest('center');
+			var comments = comment.closest('li');
     	};
 	
 		if (comments != undefined) {
@@ -4047,7 +4050,7 @@ function extInit() {
 		cp.init(2);
 
 		// Get topic ID for whitelist check
-		var id = $('select[name="id"] option:selected').val();
+		var id = $('nav#breadcrumb select option:selected').val();
 
 		// Determining current status
 		var whitelist = new Array();

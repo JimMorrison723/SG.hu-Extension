@@ -139,7 +139,7 @@
 
 /* navigation buttons */
 #ext_scrolltop {
-	width: 26px;
+	/* width: 26px; */
 	height: 26px;
 	position: fixed;
 	bottom: 208px;
@@ -150,10 +150,13 @@
 	cursor: pointer;
 	opacity: 0.6;
 	z-index: 90;
+
+	width: 20px;
+	padding-left: 6px;
 }
 
 #ext_back {
-	width: 26px;
+	/* width: 26px; */
 	height: 26px;
 	position: fixed;
 	bottom: 172px;
@@ -164,6 +167,9 @@
 	cursor: pointer;
 	opacity: 0.6;
 	z-index: 90;
+
+	width: 20px;
+	padding-left: 6px;
 }
 
 #ext_search {
@@ -215,7 +221,7 @@
 }
 
 #ext_whitelist {
-	width: 26px;
+	/* width: 26px; */
 	height: 26px;
 	position: fixed;
 	bottom: 100px;
@@ -229,6 +235,9 @@
 	font: normal normal bold 16px/26px Arial, serif;
 	opacity: 0.6;
 	z-index: 90;
+
+	width: 18px;
+	padding-left: 8px;
 }
 
 #ext_nav_faves {
@@ -347,10 +356,11 @@
 .ext_highlighted_comment {
 	position: absolute !important;
 	z-index: 51;
+	width: 930px;
 }
 
 .ext_clone_textarea.topic {
-	width: 810px;
+	width: 930px;
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -373,7 +383,7 @@
 }
 
 .ext_clone_textarea.topic textarea {
-	width: 799px !important;
+	width: 893px !important;
 	padding: 5px;
 }
 
@@ -384,7 +394,7 @@
 }
 
 .ext_clone_textarea.topic #ext_clone_textarea_shadow {
-	width: 809px !important;
+	width: 930px !important;
 	box-shadow: #333 0px 0px 10px;
 }
 
@@ -425,8 +435,8 @@
 	width: 12px;
 	height: 12px;
 	position: absolute;
-	top: 20px;
-	left: 0px;
+	top: 5px;
+	left: -11px;
 }
 
 /* Threaded comments */
