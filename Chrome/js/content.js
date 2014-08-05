@@ -3409,7 +3409,7 @@ var profiles = {
 		}
 		
 		// Iterate over the comments
-		$('#forum-posts-list ul li:not(.checked)').each(function() {
+		$('#forum-posts-list ul li header:not(.checked)').each(function() {
 
 			// Create the wrapper if not any
 			if( !$(this).next().is('.wrapper') ) {
@@ -3418,7 +3418,7 @@ var profiles = {
 			    var wrapper = $('<div class="wrapper"></div>').insertAfter( this ).css('position', 'relative');
 			    
 			    // Place in other elements
-			    $(this).parent().find('.msg-text').appendTo( wrapper );
+			    $(this).parent().find('section.body, footer').appendTo( wrapper );
 			}
 
 			// Get nickname
@@ -3428,7 +3428,7 @@ var profiles = {
 
 			} else {
 
-				var nick = ($(this).find("header a img").length == 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0].innerHTML;
+				var nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
@@ -3437,8 +3437,8 @@ var profiles = {
 			$(this).find('.titles').remove();
 			
 			// Set the background to default and remove paddings
-			$(this).next().find('section.body').css('background-color', '#F0F0F0');
-			$(this).next().find('section.body').css('padding', 3);
+			$(this).next().find('section.body, footer').css('background-color', '#F0F0F0');
+			$(this).next().find('section.body, footer').css('padding', 3);
 			
 			// Iterate over the profile settings
 			// Search for nickname match
@@ -3449,23 +3449,23 @@ var profiles = {
 						// WE GOT A MATCH
 
 						// Title
-						var placeholder = $('<span class="titles">'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
+						var placeholder = $('<span class="titles">'+profiles[c]['title']+'</span>').appendTo( $(this).find('span.icons') );
 							placeholder.css('padding-left', 10);
 						
 						// Calc outline width 
 						var width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8;
 						
 						// Border
-						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('section.body') );
+						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('section.body, footer') );
 							outline.css({ width : 6, height : '100%', position : 'absolute', left : width, top : 0, backgroundColor : '#'+profiles[c]['color'][0] });
 						
 						// Background
 						if(profiles[c]['background']) {
-							$(this).parent().find('section.body').css('background-color', '#'+profiles[c]['color'][1]);
+							$(this).parent().find('section.body, footer').css('background-color', '#'+profiles[c]['color'][1]);
 						}
 						
 						// Fix msg-text
-						$(this).parent().find('section.body').css('padding-left', (width+3+8));	
+						$(this).parent().find('section.body, footer').css('padding-left', (width+3+8));	
 					}
 				}
 			}
