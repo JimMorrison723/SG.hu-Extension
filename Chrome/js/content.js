@@ -464,15 +464,15 @@ var blocklist =  {
 var highlight_forum_categories = {
 	
 	activated : function() {
-		$('.std0').find('b').css('color', '#ffffff');
-		$('.std0').find('b').css('background-color', '#6c9ff7');
-		$('.std0').find('b').css('padding', '2px');
+		$('nav#favorites-list a.category').css('color', '#ffffff');
+		$('nav#favorites-list a.category').css('background-color', '#6c9ff7');
+		$('nav#favorites-list a.category').css('padding', '2px');
 	},
 	
 	disabled : function() {
-		$('.std0').find('b').css('color', '#444');
-		$('.std0').find('b').css('background-color', '#fff');
-		$('.std0').find('b').css('padding', '0px');
+		$('nav#favorites-list a.category').css('color', '#444');
+		$('nav#favorites-list a.category').css('background-color', '#fff');
+		$('nav#favorites-list a.category').css('padding', '0px');
 	}
 }
 
