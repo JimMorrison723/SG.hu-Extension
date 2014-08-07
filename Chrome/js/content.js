@@ -504,21 +504,23 @@ var autoload_next_page = {
 					var tmp = $(data);
 					
 					// Fetch the max page number
-					autoload_next_page.maxPage = parseInt($(tmp).find('.lapozo:last a:last').prev().html());
+					autoload_next_page.maxPage = parseInt($(tmp).find('nav.pagination a:last').prev().html());
 				}
 			});
 			
 			// Get max page number 
-			autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+			autoload_next_page.maxPage = parseInt($('nav.pagination a:last').prev().html());
 
 		// Topic
 		} else {
 			
 			// Current page index
-			autoload_next_page.currPage = parseInt($('.lapozo:last span.current:first').html());
-		
-			// Get max page number 
-			autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+			autoload_next_page.currPage = parseInt($('nav.pagination a.current').html());
+			console.log(autoload_next_page.currPage);
+
+			// Get max page number - Fix for "Last page"
+			var temp = ($('nav.pagination a:last').attr('href'));
+			autoload_next_page.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1));
 		}
 		
 		$(document).scroll(function() {
@@ -555,24 +557,26 @@ var autoload_next_page = {
 				var topic_id = $('nav#breadcrumb select option:selected').val();		
 				
 				// Url to call	
-				var url = 'listazas.php3?id='+topic_id;
-					url =  url+'&index='+(autoload_next_page.currPage+1)+'&callerid=1';
+				var url = 'forum/tema/'+topic_id;
+					url =  url+'?page='+(autoload_next_page.currPage+1)+'&callerid=1';
 			
 			} else { 
-				var url = document.location.href.substring(0, 44);
-					url = url+'&index='+(autoload_next_page.currPage+1)+'';
+				var url = document.location.href.substring(0, 34);
+					url = url+'?page='+(autoload_next_page.currPage+1)+'';
+					console.log(url);
 			}
 		}
 		
 		// Make the ajax query
 		$.get(url, function(data) {
-			
+			console.log('GetTHeFucker');
 			// Create the 'next page' indicator
 			if(dataStore['threaded_comments'] != 'true') {
 				if(document.location.href.match('cikkek')) {
 					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std2:last');
 				} else {
-					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+					console.log("forum " + (autoload_next_page.currPage+1));
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('div#forum-posts-list:last');
 				}
 			}
 			
@@ -596,9 +600,10 @@ var autoload_next_page = {
 			
 			// Topics
 			} else {
-				var tmp = tmp.find('.topichead');
+				var tmp = tmp.find('div#forum-posts-list');
+				console.log(tmp);
 				tmp.each(function() {
-					$(this).closest('center').insertBefore('.std1:last');
+					$(this).insertBefore('.ext_autopager_idicator:last');
 				});
 			}
 			
