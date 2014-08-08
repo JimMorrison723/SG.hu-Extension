@@ -108,11 +108,11 @@ var cp = {
 					html += '<p>Bármely topikban a megkezdett beszélgetéseket szálonként átrendezi a script. Egy megválaszolt üzenet az eredeti üzenet alá kerül, ezzel jelezve és elkülönítve az egymásnak szánt üzeneteket.</p>';
 					html += '<div class="button" id="threaded_comments"></div>';
 				html += '</div>';
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>Említett kommentek beidézése</h3>';
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
-				html += '</div>';
+				html += '</div>';*/
 				html += '<div>';
 					html += '<h3>WYSIWYG Editor</h3>';
 					html += '<p>Office-szerű formázógombokat kapsz a kommentíró mezőbe élő előnézettel.</p>';

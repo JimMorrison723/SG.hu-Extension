@@ -627,9 +627,9 @@ var autoload_next_page = {
 				}
 			
 				// show menitoned comment
-				if(dataStore['show_mentioned_comments'] == 'true') {
+/*				if(dataStore['show_mentioned_comments'] == 'true') {
 					show_mentioned_comments.activated();
-				}
+				}*/
 
 				if(dataStore['disable_point_system'] == 'true') {
 					disable_point_system.activated();
@@ -1358,9 +1358,9 @@ function ext_valaszmsg(target, id, no, callerid) {
 			}
 
 			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
+/*			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
-			}
+			}*/
 
 			if(dataStore['disable_point_system'] == 'true') {
 				disable_point_system.activated();
@@ -1969,9 +1969,9 @@ var fetch_new_comments_in_topic = {
 					}
 				
 					// show menitoned comment
-					if(dataStore['show_mentioned_comments'] == 'true') {
+/*					if(dataStore['show_mentioned_comments'] == 'true') {
 						show_mentioned_comments.activated();
-					}
+					}*/
 
 					// User profiles
 					if(dataStore['profiles'] != '') {
@@ -1994,7 +1994,7 @@ var fetch_new_comments_in_topic = {
 
 
 
-var show_mentioned_comments = {
+/*var show_mentioned_comments = {
 
 	activated : function() {
 
@@ -2040,7 +2040,7 @@ var show_mentioned_comments = {
 			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
 		}
 	}
-};
+};*/
 
 
 var custom_blocks = {
@@ -3957,9 +3957,9 @@ function extInit() {
 		}
 
 		// show menitoned comment
-		if(dataStore['show_mentioned_comments'] == 'true') {
+/*		if(dataStore['show_mentioned_comments'] == 'true') {
 			show_mentioned_comments.activated();
-		}
+		}*/
 
 		// WYSIWYG Editor
 		if(dataStore['wysiwyg_editor'] == 'true') {
@@ -4119,9 +4119,9 @@ function extInit() {
 			}
 		
 			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
+/*			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
-			}
+			}*/
 
 			// WYSIWYG Editor
 			if(dataStore['wysiwyg_editor'] == 'true') {
