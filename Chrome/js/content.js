@@ -1866,23 +1866,23 @@ var fetch_new_comments_in_topic = {
 	
 	init : function() {
 		
-		if($('#ujhszjott').length == 0) {
+		if($('a#forum-new-messages').length == 0) {
 			return false;
 		}
 		
 		// Set new messages number to zero
-		$('#ujhszjott a').html('0 új hozzászólás érkezett!');
+		$('a#forum-new-messages').html('0 új hozzászólás érkezett!');
 		
 		// Hide the notification when fetch new comments settgngs is enabled
 		if(dataStore['fetch_new_comments'] == 'true') {
-			$('#ujhszjott').css({ display : 'none !important', visibility : 'hidden', height : 0, margin : 0, padding : 0, border : 0 });
+			$('a#forum-new-messages').css({ display : 'none !important', visibility : 'hidden', height : 0, margin : 0, padding : 0, border : 0 });
 		}
 		
 		// Monitor new comments nofification 
 		setInterval(function(){
 			
 			// Get new comments counter
-			var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
+			var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
 			
 			if(newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked == false) {
 				
@@ -1901,10 +1901,12 @@ var fetch_new_comments_in_topic = {
 	
 	rewrite : function() {
 	
-		var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
-		var comment_c = $('#ujhszjott a').text().match(/\d+/g);
+		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
+		var topic_url = $('a#forum-new-messages').attr('href');
+		console.log(topic_url);
+		var comment_c = $('a#forum-new-messages').text().match(/\d+/g);
 			
-		$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
+		$('a#forum-new-messages').attr('href',  topic_url + '&newmsg=' + comment_c);
 	},
 	
 	fetch : function() {
@@ -1918,7 +1920,7 @@ var fetch_new_comments_in_topic = {
 		}
 		
 		// Get new comments counter
-		var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
+		var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
 		
 		// Update the newmsg
 		var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
@@ -3642,7 +3644,7 @@ var columnify_comments = {
 		$('#forum-posts-list ul li header:not(.columnify)').each(function() {
 			
 			// Get the message element
-			var target = $(this).next('section.body');
+			var target = $(this).next('.wrapper').find('section.body');
 			
 			// Add multi column when the text is larder than 200px
 			if( target.html().length > 800) {
