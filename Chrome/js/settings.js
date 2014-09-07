@@ -36,7 +36,7 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.1<br></p>';
+				html += '<p>Verzió: 3.1.9.1 (Új felülethez készült alpha verzió)<br></p>';
 				html += '<p>Kiadás dátuma: 2014. 08. 07.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
@@ -113,11 +113,11 @@ var cp = {
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
 				html += '</div>';*/
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>WYSIWYG Editor</h3>';
 					html += '<p>Office-szerű formázógombokat kapsz a kommentíró mezőbe élő előnézettel.</p>';
 					html += '<div class="button" id="wysiwyg_editor"></div>';
-				html += '</div>';
+				html += '</div>';*/
 				html += '<div>';
 					html += '<h3>Topikba érkező új üzenetek automatikus kinyerése</h3>';
 					html += '<p>Amíg egy topikban tartózkodsz, a bővítmény automatikusan kinyeri az olvasás ideje alatt érkező új üezenteket.</p>';

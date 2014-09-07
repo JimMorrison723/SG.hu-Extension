@@ -631,9 +631,9 @@ var autoload_next_page = {
 					show_mentioned_comments.activated();
 				}*/
 
-				if(dataStore['disable_point_system'] == 'true') {
+/*				if(dataStore['disable_point_system'] == 'true') {
 					disable_point_system.activated();
-				}
+				}*/
 
 				// Profiles
 				if(dataStore['profiles'] != '') {
@@ -647,13 +647,13 @@ var autoload_next_page = {
 				if(dataStore['quick_user_info'] == 'true') {
 					quick_user_info.activated();
 				}
-
+/*
 				if(dataStore['better_yt_embed'] == 'true') {
 
 					//Check if the script should run or not
 					if($('embed').length >= dataStore['youtube_embed_limit'])
 						better_yt_embed.activated();
-				}
+				}*/
 
 				/*//Night mode
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
@@ -765,7 +765,7 @@ var show_navigation_buttons = {
 		}
 
 		//Night mode
-		if (dataStore['show_navigation_buttons_night'] == 'true') {
+/*		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
 			var state = dataStore['navigation_button_night_state'];
 				//console.log("topik:" + dataStore['navigation_button_night_state']);
@@ -815,7 +815,7 @@ var show_navigation_buttons = {
 				// Save in localStorage
 				port.postMessage({ name : "setSetting", key : 'navigation_button_night_state', val : data });
 			});	
-		};
+		};*/
 		
 		
 		// Set the button positions
@@ -1362,9 +1362,9 @@ function ext_valaszmsg(target, id, no, callerid) {
 				show_mentioned_comments.activated();
 			}*/
 
-			if(dataStore['disable_point_system'] == 'true') {
+/*			if(dataStore['disable_point_system'] == 'true') {
 				disable_point_system.activated();
-			}
+			}*/
 
 			// Set-up block buttons
 			add_to_list.init();
@@ -1464,7 +1464,7 @@ var overlay_reply_to = {
 		// Create textarea clone
 		
 		// WYSIWYG editor
-		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] == 'true') {
 			
 			if(document.location.href.match('cikkek')) {
 			
@@ -1504,7 +1504,7 @@ var overlay_reply_to = {
 
 				
 			// Apply some styles
-			/*textarea_clone.css({'background' : 'none', 'border' : 'none' });*/
+			textarea_clone.css({'background' : 'none', 'border' : 'none' });
 
 
 			// Fix buttons
@@ -1535,7 +1535,7 @@ var overlay_reply_to = {
 
 		
 		// Normal textarea
-		} else {
+		} else {*/
 		
 				
 			if(document.location.href.match('cikkek')) {
@@ -1591,7 +1591,7 @@ var overlay_reply_to = {
 
 
 			textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
-		}
+		/*}*/
 		
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
@@ -1627,9 +1627,9 @@ var overlay_reply_to = {
 		textarea_clone.find('textarea').focus();
 		
 		// Set the iframe focus
-		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] == 'true') {
 			textarea_clone.find('iframe')[0].focus();
-		}
+		}*/
 
 		// Block default tab action in non-WYSIWYG editor
 		$('body').keydown(function(event) {
@@ -1640,14 +1640,14 @@ var overlay_reply_to = {
 		});
 
 		// Block default tab action in a WYSIWYG editor
-		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] == 'true') {
 			$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
 				if (event.keyCode == '9') {
     				 event.preventDefault();
     				 textarea_clone.find('a:last').focus();
    				}
 			});
-		}
+		}*/
 		
 		// Thickbox
 		textarea_clone.find('a.thickbox').each(function() {
@@ -1667,9 +1667,9 @@ var overlay_reply_to = {
 		var close_btm = $('<img src="'+chrome.extension.getURL('img/content/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 
 		// Change close button position if WYSIWYG editor is disabled
-		if(dataStore['wysiwyg_editor'] != true) {
+/*		if(dataStore['wysiwyg_editor'] != true) {
 			close_btm.css({ 'right' : 4, 'top' : 9 });
-		}
+		}*/
 
 		// Add Close event
 		$(close_btm).click(function() {
@@ -3821,13 +3821,13 @@ var quick_insertion = {
 
 		var ta;
 		var ta2;
-		if(dataStore['wysiwyg_editor'] == 'true') {
+/*		if(dataStore['wysiwyg_editor'] == 'true') {
 			ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea
 			ta2 = $('.cleditorMain:first textarea[name="message"]');
 		}
-		else {
+		else {*/
 			ta = $('form[name="newmessage"] textarea');
-		}
+		/*}*/
 
 		// Paste event on WYSIWYG view and source view
 		$(ta).add(ta2).on('paste', function(e) {
@@ -3864,15 +3864,15 @@ var quick_insertion = {
 					var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
 
 					// Otherwise when wysiwyg editor will appear even if it's disabled
-					if(dataStore['wysiwyg_editor'] == 'true') {
+/*					if(dataStore['wysiwyg_editor'] == 'true') {
 						$('textarea[name="message"]:first').val(tarea);
 						$('textarea[name="message"]:first').cleditor()[0].focus();
 						$('.cleditorMain:first iframe').contents().find('body').html(imod);
 						$('textarea[name="message"]:first').cleditor()[0].focus();
 
-					} else {
+					} else {*/
 						$('textarea[name="message"]:first').val(tarea);
-					}
+					/*}*/
 				}
 
 			} else {
@@ -3918,9 +3918,9 @@ function extInit() {
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
 		// Message Center
-		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.article();
-		}
+		}*/
 
 		// Threaded_comments
 		if(dataStore['threaded_comments'] == 'true') {
@@ -3963,14 +3963,14 @@ function extInit() {
 			show_mentioned_comments.activated();
 		}*/
 
-		// WYSIWYG Editor
+/*		// WYSIWYG Editor
 		if(dataStore['wysiwyg_editor'] == 'true') {
 			wysiwyg_editor.activated();
-		}
+		}*/
 
-		if(dataStore['disable_point_system'] == 'true') {
+/*		if(dataStore['disable_point_system'] == 'true') {
 			disable_point_system.activated();
-		}
+		}*/
 
 		// Auto resizing textarea
 		textarea_auto_resize.init();
@@ -3984,10 +3984,10 @@ function extInit() {
 		}
 
 		//Pasted text will be a hyperlink, picture, video automatically
-		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
+/*		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
 			quick_insertion.activated();
 		}
-
+*/
 	// FORUM.PHP
 	} else if(document.location.href.match('forum\/$')) {
 
@@ -4040,9 +4040,9 @@ function extInit() {
 		}
 		
 		// Message center
-		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.init();
-		}
+		}*/
 		
 		//Night mode
 		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
@@ -4074,9 +4074,9 @@ function extInit() {
 			}
 
 			// Message Center
-			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+/*			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 				message_center.topic();
-			}
+			}*/
 		
 			//gradual_comments
 			if(dataStore['threaded_comments'] == 'true') {
@@ -4084,9 +4084,9 @@ function extInit() {
 			}
 		
 			// Jump the last unreaded message
-			if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
+/*			if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 				jump_unreaded_messages.topic();
-			}
+			}*/
 		
 			// Set-up block buttons
 			add_to_list.init();
@@ -4126,13 +4126,13 @@ function extInit() {
 			}*/
 
 			// WYSIWYG Editor
-			if(dataStore['wysiwyg_editor'] == 'true') {
+/*			if(dataStore['wysiwyg_editor'] == 'true') {
 				wysiwyg_editor.activated();
-			}
+			}*/
 
-			if(dataStore['disable_point_system'] == 'true') {
+/*			if(dataStore['disable_point_system'] == 'true') {
 				disable_point_system.activated();
-			}
+			}*/
 
 			// Auto resizing textarea
 			textarea_auto_resize.init();
@@ -4151,12 +4151,12 @@ function extInit() {
 			}
 
 			//Removes the default YT embed code and replace it for faster page load
-			if(dataStore['better_yt_embed'] == 'true') {
+/*			if(dataStore['better_yt_embed'] == 'true') {
 
 				//Check if the script should run or not
 				if($('embed').length >= dataStore['youtube_embed_limit'])
 					better_yt_embed.activated();
-			}
+			}*/
 
 			//Pasted text will be a hyperlink, picture, video automatically
 			if(dataStore['quick_insertion'] == 'true') {
