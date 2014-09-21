@@ -36,8 +36,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.1.9.1 (Új felülethez készült alpha verzió)<br></p>';
-				html += '<p>Kiadás dátuma: 2014. 08. 07.</p>';
+				html += '<p>Verzió: 3.1.9.2 (Új felülethez készült alpha verzió)<br></p>';
+				html += '<p>Kiadás dátuma: 2014. 09. 21.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -48,14 +48,14 @@ var cp = {
 					html += '<p>Ezzel az opcióval a fórum főoldalon levő közös chatet tüntethted el maradéktalanul.</p>';
 					html += '<div class="button" id="chat_hide"></div>';
 				html += '</div>';
-/*				html += '<div>';
+				html += '<div>';
 					html += '<h3>Csak olvasatlan üzenttel rendelkező kedvencek mutatása</h3>';
 					html += '<p class="sub">';
 						html += '<label><input type="checkbox" id="fav_show_only_unreaded_remember"> Utolsó állapot megjegyzése</label><br>';
 					html += '</p>';
 					html += '<p>A fórum főoldalán található kedvencek listában csak az olvasatlan üzenettel rendelkező topikok lesznek listázva. A bővítmény létrehoz tovább egy kapcsolót a kedvencek cím mellett mellyel könnyen visszaválthatsz a régi nézetre.</p>';
 					html += '<div class="button" id="fav_show_only_unreaded"></div>';
-				html += '</div>';*/
+				html += '</div>';
 				html += '<div>';
 					html += '<h3>Rövid kommentjelzők</h3>';
 					html += '<p>A főoldali kedvencek listában nem jelenik meg helyet foglalva új sorban az "N új üzeneted érkezett" szöveg, ehelyett helytakarékos módon csak egy piros szám jelzi az új üzeneteket a topik neve mellett.</p>';
@@ -184,7 +184,7 @@ var cp = {
 			html += '<div class="settings_page">';
 				html += '<div>';
 					html += '<h3>Reklámok blokkolása</h3>';
-					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n.</p>';
+					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n. (Továbbá a fórum főoldalon található FB doboz!)</p>';
 					html += '<div class="button" id="remove_ads"></div>';
 				html += '</div>';
 			html += '</div>';

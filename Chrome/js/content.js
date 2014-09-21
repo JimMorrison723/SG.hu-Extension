@@ -75,20 +75,20 @@ var jump_unreaded_messages = {
 	
 	activated : function() {
 	
-		$('#favorites-lista').find('a').each(function() { //.ext_faves'
+		$('#favorites-list span').find('a').each(function() { //.ext_faves'
 			
 			// If theres a new message
-			if($(this).find('span[class*=new]').length > 0) {
+			if($(this).find('span[class="new"]').length > 0) {
 			
 				// Get the new messages count
-				var newMsg = parseInt($(this).html().match(/\d+/g));
+				var newMsg = parseInt($(this).find('span[class="new"]').html().match(/\d+/g));
 
 				// Get last msn's page number
 				var page = Math.ceil( newMsg / 80 );
-				
+
 				// Rewrite the url
-				//$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
-				$(this).attr('href', $(this).attr('href') + '#last-read');
+				$(this).attr('href', $(this).attr('href') + '?order=desc&page='+page+'&newmsg='+newMsg);
+				//$(this).attr('href', $(this).attr('href') + '#last-read');
 			
 			// Remove newmsg var from link
 			} else if( $(this).attr('href').indexOf('&order') != -1) {
@@ -104,12 +104,12 @@ var jump_unreaded_messages = {
 	
 		$('#favorites-list').find('a').each(function() {
 			
-/*			if( $(this).attr('href').indexOf('&order') != -1) {
+			if( $(this).attr('href').indexOf('&order') != -1) {
 				
 				var start = $(this).attr('href').indexOf('&order');
 				
 				$(this).attr('href', $(this).attr('href').substring(0, start));
-			}*/
+			}
 		});
 	},
 	
@@ -128,10 +128,10 @@ var jump_unreaded_messages = {
 		
 		// Target comment element
 		if($('.ext_new_comment').length > 0) {
-			var target = $('.ext_new_comment:first').closest('center');
+			var target = $('.ext_new_comment:first').closest('li.forum-post');
 		
-		} else if( $('a[name=pirosvonal]').length > 0) {
-			var target = $('a[name=pirosvonal]').prev();
+		} else if( $('a#last-read').length > 0) {
+			var target = $('a#last-read').prev();
 			
 				// Insert the horizontal rule
 				$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
@@ -144,10 +144,10 @@ var jump_unreaded_messages = {
 		}
 		
 		// Append hr tag content if any
-		var content = $('a[name=pirosvonal]').find('center').insertBefore('a[name=pirosvonal]');
+		//var content = $('a#last-read').find('li.forum-post').insertBefore('a#last-read');
 			
 		// Remove original hr tag
-		$('a[name=pirosvonal]').remove();
+		$('a#last-read').remove();
 
 		// Url to rewrite
 		var url = document.location.href.replace(/&newmsg=\d+/gi, "");
@@ -161,7 +161,7 @@ var jump_unreaded_messages = {
 		}, 1000);
 		
 		// Add click event the manual 'jump to last msg' button
-		$('a[href*="pirosvonal"]').click(function(e) {
+		$('a[href*="#last-read"]').click(function(e) {
 			e.preventDefault();
 			jump_unreaded_messages.jump();
 		});
@@ -193,7 +193,7 @@ var jump_unreaded_messages = {
 	
 };
 
-/*var fav_show_only_unreaded = {
+var fav_show_only_unreaded = {
 
 	opened : false,
 	
@@ -209,7 +209,7 @@ var jump_unreaded_messages = {
 		$('div[class*="csakujuzi"]').remove();
 
 		// Remove style tags from faves containers
-		$('.ext_faves').next().children('div').removeAttr("style");
+		$('.ext_faves').next().children('nav').removeAttr("style");
 
 		// Disable page auto-hide function
 		setCookie('sgkedvencrejtve', '0', 365);	
@@ -221,10 +221,10 @@ var jump_unreaded_messages = {
 		var counter = 0;
 		var counterAll = 0;
 
-		$($('.ext_faves').next().find('div a').get().reverse()).each(function() {
+		$($('.ext_faves nav#favorites-list').find('span a').get().reverse()).each(function() {
 		
 			// Skip topics that have unreaded messages
-			if( $(this).find('small').length > 0) {
+			if( $(this).find('span.new').length > 0) {
 				counter++;
 				counterAll++;
 				return true;
@@ -244,7 +244,7 @@ var jump_unreaded_messages = {
 			// Otherwise, add hidden class
 			$(this).parent().addClass('ext_hidden_fave');
 		});
-	
+
 		// Create an error message if theres no topik with unreaded messages
 		if(counterAll == 0 && $('#ext_filtered_faves_error').length == 0) {
 			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
@@ -270,7 +270,7 @@ var jump_unreaded_messages = {
 			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-				$('.ext_hidden_fave').show();
+				$('.fav-not-new-msg').show();
 				
 				fav_show_only_unreaded.opened = true;
 
@@ -285,7 +285,7 @@ var jump_unreaded_messages = {
 			} else {
 				$('#ext_filtered_faves_error').show();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-				$('.ext_hidden_fave').hide();
+				$('.fav-not-new-msg').hide(); //.ext_hidden_fave
 				
 				fav_show_only_unreaded.opened = false;
 
@@ -316,10 +316,10 @@ var jump_unreaded_messages = {
 		$('#ext_show_filtered_faves').remove();
 
 		// Put back the buttons to the right side
-		$('#ext_refresh_faves').css('right', 0);
+		//$('#ext_refresh_faves').css('right', 0);
 		$('#ext_read_faves').css('right', 18);
 	}
-};*/
+};
 
 
 var short_comment_marker = {
@@ -516,7 +516,6 @@ var autoload_next_page = {
 			
 			// Current page index
 			autoload_next_page.currPage = parseInt($('nav.pagination a.current').html());
-			console.log(autoload_next_page.currPage);
 
 			// Get max page number - Fix for "Last page"
 			var temp = ($('nav.pagination a:last').attr('href'));
@@ -563,20 +562,18 @@ var autoload_next_page = {
 			} else { 
 				var url = document.location.href.substring(0, 34);
 					url = url+'?page='+(autoload_next_page.currPage+1)+'';
-					console.log(url);
 			}
 		}
 		
 		// Make the ajax query
 		$.get(url, function(data) {
-			console.log('GetTHeFucker');
+
 			// Create the 'next page' indicator
 			if(dataStore['threaded_comments'] != 'true') {
 				if(document.location.href.match('cikkek')) {
-					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std2:last');
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertAfter('.std2:last');
 				} else {
-					console.log("forum " + (autoload_next_page.currPage+1));
-					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('div#forum-posts-list:last');
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertAfter('div#forum-posts-list:last');
 				}
 			}
 			
@@ -600,11 +597,9 @@ var autoload_next_page = {
 			
 			// Topics
 			} else {
+
 				var tmp = tmp.find('div#forum-posts-list');
-				console.log(tmp);
-				tmp.each(function() {
-					$(this).insertBefore('.ext_autopager_idicator:last');
-				});
+				tmp.insertAfter('.ext_autopager_idicator:last');
 			}
 			
 			autoload_next_page.progress = false;
@@ -939,16 +934,16 @@ var show_navigation_buttons = {
 				
 				if(dataStore['jump_unreaded_messages'] == 'true') {
 					jump_unreaded_messages.activated();
-				}
+				}*/
 					
 				// Hide topics that doesnt have unreaded messages
-				/*fav_show_only_unreaded.activated();*/
+				fav_show_only_unreaded.activated();
 						
 				// Faves: short comment marker
-			  	/*if(dataStore['short_comment_marker'] == 'true' ) {
+			  	if(dataStore['short_comment_marker'] == 'true' ) {
 					short_comment_marker.activated();
-				}*/
-				
+				}
+				/*
 				// Set position
 				show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
 				show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
@@ -1140,7 +1135,7 @@ var update_fave_list = {
 		$('#fkedvenc').removeAttr('id');
 		
 		// Create refhref button
-		$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
+		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_refresh_faves" style="display: inline-block;"></div>]</span>'); // ha lesz blokkok átrendezése, akkor #ext_left_sidebar után már nem kell inline style
 
 		// Move the button away if unreaded faves is on
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
@@ -1148,7 +1143,7 @@ var update_fave_list = {
 		}
 
 		// Set refresh image
-		$('<img src="'+chrome.extension.getURL('/img/content/refresh.png')+'">').appendTo('#ext_refresh_faves');
+		$('<img src="'+chrome.extension.getURL('/img/content/refresh.png')+'" style="background-color: rgba(128, 128, 128, 0.17);">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
 		
 		// Add click event
 		$('#ext_refresh_faves').click(function() {
@@ -1218,7 +1213,7 @@ var make_read_all_faves = {
 	activated : function() {
 
 		// Create the 'read them all' button
-		$('.ext_faves').append('<div id="ext_read_faves"><div>');
+		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_read_faves" style="display: inline-block;"></div>]</span>');
 
 		// Move the button away if unreaded faves is on
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
@@ -1226,7 +1221,8 @@ var make_read_all_faves = {
 		}
 
 		// Append the image
-		$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo('#ext_read_faves');
+		/*$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo('#ext_read_faves');*/
+		$('<div id="icon">&#9675;</div>').appendTo('#ext_read_faves');
 		
 		// Add click event
 		$('#ext_read_faves').click(function() {
@@ -1239,21 +1235,22 @@ var make_read_all_faves = {
 		if(confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
 			
 			// Set 'in progress' icon
-			$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
-			
+			//$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
+			$('#ext_read_faves #icon').html('&#9684;');
+
 			var count = 0;
 			var counter = 0;
 			
 			// Get unreaded topics count
-			$('.ext_faves').next().find('div a').each(function() {
+			$('.ext_faves').find('a').each(function() {
 				
 				// Dont bother the forum categories
-				if( $(this).parent().is('.std0') ) {
+				if( $(this).is('.category') ) {
 					return true;
 				}
 				
 				// Also dont bother readed topics
-				if( $(this).find('font').length == 0) {
+				if( $(this).hasClass('fav-not-new-msg') ){
 					return true;
 				}
 				
@@ -1261,24 +1258,24 @@ var make_read_all_faves = {
 			});
 			
 			// Iterate over all faves
-			$('.ext_faves').next().find('div a').each(function() {
+			$('.ext_faves').find('a').each(function() {
 				
 				// Dont bother the forum categories
-				if( $(this).parent().is('.std0') ) {
+				if( $(this).is('.category') ) {
 					return true;
 				}
 				
 				// Also dont bother readed topics
-				if( $(this).find('font').length == 0) {
+				if( $(this).hasClass('fav-not-new-msg') ) {
 					return true;
 				}
 				
 				var ele = $(this);
-				
+
 				// Make an ajax query to refresh last readed time
 				$.get( $(this).attr('href'), function() {
 					
-					$(ele).find('font').remove();
+					$(ele).find('span.new').remove();
 					$(ele).find('.ext_short_comment_marker').remove();
 					
 					if(dataStore['fav_show_only_unreaded'] == 'true' && fav_show_only_unreaded.opened == false) {
@@ -1293,12 +1290,12 @@ var make_read_all_faves = {
 				
 				if(count == counter) {
 					
-					// Set 'completed' icon
-					$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_done.png') );
+					// Set 'completed' icon / black circle
+					$('#ext_read_faves').html('&#9679;');
 			
 					// Set normal icon
 					setTimeout(function() {
-						$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded.png') );
+						$('#ext_read_faves').html('&#9675;');
 					}, 2000);
 					
 					// Faves: show only with unreaded messages
@@ -1580,17 +1577,15 @@ var overlay_reply_to = {
 			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
 
 			// Fix buttons
-			textarea_clone.find('button:eq(0)').css({ position : 'absolute',  left : 0 });
-			textarea_clone.find('button:eq(1)').css({ position : 'absolute',  left : 90 });  //90   // Makrók 90
-			textarea_clone.find('button:eq(2)').css({ position : 'absolute',  left : 180 }); //180  
-			textarea_clone.find('button:eq(3)').css({ position : 'absolute',  left : 270 }); //270  
-			textarea_clone.find('button:eq(4)').css({ position : 'absolute',  left : 360 }); //360  
-			textarea_clone.find('button:eq(5)').css({ position : 'absolute',  left : 450 }); //450  
-			textarea_clone.find('button:eq(6)').css({ position : 'absolute',  left : 450 }); //450  
-			textarea_clone.find('button:eq(7)').css({ position : 'absolute',  left : 450 }); //450  
+			textarea_clone.find('button:eq(1)').css({ position : 'absolute',  left : 0 });
+			textarea_clone.find('button:eq(2)').css({ position : 'absolute',  left : 90 });  //90   // Makrók 90
+			textarea_clone.find('button:eq(3)').css({ position : 'absolute',  left : 180 }); //180  
+			textarea_clone.find('button:eq(4)').css({ position : 'absolute',  left : 270 }); //270  
+			textarea_clone.find('button:eq(5)').css({ position : 'absolute',  left : 371 }); //360  
+			textarea_clone.find('button:eq(6)').css({ position : 'absolute',  left : 471 }); //450  
+			textarea_clone.find('button:eq(7)').css({ position : 'absolute',  left : 583 }); //450  
 
-
-			textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
+			/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
 		/*}*/
 		
 		// Textarea position
@@ -1903,7 +1898,7 @@ var fetch_new_comments_in_topic = {
 	
 		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
 		var topic_url = $('a#forum-new-messages').attr('href');
-		console.log(topic_url);
+
 		var comment_c = $('a#forum-new-messages').text().match(/\d+/g);
 			
 		$('a#forum-new-messages').attr('href',  topic_url + '&newmsg=' + comment_c);
@@ -4014,10 +4009,10 @@ function extInit() {
 		}
 		
 		// Faves: show only with unreaded messages
-/*		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 			fav_show_only_unreaded.init();
 			fav_show_only_unreaded.activated();
-		}*/
+		}
 
 		// Faves: short comment marker
 		if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
@@ -4084,9 +4079,9 @@ function extInit() {
 			}
 		
 			// Jump the last unreaded message
-/*			if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
+			if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 				jump_unreaded_messages.topic();
-			}*/
+			}
 		
 			// Set-up block buttons
 			add_to_list.init();
