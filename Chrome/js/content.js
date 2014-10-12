@@ -221,28 +221,32 @@ var fav_show_only_unreaded = {
 		var counter = 0;
 		var counterAll = 0;
 
+		// Ez egymaga a topikokat valasztja ki, forum kategoriat nem
 		$($('.ext_faves nav#favorites-list').find('span a').get().reverse()).each(function() {
-		
-			// Skip topics that have unreaded messages
-			if( $(this).find('span.new').length > 0) {
+$(this).css({'background':'red'});
+			// Skip topics that have unreaded messages - uj uzenettel rendelkezo topikok
+			if( !$(this).hasClass('fav-not-new-msg') ) {
+$(this).css({'background':'blue'});
 				counter++;
 				counterAll++;
 				return true;
 			}
 		
-			if( $(this).parent().is('div.std0') ) {
+			if( $(this).parent().closest().is('a') ) {
 		
 				if(counter == 0) {
-					$(this).parent().addClass('ext_hidden_fave');
+$(this).css({'background':'yellow'});
+					$(this).parent().closest('a').addClass('ext_hidden_fave');
 					return true;
 				} else {
 					counter = 0;
 					return true;
 				}
 			}
-		
+		console.log("counter: " + counter);
+		console.log("counterALL: " + counterAll);
 			// Otherwise, add hidden class
-			$(this).parent().addClass('ext_hidden_fave');
+			$(this).find('a[class="category"]').addClass('ext_hidden_fave');
 		});
 
 		// Create an error message if theres no topik with unreaded messages
@@ -750,8 +754,8 @@ var show_navigation_buttons = {
 		
 			// Create faves button event
 			$('#ext_nav_faves').click( function() {
-				
 				if($('#ext_nav_faves_wrapper').css('display') == 'none') {
+				console.log('show');
 					show_navigation_buttons.showFaves();
 				} else {
 					show_navigation_buttons.removeOverlay();
@@ -923,8 +927,37 @@ var show_navigation_buttons = {
 	
 	showFaves : function() {
 		var url = "http://sg.hu/forum/";
-		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list');
-/*		$.ajax({
+		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list', function() {
+
+			// Write data into wrapper
+			if(dataStore['jump_unreaded_messages'] == 'true') {
+				jump_unreaded_messages.activated();
+			}
+				
+			// Hide topics that doesnt have unreaded messages
+			fav_show_only_unreaded.activated();
+					
+			// Faves: short comment marker
+		  	if(dataStore['short_comment_marker'] == 'true' ) {
+				short_comment_marker.activated();
+			}
+			
+			// Set position
+			show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
+			show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+
+			// Hide opened overlays
+			show_navigation_buttons.removeOverlay();
+						
+			// Show the container
+			$('#ext_nav_faves_wrapper').show();
+			$('#ext_nav_faves_arrow').show();
+			
+			// Create the hiding overlay
+			show_navigation_buttons.createOverlay();
+		});
+
+		/*$.ajax({
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
 			success : function(data) {
@@ -934,7 +967,7 @@ var show_navigation_buttons = {
 				
 				if(dataStore['jump_unreaded_messages'] == 'true') {
 					jump_unreaded_messages.activated();
-				}*/
+				}
 					
 				// Hide topics that doesnt have unreaded messages
 				fav_show_only_unreaded.activated();
@@ -943,7 +976,7 @@ var show_navigation_buttons = {
 			  	if(dataStore['short_comment_marker'] == 'true' ) {
 					short_comment_marker.activated();
 				}
-				/*
+				
 				// Set position
 				show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
 				show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
@@ -957,8 +990,8 @@ var show_navigation_buttons = {
 				
 				// Create the hiding overlay
 				show_navigation_buttons.createOverlay();
-			/*}*/
-		/*});*/
+			}
+		});*/
 	},
 	
 	findArrowPosition : function(ele, target) {
