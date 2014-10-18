@@ -142,6 +142,7 @@ var jump_unreaded_messages = {
 			// Insert the horizontal rule
 			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 		}
+		$('#ext_unreaded_hr').css({'height':'0px'})
 		
 		// Append hr tag content if any
 		//var content = $('a#last-read').find('li.forum-post').insertBefore('a#last-read');
@@ -198,8 +199,12 @@ var fav_show_only_unreaded = {
 	opened : false,
 	
 	init : function() {
+
 		if(dataStore['fav_show_only_unreaded_remember'] == 'true') {
 			fav_show_only_unreaded.opened = convertBool(dataStore['fav_show_only_unreaded_opened']);
+		}
+		if($('#favorites-open-close-button #icon').html() == '+') {
+			fav_show_only_unreaded.opened = true;
 		}
 	},
 
@@ -218,40 +223,12 @@ var fav_show_only_unreaded = {
 		$('#ext_refresh_faves').css('right', 18);
 		$('#ext_read_faves').css('right', 36);
 		
-		var counter = 0;
-		var counterAll = 0;
-
-		// Ez egymaga a topikokat valasztja ki, forum kategoriat nem
-		$($('.ext_faves nav#favorites-list').find('span a').get().reverse()).each(function() {
-$(this).css({'background':'red'});
-			// Skip topics that have unreaded messages - uj uzenettel rendelkezo topikok
-			if( !$(this).hasClass('fav-not-new-msg') ) {
-$(this).css({'background':'blue'});
-				counter++;
-				counterAll++;
-				return true;
-			}
-		
-			if( $(this).parent().closest().is('a') ) {
-		
-				if(counter == 0) {
-$(this).css({'background':'yellow'});
-					$(this).parent().closest('a').addClass('ext_hidden_fave');
-					return true;
-				} else {
-					counter = 0;
-					return true;
-				}
-			}
-		console.log("counter: " + counter);
-		console.log("counterALL: " + counterAll);
-			// Otherwise, add hidden class
-			$(this).find('a[class="category"]').addClass('ext_hidden_fave');
-		});
-
-		// Create an error message if theres no topik with unreaded messages
-		if(counterAll == 0 && $('#ext_filtered_faves_error').length == 0) {
-			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+		var Alllength = $('#favorites-list a').length;
+		var unreaded_length = $('#favorites-list a[class="fav-not-new-msg"]').length;
+		$('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave');
+		//Fix
+		if (typeof unreaded_length === 'undefined') {
+			unreaded_length = 0;
 		}
 	
 		// Remove old toggle button if any
@@ -261,7 +238,7 @@ $(this).css({'background':'yellow'});
 		if($('#ext_nav_faves_wrapper').length) {
 			$('#ext_nav_faves_wrapper').prepend('<div id="ext_show_filtered_faves"></div>');
 		} else {
-			$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
+			$('.ext_faves').next().append('<div id="ext_show_filtered_faves"></div>');
 		}
 		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
@@ -302,6 +279,13 @@ $(this).css({'background':'yellow'});
 				}
 			}
 		});
+
+		console.log(unreaded_length);
+		console.log($('#ext_filtered_faves_error').length);
+		// Create an error message if theres no topik with unreaded messages
+		if( unreaded_length == 0 && $('#ext_filtered_faves_error').length == 0) {
+			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+		}
 
 		// Check opened status
 		if(fav_show_only_unreaded.opened == true) {
@@ -1194,10 +1178,11 @@ var update_fave_list = {
 		// Set 'in progress' icon
 		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );	
 		
-		$.ajax({
+		/*$.ajax({
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
-			success : function(data) {
+			success : function(data) {*/
+		$( "nav#favorites-list" ).load( "http://sg.hu/forum/ nav#favorites-list", function() {
 
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
@@ -1208,7 +1193,7 @@ var update_fave_list = {
 				}, 2000);
 				
 				// Append new fave list
-				$('.ext_faves:first').next().html(data);
+				/*$('.ext_faves:first').next().html(data);*/
 				
 				// Faves: show only with unreaded messages
 				/*if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
@@ -1234,8 +1219,8 @@ var update_fave_list = {
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 					lights.forum_switchOn();
 				}
-			}
-		});
+			});
+		/*});*/
 	}
 };
 
