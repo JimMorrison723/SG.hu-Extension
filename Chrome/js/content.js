@@ -1196,9 +1196,9 @@ var update_fave_list = {
 				/*$('.ext_faves:first').next().html(data);*/
 				
 				// Faves: show only with unreaded messages
-				/*if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+				if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 					fav_show_only_unreaded.activated();
-				}*/
+				}
 
 				// Faves: short comment marker
 				if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
@@ -1217,7 +1217,7 @@ var update_fave_list = {
 
 				//Night mode
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
-					lights.forum_switchOn();
+					/*lights.forum_switchOn();*/
 				}
 			});
 		/*});*/
@@ -1397,9 +1397,9 @@ function ext_valaszmsg(target, id, no, callerid) {
 				quick_user_info.activated();
 			}
 
-			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+			/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 				lights.topic_switchOn();
-			}
+			}*/
 
 		});
 	}
@@ -1999,9 +1999,9 @@ var fetch_new_comments_in_topic = {
 					}
 
 					//
-					if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+					/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 						lights.topic_switchOn();
-					}
+					}*/
 			}
 		});
 	}
@@ -3457,7 +3457,7 @@ var profiles = {
 			$(this).find('.titles').remove();
 			
 			// Set the background to default and remove paddings
-			$(this).next().find('section.body, footer').css('background-color', '#F0F0F0');
+			//$(this).next().find('section.body, footer').css('background-color', '#F0F0F0'); // custom topik fix
 			$(this).next().find('section.body, footer').css('padding', 3);
 			
 			// Iterate over the profile settings
@@ -4058,9 +4058,9 @@ function extInit() {
 		}*/
 		
 		//Night mode
-		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+		/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 			lights.forum_switchOn();
-		}
+		}*/
 	}
 	
 	// LISTAZAS.PHP
