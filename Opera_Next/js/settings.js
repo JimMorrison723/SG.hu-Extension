@@ -36,8 +36,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.0.7.3<br></p>';
-				html += '<p>Kiadás dátuma: 2013. 11. 30.</p>';
+				html += '<p>Verzió: 3.1.9.4 (Új felülethez készült alpha verzió)<br></p>';
+				html += '<p>Kiadás dátuma: 2015. 01. 16.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -66,7 +66,7 @@ var cp = {
 					html += '<p>A fórum főoldalon átalakított, átdizájnolt listákat láthatsz, mely jobban kiemeli többek között a kedvenceknél a fórumkategóriákat is.</p>';
 					html += '<div class="button" id="highlight_forum_categories"></div>';
 				html += '</div>';
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>Blokkok átrendezése, rejtése</h3>';
 					html += '<p class="sub">';
 						html += '<label><input type="checkbox" id="hide_blocks_buttons"> Átrendező gombok elrejtése</label><br>';
@@ -74,12 +74,12 @@ var cp = {
 					html += '</p>';
 					html += '<p>A fórum főoldal oldalsávjain található blokkok tetszőleges átrendezése, rejtése.</p>';
 					html += '<div class="button" id="custom_blocks"></div>';
-				html += '</div>';
-				html += '<div>';
+				html += '</div>';*/
+/*				html += '<div>';
 					html += '<h3>Üzenetközpont (BÉTA)</h3>';
 					html += '<p>Saját üzenetek naplózása, azokra érkező válaszok nyomkövetése.</p>';
 					html += '<div class="button" id="message_center"></div>';
-				html += '</div>';
+				html += '</div>';*/
 			html += '</div>';
 
 			html += '<div class="settings_page">';
@@ -103,21 +103,21 @@ var cp = {
 					html += '<p>Bármely topikban a neked címzett üzenetek mellé egy narancssárga nyíl kerül, ezzel jelezve hogy ezt az üzenetet neked szánták.</p>';
 					html += '<div class="button" id="highlight_comments_for_me"></div>';
 				html += '</div>';	
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>Kommentek szálonkénti elrendezése</h3>';
 					html += '<p>Bármely topikban a megkezdett beszélgetéseket szálonként átrendezi a script. Egy megválaszolt üzenet az eredeti üzenet alá kerül, ezzel jelezve és elkülönítve az egymásnak szánt üzeneteket.</p>';
 					html += '<div class="button" id="threaded_comments"></div>';
-				html += '</div>';
-				html += '<div>';
+				html += '</div>';*/
+/*				html += '<div>';
 					html += '<h3>Említett kommentek beidézése</h3>';
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
-				html += '</div>';
-				html += '<div>';
+				html += '</div>';*/
+/*				html += '<div>';
 					html += '<h3>WYSIWYG Editor</h3>';
 					html += '<p>Office-szerű formázógombokat kapsz a kommentíró mezőbe élő előnézettel.</p>';
 					html += '<div class="button" id="wysiwyg_editor"></div>';
-				html += '</div>';
+				html += '</div>';*/
 				html += '<div>';
 					html += '<h3>Topikba érkező új üzenetek automatikus kinyerése</h3>';
 					html += '<p>Amíg egy topikban tartózkodsz, a bővítmény automatikusan kinyeri az olvasás ideje alatt érkező új üezenteket.</p>';
@@ -142,11 +142,11 @@ var cp = {
 					html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
 					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>Pontrendszer letiltása</h3>';
 					html += '<p>Ez az opció eltávolítja a pontozó gombokat és minden rejtett hozzászólást láthatóvá tesz.</p>';
 					html += '<div class="button" id="disable_point_system"></div>';
-				html += '</div>';
+				html += '</div>';*/
 				html += '<div>';
 					html += '<h3>Hosszú kommentek oszloposítása</h3>';
 					html += '<p>Meghatározott karakterszám felett a bővítmény oszlopokra bontja az üzeneteket a könnyebb olvashatóság miatt. </p>';
@@ -157,7 +157,7 @@ var cp = {
 					html += '<p>Létrehoz egy "info" gombot a hozzászólás fejlécében, amiben megjelennek a felhasználó adatai.</p>';
 					html += '<div class="button" id="quick_user_info"></div>';
 				html += '</div>';
-				html += '<div>';
+/*				html += '<div>';
 					html += '<h3>Youtube Őrület</h3>';
 					html += '<p>A script kiveszi a beágyazott videót az oldalból, és egy fekete sávot rak be a helyére, amiben a videó címe látható. A sávra kattintva megjelenik maga a videó. Mennyi beágyazott videó után linkesítsen?';
 						html += '<select id="youtube_embed_limit">';
@@ -173,13 +173,18 @@ var cp = {
 						html += '</select>';
 					html += '</p>';
 					html += '<div class="button" id="better_yt_embed"></div>';
+				html += '</div>';*/
+				html += '<div>';
+					html += '<h3>Gyors beszúrás</h3>';
+					html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
+					html += '<div class="button" id="quick_insertion"></div>';
 				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';
 				html += '<div>';
 					html += '<h3>Reklámok blokkolása</h3>';
-					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n.</p>';
+					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n. (Továbbá a fórum főoldalon található FB doboz!)</p>';
 					html += '<div class="button" id="remove_ads"></div>';
 				html += '</div>';
 			html += '</div>';

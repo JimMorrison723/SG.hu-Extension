@@ -29,12 +29,12 @@ function isLoggedIn() {
 	
 	
 	// Forum main page
-	} else if(document.location.href.match('forum.php')) {
-		return $('.std1').length ? true : false;
+	} else if(document.location.href.match('forum\/$')) {
+		return $('.user-hello').length ? true : false;
 	
 	// Topic page
-	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
-		return ( $('.std1').length > 1) ? true : false;
+	} else if(document.location.href.match('\/forum\/tema')) {
+		return ( $('.comments-login').length == 0) ? true : false;
 	}
 	
 }
@@ -46,13 +46,13 @@ function getUserName() {
 		return $('#msg-head b a').html();
 
 	// Forum main page
-	} else if(document.location.href.match('forum.php')) {
-		return $('.std1 b').text().match(/Szia (.*)!/)[1];
+	} else if(document.location.href.match('forum\/$')) {
+		return $('.user-hello').text().match(/Üdv, (.*)!/)[1];
 	
 	// Topic page
-	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
+	} else if(document.location.href.match('\/forum\/tema')) {
 	
-		return $('.std1:contains("Bejelentkezve")').text().replace('Bejelentkezve: ', '');
+		return $('#comments-login span').text();
 	}
 }
 
@@ -61,14 +61,12 @@ var chat_hide = {
 	
 	activated : function() {
 
-		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').hide();
-		$('table:eq(3) td:eq(2) br').hide();
+		$('#forum-chat').hide();
 	},
 	
 	disabled : function() {
 
-		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').show();
-		$('table:eq(3) td:eq(2) br').show();	
+		$('#forum-chat').show();
 	}
 }
 
@@ -77,19 +75,20 @@ var jump_unreaded_messages = {
 	
 	activated : function() {
 	
-		$('.ext_faves').next().find('a').each(function() {
+		$('#favorites-list span').find('a').each(function() { //.ext_faves'
 			
 			// If theres a new message
-			if($(this).find('small').length > 0) {
+			if($(this).find('span[class="new"]').length > 0) {
 			
 				// Get the new messages count
-				var newMsg = parseInt($(this).find('small').html().match(/\d+/g));
-				
+				var newMsg = parseInt($(this).find('span[class="new"]').html().match(/\d+/g));
+
 				// Get last msn's page number
 				var page = Math.ceil( newMsg / 80 );
-				
+
 				// Rewrite the url
-				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
+				$(this).attr('href', $(this).attr('href') + '?order=desc&page='+page+'&newmsg='+newMsg);
+				//$(this).attr('href', $(this).attr('href') + '#last-read');
 			
 			// Remove newmsg var from link
 			} else if( $(this).attr('href').indexOf('&order') != -1) {
@@ -103,7 +102,7 @@ var jump_unreaded_messages = {
 	
 	disabled : function() {
 	
-		$('.ext_faves').next().find('a').each(function() {
+		$('#favorites-list').find('a').each(function() {
 			
 			if( $(this).attr('href').indexOf('&order') != -1) {
 				
@@ -129,10 +128,10 @@ var jump_unreaded_messages = {
 		
 		// Target comment element
 		if($('.ext_new_comment').length > 0) {
-			var target = $('.ext_new_comment:first').closest('center');
+			var target = $('.ext_new_comment:first').closest('li.forum-post');
 		
-		} else if( $('a[name=pirosvonal]').length > 0) {
-			var target = $('a[name=pirosvonal]').prev();
+		} else if( $('a#last-read').length > 0) {
+			var target = $('a#last-read').prev();
 			
 				// Insert the horizontal rule
 				$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
@@ -143,12 +142,13 @@ var jump_unreaded_messages = {
 			// Insert the horizontal rule
 			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 		}
+		$('#ext_unreaded_hr').css({'height':'0px'})
 		
 		// Append hr tag content if any
-		var content = $('a[name=pirosvonal]').find('center').insertBefore('a[name=pirosvonal]');
+		//var content = $('a#last-read').find('li.forum-post').insertBefore('a#last-read');
 			
 		// Remove original hr tag
-		$('a[name=pirosvonal]').remove();
+		$('a#last-read').remove();
 
 		// Url to rewrite
 		var url = document.location.href.replace(/&newmsg=\d+/gi, "");
@@ -162,7 +162,7 @@ var jump_unreaded_messages = {
 		}, 1000);
 		
 		// Add click event the manual 'jump to last msg' button
-		$('a[href*="pirosvonal"]').click(function(e) {
+		$('a[href*="#last-read"]').click(function(e) {
 			e.preventDefault();
 			jump_unreaded_messages.jump();
 		});
@@ -199,8 +199,12 @@ var fav_show_only_unreaded = {
 	opened : false,
 	
 	init : function() {
+
 		if(dataStore['fav_show_only_unreaded_remember'] == 'true') {
 			fav_show_only_unreaded.opened = convertBool(dataStore['fav_show_only_unreaded_opened']);
+		}
+		if($('#favorites-open-close-button #icon').html() == '+') {
+			fav_show_only_unreaded.opened = true;
 		}
 	},
 
@@ -210,7 +214,7 @@ var fav_show_only_unreaded = {
 		$('div[class*="csakujuzi"]').remove();
 
 		// Remove style tags from faves containers
-		$('.ext_faves').next().children('div').removeAttr("style");
+		$('.ext_faves').next().children('nav').removeAttr("style");
 
 		// Disable page auto-hide function
 		setCookie('sgkedvencrejtve', '0', 365);	
@@ -219,36 +223,12 @@ var fav_show_only_unreaded = {
 		$('#ext_refresh_faves').css('right', 18);
 		$('#ext_read_faves').css('right', 36);
 		
-		var counter = 0;
-		var counterAll = 0;
-
-		$($('.ext_faves').next().find('div a').get().reverse()).each(function() {
-		
-			// Skip topics that have unreaded messages
-			if( $(this).find('small').length > 0) {
-				counter++;
-				counterAll++;
-				return true;
-			}
-		
-			if( $(this).parent().is('div.std0') ) {
-		
-				if(counter == 0) {
-					$(this).parent().addClass('ext_hidden_fave');
-					return true;
-				} else {
-					counter = 0;
-					return true;
-				}
-			}
-		
-			// Otherwise, add hidden class
-			$(this).parent().addClass('ext_hidden_fave');
-		});
-	
-		// Create an error message if theres no topik with unreaded messages
-		if(counterAll == 0 && $('#ext_filtered_faves_error').length == 0) {
-			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+		var Alllength = $('#favorites-list a').length;
+		var unreaded_length = $('#favorites-list a[class="fav-not-new-msg"]').length;
+		$('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave');
+		//Fix
+		if (typeof unreaded_length === 'undefined') {
+			unreaded_length = 0;
 		}
 	
 		// Remove old toggle button if any
@@ -258,7 +238,7 @@ var fav_show_only_unreaded = {
 		if($('#ext_nav_faves_wrapper').length) {
 			$('#ext_nav_faves_wrapper').prepend('<div id="ext_show_filtered_faves"></div>');
 		} else {
-			$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
+			$('.ext_faves').next().append('<div id="ext_show_filtered_faves"></div>');
 		}
 		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
@@ -271,7 +251,7 @@ var fav_show_only_unreaded = {
 			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-				$('.ext_hidden_fave').show();
+				$('.fav-not-new-msg').show();
 				
 				fav_show_only_unreaded.opened = true;
 
@@ -286,7 +266,7 @@ var fav_show_only_unreaded = {
 			} else {
 				$('#ext_filtered_faves_error').show();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-				$('.ext_hidden_fave').hide();
+				$('.fav-not-new-msg').hide(); //.ext_hidden_fave
 				
 				fav_show_only_unreaded.opened = false;
 
@@ -299,6 +279,13 @@ var fav_show_only_unreaded = {
 				}
 			}
 		});
+
+		console.log(unreaded_length);
+		console.log($('#ext_filtered_faves_error').length);
+		// Create an error message if theres no topik with unreaded messages
+		if( unreaded_length == 0 && $('#ext_filtered_faves_error').length == 0) {
+			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+		}
 
 		// Check opened status
 		if(fav_show_only_unreaded.opened == true) {
@@ -317,7 +304,7 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves').remove();
 
 		// Put back the buttons to the right side
-		$('#ext_refresh_faves').css('right', 0);
+		//$('#ext_refresh_faves').css('right', 0);
 		$('#ext_read_faves').css('right', 18);
 	}
 };
@@ -327,16 +314,16 @@ var short_comment_marker = {
 	
 	activated : function() {
 	
-		$('.ext_faves').next().find('div a').each(function() {
+		$('#favorites-list').find('a').each(function() {
 		
-			if( $(this).find('small').length > 0) {
+			if($(this).find('span[class*=new]').length > 0) {
 			
 				// Received new messages counter
-				var newMsg = parseInt( $(this).find('small').html().match(/\d+/g) );
+				var newMsg = parseInt( $(this).find('span').html().match(/\d+/g) ); // \d - non-digit character
 			
 				// Remove the old marker text
-				$(this).find('br').hide();
-				$(this).find('font:last').hide();
+				$(this).find('span[class*=new]').hide();
+				/*$(this).find('font:last').hide();*/
 			
 				// Add the new marker after the topic title
 				$(this).html( $(this).html() + ' <span class="ext_short_comment_marker" style="color: red;">'+newMsg+'</span>');
@@ -346,13 +333,13 @@ var short_comment_marker = {
 	
 	disabled : function() {
 	
-		$('.ext_faves').next().find('div a').each(function() {
+		$('#favorites-list').find('a').each(function() {
 		
-			if( $(this).find('small').length > 0) {
+			if($(this).find('span[class*=new]').length > 0) {
 						
 				// Remove the old marker text
-				$(this).find('br').show();
-				$(this).find('font:last').show();
+				$(this).find('span[class*=new]').show();
+				/*$(this).find('font:last').show();*/
 			
 				// Add the new marker after the topic title
 				
@@ -374,7 +361,7 @@ var blocklist =  {
 	
 		var deletelist = dataStore['block_list'].split(',');
 
-		$(".topichead").each( function() {
+		$("#forum-posts-list ul li header").each( function() {
 			
 			if(document.location.href.match('cikkek')) {
 			
@@ -382,13 +369,13 @@ var blocklist =  {
 
 			} else {
 			
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
 			for(var i = 0; i < deletelist.length; i++) {
 				if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
-					$(this).closest('center').hide();
+					$(this).closest('li.forum-post').hide();
 				}
 			}
 		});
@@ -398,8 +385,8 @@ var blocklist =  {
 
 		var nick = '';
 
-		var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
-		var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
+		var anchor = $(el).closest('#forum-posts-list ul li header').find('a[href*="/felhasznalo"]');
+		var tmpUrl = anchor.attr('href');
 
 		if(anchor.children('img').length > 0) {
 			nick = anchor.children('img').attr('title').replace(" - VIP", "");
@@ -410,10 +397,10 @@ var blocklist =  {
 	
 		if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
 	
-			$('.topichead a[href="'+tmpUrl+'"]').each(function() {
+			$('#forum-posts-list ul li header a[href="'+tmpUrl+'"]').each(function() {
 	
 				// Remove the comment
-				$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+				$(this).closest('li.forum-post').animate({ height : 0, opacity : 0 }, 500, function() {
 					$(this).hide();
 				})
 			});
@@ -431,27 +418,27 @@ var blocklist =  {
 	
 	unblock : function(user) {
 
-		$(".topichead").each( function() {
+		$("#forum-posts-list ul li header").each( function() {
 			
 			if(document.location.href.match('cikkek')) {
 			
 				var nick = $(this).find('a:first').html();
 			} else {
 			
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 
 			if(nick.toLowerCase() == user.toLowerCase()) {
 
 				// Show temporary the comment height
-				$(this).closest('center').css({ display : 'block', height : 'auto' });
+				$(this).closest('li.forum-post').css({ display : 'block', height : 'auto' });
 				
 				// Get height
-				var height = $(this).closest('center').height();
+				var height = $(this).closest('li.forum-post').height();
 				
 				// Set back to invisible, then animate
-				$(this).closest('center').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
+				$(this).closest('li.forum-post').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
 			}
 		});
 	}
@@ -465,15 +452,15 @@ var blocklist =  {
 var highlight_forum_categories = {
 	
 	activated : function() {
-		$('.std0').find('b').css('color', '#ffffff');
-		$('.std0').find('b').css('background-color', '#6c9ff7');
-		$('.std0').find('b').css('padding', '2px');
+		$('nav#favorites-list a.category').css('color', '#ffffff');
+		$('nav#favorites-list a.category').css('background-color', '#6c9ff7');
+		$('nav#favorites-list a.category').css('padding', '2px');
 	},
 	
 	disabled : function() {
-		$('.std0').find('b').css('color', '#444');
-		$('.std0').find('b').css('background-color', '#fff');
-		$('.std0').find('b').css('padding', '0px');
+		$('nav#favorites-list a.category').css('color', '#444');
+		$('nav#favorites-list a.category').css('background-color', '#fff');
+		$('nav#favorites-list a.category').css('padding', '0px');
 	}
 }
 
@@ -494,7 +481,7 @@ var autoload_next_page = {
 			autoload_next_page.currPage = 1;
 			
 			// Get topic ID
-			var topic_id = $('.std2 a').attr('href').split('?id=')[1];
+			var topic_id = $('nav#breadcrumb select option:selected').val();
 			
 			// Get the topic page to determinate max page number
 			$.ajax({
@@ -505,21 +492,22 @@ var autoload_next_page = {
 					var tmp = $(data);
 					
 					// Fetch the max page number
-					autoload_next_page.maxPage = parseInt($(tmp).find('.lapozo:last a:last').prev().html());
+					autoload_next_page.maxPage = parseInt($(tmp).find('nav.pagination a:last').prev().html());
 				}
 			});
 			
 			// Get max page number 
-			autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+			autoload_next_page.maxPage = parseInt($('nav.pagination a:last').prev().html());
 
 		// Topic
 		} else {
 			
 			// Current page index
-			autoload_next_page.currPage = parseInt($('.lapozo:last span.current:first').html());
-		
-			// Get max page number 
-			autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+			autoload_next_page.currPage = parseInt($('nav.pagination a.current').html());
+
+			// Get max page number - Fix for "Last page"
+			var temp = ($('nav.pagination a:last').attr('href'));
+			autoload_next_page.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1));
 		}
 		
 		$(document).scroll(function() {
@@ -553,27 +541,27 @@ var autoload_next_page = {
 			if(document.location.href.match('cikkek')) {
 			
 				// Get topic ID
-				var topic_id = $('.std2 a').attr('href').split('?id=')[1];		
+				var topic_id = $('nav#breadcrumb select option:selected').val();		
 				
 				// Url to call	
-				var url = 'listazas.php3?id='+topic_id;
-					url =  url+'&index='+(autoload_next_page.currPage+1)+'&callerid=1';
+				var url = 'forum/tema/'+topic_id;
+					url =  url+'?page='+(autoload_next_page.currPage+1)+'&callerid=1';
 			
 			} else { 
-				var url = document.location.href.substring(0, 44);
-					url = url+'&index='+(autoload_next_page.currPage+1)+'';
+				var url = document.location.href.substring(0, 34);
+					url = url+'?page='+(autoload_next_page.currPage+1)+'';
 			}
 		}
 		
 		// Make the ajax query
 		$.get(url, function(data) {
-			
+
 			// Create the 'next page' indicator
 			if(dataStore['threaded_comments'] != 'true') {
 				if(document.location.href.match('cikkek')) {
-					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std2:last');
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertAfter('.std2:last');
 				} else {
-					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertAfter('div#forum-posts-list:last');
 				}
 			}
 			
@@ -597,10 +585,9 @@ var autoload_next_page = {
 			
 			// Topics
 			} else {
-				var tmp = tmp.find('.topichead');
-				tmp.each(function() {
-					$(this).closest('center').insertBefore('.std1:last');
-				});
+
+				var tmp = tmp.find('div#forum-posts-list');
+				tmp.insertAfter('.ext_autopager_idicator:last');
 			}
 			
 			autoload_next_page.progress = false;
@@ -623,13 +610,13 @@ var autoload_next_page = {
 				}
 			
 				// show menitoned comment
-				if(dataStore['show_mentioned_comments'] == 'true') {
+/*				if(dataStore['show_mentioned_comments'] == 'true') {
 					show_mentioned_comments.activated();
-				}
+				}*/
 
-				if(dataStore['disable_point_system'] == 'true') {
+/*				if(dataStore['disable_point_system'] == 'true') {
 					disable_point_system.activated();
-				}
+				}*/
 
 				// Profiles
 				if(dataStore['profiles'] != '') {
@@ -643,13 +630,13 @@ var autoload_next_page = {
 				if(dataStore['quick_user_info'] == 'true') {
 					quick_user_info.activated();
 				}
-
+/*
 				if(dataStore['better_yt_embed'] == 'true') {
 
 					//Check if the script should run or not
 					if($('embed').length >= dataStore['youtube_embed_limit'])
 						better_yt_embed.activated();
-				}
+				}*/
 
 				/*//Night mode
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
@@ -679,15 +666,15 @@ var show_navigation_buttons = {
 		// Add event to back button
 		$('#ext_back').click(function() {
 			if(document.location.href.match('cikkek')) {
-				document.location.href = 'index.php';
+				document.location.href = 'http://sg.hu/';
 			} else {
-				document.location.href = 'forum.php';
+				document.location.href = 'http://sg.hu/forum/';
 			}
 		});
 		
 		
-		if(!document.location.href.match('cikkek') && !document.location.href.match('listazas_msg.php')) {
-			
+		if(!document.location.href.match('cikkek') && !document.location.href.match('\/uzenetek')) {
+
 			// Create search button
 			$('<div id="ext_search"></div>').prependTo('body');
 			
@@ -707,7 +694,7 @@ var show_navigation_buttons = {
 			});
 			
 			// Get topic ID
-			var id = $('select[name="id"] option:selected').val();
+			var id = $('nav#breadcrumb select option:selected').val();
 		
 			// Determining current status
 			var status, title = '';
@@ -735,7 +722,7 @@ var show_navigation_buttons = {
 	
 		
 		// Execute when the user is logged in
-		if(isLoggedIn() || document.location.href.match('listazas_msg.php')) {
+		if(isLoggedIn() || document.location.href.match('\/uzenetek')) {
 		
 			// Create faves button
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
@@ -751,8 +738,8 @@ var show_navigation_buttons = {
 		
 			// Create faves button event
 			$('#ext_nav_faves').click( function() {
-				
 				if($('#ext_nav_faves_wrapper').css('display') == 'none') {
+				console.log('show');
 					show_navigation_buttons.showFaves();
 				} else {
 					show_navigation_buttons.removeOverlay();
@@ -761,7 +748,7 @@ var show_navigation_buttons = {
 		}
 
 		//Night mode
-		if (dataStore['show_navigation_buttons_night'] == 'true') {
+/*		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
 			var state = dataStore['navigation_button_night_state'];
 				//console.log("topik:" + dataStore['navigation_button_night_state']);
@@ -811,7 +798,7 @@ var show_navigation_buttons = {
 				// Save in localStorage
 				port.postMessage({ name : "setSetting", key : 'navigation_button_night_state', val : data });
 			});	
-		};
+		};*/
 		
 		
 		// Set the button positions
@@ -923,8 +910,38 @@ var show_navigation_buttons = {
 	},
 	
 	showFaves : function() {
-		
-		$.ajax({
+		var url = "http://sg.hu/forum/";
+		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list', function() {
+
+			// Write data into wrapper
+			if(dataStore['jump_unreaded_messages'] == 'true') {
+				jump_unreaded_messages.activated();
+			}
+				
+			// Hide topics that doesnt have unreaded messages
+			fav_show_only_unreaded.activated();
+					
+			// Faves: short comment marker
+		  	if(dataStore['short_comment_marker'] == 'true' ) {
+				short_comment_marker.activated();
+			}
+			
+			// Set position
+			show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
+			show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+
+			// Hide opened overlays
+			show_navigation_buttons.removeOverlay();
+						
+			// Show the container
+			$('#ext_nav_faves_wrapper').show();
+			$('#ext_nav_faves_arrow').show();
+			
+			// Create the hiding overlay
+			show_navigation_buttons.createOverlay();
+		});
+
+		/*$.ajax({
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
 			success : function(data) {
@@ -940,7 +957,7 @@ var show_navigation_buttons = {
 				fav_show_only_unreaded.activated();
 						
 				// Faves: short comment marker
-				if(dataStore['short_comment_marker'] == 'true' ) {
+			  	if(dataStore['short_comment_marker'] == 'true' ) {
 					short_comment_marker.activated();
 				}
 				
@@ -958,7 +975,7 @@ var show_navigation_buttons = {
 				// Create the hiding overlay
 				show_navigation_buttons.createOverlay();
 			}
-		});
+		});*/
 	},
 	
 	findArrowPosition : function(ele, target) {
@@ -1135,7 +1152,7 @@ var update_fave_list = {
 		$('#fkedvenc').removeAttr('id');
 		
 		// Create refhref button
-		$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
+		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_refresh_faves" style="display: inline-block;"></div>]</span>'); // ha lesz blokkok átrendezése, akkor #ext_left_sidebar után már nem kell inline style
 
 		// Move the button away if unreaded faves is on
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
@@ -1143,7 +1160,7 @@ var update_fave_list = {
 		}
 
 		// Set refresh image
-		$('<img src="'+chrome.extension.getURL('/img/content/refresh.png')+'">').appendTo('#ext_refresh_faves');
+		$('<img src="'+chrome.extension.getURL('/img/content/refresh.png')+'" style="background-color: rgba(128, 128, 128, 0.17);">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
 		
 		// Add click event
 		$('#ext_refresh_faves').click(function() {
@@ -1161,10 +1178,11 @@ var update_fave_list = {
 		// Set 'in progress' icon
 		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );	
 		
-		$.ajax({
+		/*$.ajax({
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
-			success : function(data) {
+			success : function(data) {*/
+		$( "nav#favorites-list" ).load( "http://sg.hu/forum/ nav#favorites-list", function() {
 
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
@@ -1175,7 +1193,7 @@ var update_fave_list = {
 				}, 2000);
 				
 				// Append new fave list
-				$('.ext_faves:first').next().html(data);
+				/*$('.ext_faves:first').next().html(data);*/
 				
 				// Faves: show only with unreaded messages
 				if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
@@ -1199,10 +1217,10 @@ var update_fave_list = {
 
 				//Night mode
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
-					lights.forum_switchOn();
+					/*lights.forum_switchOn();*/
 				}
-			}
-		});
+			});
+		/*});*/
 	}
 };
 
@@ -1213,7 +1231,7 @@ var make_read_all_faves = {
 	activated : function() {
 
 		// Create the 'read them all' button
-		$('.ext_faves').append('<div id="ext_read_faves"><div>');
+		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_read_faves" style="display: inline-block;"></div>]</span>');
 
 		// Move the button away if unreaded faves is on
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
@@ -1221,7 +1239,8 @@ var make_read_all_faves = {
 		}
 
 		// Append the image
-		$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo('#ext_read_faves');
+		/*$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo('#ext_read_faves');*/
+		$('<div id="icon">&#9675;</div>').appendTo('#ext_read_faves');
 		
 		// Add click event
 		$('#ext_read_faves').click(function() {
@@ -1234,21 +1253,22 @@ var make_read_all_faves = {
 		if(confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
 			
 			// Set 'in progress' icon
-			$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
-			
+			//$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
+			$('#ext_read_faves #icon').html('&#9684;');
+
 			var count = 0;
 			var counter = 0;
 			
 			// Get unreaded topics count
-			$('.ext_faves').next().find('div a').each(function() {
+			$('.ext_faves').find('a').each(function() {
 				
 				// Dont bother the forum categories
-				if( $(this).parent().is('.std0') ) {
+				if( $(this).is('.category') ) {
 					return true;
 				}
 				
 				// Also dont bother readed topics
-				if( $(this).find('font').length == 0) {
+				if( $(this).hasClass('fav-not-new-msg') ){
 					return true;
 				}
 				
@@ -1256,24 +1276,24 @@ var make_read_all_faves = {
 			});
 			
 			// Iterate over all faves
-			$('.ext_faves').next().find('div a').each(function() {
+			$('.ext_faves').find('a').each(function() {
 				
 				// Dont bother the forum categories
-				if( $(this).parent().is('.std0') ) {
+				if( $(this).is('.category') ) {
 					return true;
 				}
 				
 				// Also dont bother readed topics
-				if( $(this).find('font').length == 0) {
+				if( $(this).hasClass('fav-not-new-msg') ) {
 					return true;
 				}
 				
 				var ele = $(this);
-				
+
 				// Make an ajax query to refresh last readed time
 				$.get( $(this).attr('href'), function() {
 					
-					$(ele).find('font').remove();
+					$(ele).find('span.new').remove();
 					$(ele).find('.ext_short_comment_marker').remove();
 					
 					if(dataStore['fav_show_only_unreaded'] == 'true' && fav_show_only_unreaded.opened == false) {
@@ -1288,18 +1308,18 @@ var make_read_all_faves = {
 				
 				if(count == counter) {
 					
-					// Set 'completed' icon
-					$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_done.png') );
+					// Set 'completed' icon / black circle
+					$('#ext_read_faves').html('&#9679;');
 			
 					// Set normal icon
 					setTimeout(function() {
-						$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded.png') );
+						$('#ext_read_faves').html('&#9675;');
 					}, 2000);
 					
 					// Faves: show only with unreaded messages
-					if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+					/*if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 						fav_show_only_unreaded.activated();
-					}
+					}*/
 
 					// Reset faves newmsg vars
 					if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
@@ -1353,13 +1373,13 @@ function ext_valaszmsg(target, id, no, callerid) {
 			}
 
 			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
+/*			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
-			}
+			}*/
 
-			if(dataStore['disable_point_system'] == 'true') {
+/*			if(dataStore['disable_point_system'] == 'true') {
 				disable_point_system.activated();
-			}
+			}*/
 
 			// Set-up block buttons
 			add_to_list.init();
@@ -1377,9 +1397,9 @@ function ext_valaszmsg(target, id, no, callerid) {
 				quick_user_info.activated();
 			}
 
-			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+			/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 				lights.topic_switchOn();
-			}
+			}*/
 
 		});
 	}
@@ -1397,14 +1417,14 @@ var overlay_reply_to = {
 		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
 		
 		// Change the behavior the replyto button
-		$('.topichead a:contains("válasz")').on('click', function(e) {
+		$('li[id*=post] header a:contains("válasz")').on('click', function(e) {
 			
 			// Prevent default submission
 			e.preventDefault();
 
 			// Get ref msg ID and comment element
 			var msgno = $(this).attr('href').match(/\d+/g);
-			var entry = $(this).closest('center');
+			var entry = $(this).closest('li');
 
 			// Call show method
 			overlay_reply_to.show(entry, msgno);
@@ -1413,7 +1433,7 @@ var overlay_reply_to = {
 	
 	disabled : function() {
 	
-		$('.topichead a:contains("válasz")').off('click');
+		$('li[id*=post] header a:contains("válasz")').off('click');
 	
 	},
 	
@@ -1435,10 +1455,10 @@ var overlay_reply_to = {
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 		
 		// Highlight the reply comment
-		var comment_clone = $(comment).clone().prependTo('body').addClass('ext_highlighted_comment');
+		var comment_clone = $(comment).clone().prependTo('#forum-posts-list').addClass('ext_highlighted_comment');
 		
 		// Maintain comment clone positions
-		comment_clone.css({ 'left' : comment.children('table:first').offset().left, 'top' : comment.children('table:first').offset().top });
+		comment_clone.css({ 'left' : comment.children('header').offset().left, 'top' : comment.children('header').offset().top });
 		
 		// Remove threaded view padding and border
 		comment_clone.css({ margin : 0 , padding : 0, border : 0 });
@@ -1447,10 +1467,10 @@ var overlay_reply_to = {
 		comment_clone.find('.ext_comments_for_me_indicator').remove();
 		
 		// Remove sub-center tags
-		comment_clone.find('center').remove();
+		comment_clone.find('ul.post-answer').remove();
 		
 		// Remove quoted subcomments
-		comment_clone.find('center').parent('div').remove();
+		comment_clone.find('ul.post-answer').remove(); /*.parent('div') */ 
 		
 		if(document.location.href.match('cikkek')) {
 			comment_clone.css('width', 700);
@@ -1459,7 +1479,7 @@ var overlay_reply_to = {
 		// Create textarea clone
 		
 		// WYSIWYG editor
-		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] == 'true') {
 			
 			if(document.location.href.match('cikkek')) {
 			
@@ -1510,13 +1530,7 @@ var overlay_reply_to = {
 			textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
 			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270, right : 'auto' });
 
-			if(dataStore['spoiler_button'] == 'true') {
-//				textarea_clone.find('a:eq(1)').css({ left : 360 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, left : 90 }); //spoiler button 360
-				textarea_clone.find('a:eq(7)').css({ position : 'absolute', top : 220, right : 0 });
-			} else {
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
-			}
+			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 				
 			// Fix smile list
 			if(document.location.href.match('cikkek')) {
@@ -1536,7 +1550,7 @@ var overlay_reply_to = {
 
 		
 		// Normal textarea
-		} else {
+		} else {*/
 		
 				
 			if(document.location.href.match('cikkek')) {
@@ -1561,14 +1575,14 @@ var overlay_reply_to = {
 				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
 									
 			} else {
-	
-				var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+
+				var textarea_clone = $('form[name="newmessage"] textarea').closest('form').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 
 				// Add 'topic' class to the clone
 				textarea_clone.addClass('topic');
 					
 				// Remove username line
-				textarea_clone.find('.std1').remove();
+				textarea_clone.find('#comments-login').remove();
 			
 				// Create a container element around the textarea for box-shadow
 				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
@@ -1581,21 +1595,16 @@ var overlay_reply_to = {
 			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
 
 			// Fix buttons
-			textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
-			textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 }); // Makrók 90
-			textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
-			textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
-			textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
-			textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
+			textarea_clone.find('button:eq(1)').css({ position : 'absolute',  left : 0 });
+			textarea_clone.find('button:eq(2)').css({ position : 'absolute',  left : 90 });  //90   // Makrók 90
+			textarea_clone.find('button:eq(3)').css({ position : 'absolute',  left : 180 }); //180  
+			textarea_clone.find('button:eq(4)').css({ position : 'absolute',  left : 270 }); //270  
+			textarea_clone.find('button:eq(5)').css({ position : 'absolute',  left : 371 }); //360  
+			textarea_clone.find('button:eq(6)').css({ position : 'absolute',  left : 471 }); //450  
+			textarea_clone.find('button:eq(7)').css({ position : 'absolute',  left : 583 }); //450  
 
-			if(dataStore['spoiler_button'] == 'true') {
-				textarea_clone.find('a:eq(1)').css({ position : 'absolute', left : 540 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', left : 90 , 'margin-left' : 0 }); //spoiler button 360
-				textarea_clone.find('a:eq(7)').css({ position : 'absolute', right : 0 });
-			} else {
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });
-			}
-		}
+			/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
+		/*}*/
 		
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
@@ -1603,7 +1612,7 @@ var overlay_reply_to = {
 		if(document.location.href.match('cikkek')) {
 			var left = $(document).width() / 2 - 350;
 		} else {
-			var left = $(document).width() / 2 - 405;
+			var left = $(document).width() / 2 - 475;
 		}
 
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
@@ -1631,9 +1640,9 @@ var overlay_reply_to = {
 		textarea_clone.find('textarea').focus();
 		
 		// Set the iframe focus
-		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] == 'true') {
 			textarea_clone.find('iframe')[0].focus();
-		}
+		}*/
 
 		// Block default tab action in non-WYSIWYG editor
 		$('body').keydown(function(event) {
@@ -1644,14 +1653,14 @@ var overlay_reply_to = {
 		});
 
 		// Block default tab action in a WYSIWYG editor
-		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] == 'true') {
 			$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
 				if (event.keyCode == '9') {
     				 event.preventDefault();
     				 textarea_clone.find('a:last').focus();
    				}
 			});
-		}
+		}*/
 		
 		// Thickbox
 		textarea_clone.find('a.thickbox').each(function() {
@@ -1671,9 +1680,9 @@ var overlay_reply_to = {
 		var close_btm = $('<img src="'+chrome.extension.getURL('img/content/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 
 		// Change close button position if WYSIWYG editor is disabled
-		if(dataStore['wysiwyg_editor'] != true) {
+/*		if(dataStore['wysiwyg_editor'] != true) {
 			close_btm.css({ 'right' : 4, 'top' : 9 });
-		}
+		}*/
 
 		// Add Close event
 		$(close_btm).click(function() {
@@ -1708,15 +1717,15 @@ var highlight_comments_for_me = {
 		}
 	
 		// Get the proper domnodes
-		var comment = $('.msg-replyto a:contains("' + userName + '")');
+		var comment = $('li[id*="post"] footer a:contains("' + userName + '")');
 
 		//We need exact match with the userName
 		var start_pos   = comment.text().indexOf('\'') + 1;
 		var end_pos     = comment.text().indexOf('\'',start_pos);
 		var TesTcomment = comment.text().substring(start_pos, end_pos);
-		
+	
 		if (TesTcomment == userName) {
-			var comments = comment.closest('center');
+			var comments = comment.closest('li');
     	};
 	
 		if (comments != undefined) {
@@ -1870,23 +1879,23 @@ var fetch_new_comments_in_topic = {
 	
 	init : function() {
 		
-		if($('#ujhszjott').length == 0) {
+		if($('a#forum-new-messages').length == 0) {
 			return false;
 		}
 		
 		// Set new messages number to zero
-		$('#ujhszjott a').html('0 új hozzászólás érkezett!');
+		$('a#forum-new-messages').html('0 új hozzászólás érkezett!');
 		
 		// Hide the notification when fetch new comments settgngs is enabled
 		if(dataStore['fetch_new_comments'] == 'true') {
-			$('#ujhszjott').css({ display : 'none !important', visibility : 'hidden', height : 0, margin : 0, padding : 0, border : 0 });
+			$('a#forum-new-messages').css({ display : 'none !important', visibility : 'hidden', height : 0, margin : 0, padding : 0, border : 0 });
 		}
 		
 		// Monitor new comments nofification 
 		setInterval(function(){
 			
 			// Get new comments counter
-			var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
+			var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
 			
 			if(newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked == false) {
 				
@@ -1905,10 +1914,12 @@ var fetch_new_comments_in_topic = {
 	
 	rewrite : function() {
 	
-		var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
-		var comment_c = $('#ujhszjott a').text().match(/\d+/g);
+		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
+		var topic_url = $('a#forum-new-messages').attr('href');
+
+		var comment_c = $('a#forum-new-messages').text().match(/\d+/g);
 			
-		$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
+		$('a#forum-new-messages').attr('href',  topic_url + '&newmsg=' + comment_c);
 	},
 	
 	fetch : function() {
@@ -1922,7 +1933,7 @@ var fetch_new_comments_in_topic = {
 		}
 		
 		// Get new comments counter
-		var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
+		var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
 		
 		// Update the newmsg
 		var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
@@ -1973,9 +1984,9 @@ var fetch_new_comments_in_topic = {
 					}
 				
 					// show menitoned comment
-					if(dataStore['show_mentioned_comments'] == 'true') {
+/*					if(dataStore['show_mentioned_comments'] == 'true') {
 						show_mentioned_comments.activated();
-					}
+					}*/
 
 					// User profiles
 					if(dataStore['profiles'] != '') {
@@ -1988,9 +1999,9 @@ var fetch_new_comments_in_topic = {
 					}
 
 					//
-					if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+					/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 						lights.topic_switchOn();
-					}
+					}*/
 			}
 		});
 	}
@@ -1998,7 +2009,7 @@ var fetch_new_comments_in_topic = {
 
 
 
-var show_mentioned_comments = {
+/*var show_mentioned_comments = {
 
 	activated : function() {
 
@@ -2044,7 +2055,7 @@ var show_mentioned_comments = {
 			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
 		}
 	}
-};
+};*/
 
 
 var custom_blocks = {
@@ -2394,19 +2405,22 @@ var custom_blocks = {
 var remove_adds = {
 
 	activated : function() {
-		
-		// Page top
+
+/*		// Page top
 		$('img[src*="hirdetes.gif"]').parent().remove();
 		
 		// Home sidebar
 		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
-		$('.std0:contains("Hirdetés")').remove();
+		$('.std0:contains("Hirdetés")').remove();*/
+
+		// Home facebook widget
+		$('#forum-fb-likebox').remove();
 		
 		// Under menu
-		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
+/*		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
 		
 		// Save init time in unix timestamp
-		var time = Math.round(new Date().getTime() / 1000)
+		var time = Math.round(new Date().getTime() / 1000) 
 
 		// Text ads
 		var interval = setInterval(function() {
@@ -2428,7 +2442,7 @@ var remove_adds = {
 			if( (time+5) < newTime ) {
 				clearInterval(interval);
 			}
-		}, 500, interval);
+		}, 500, interval);*/
 		
 	},
 };
@@ -2460,7 +2474,7 @@ var wysiwyg_editor = {
 		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(4)').css({ 'position' : 'absolute', 'left' : 200 });
 		$('form[name="newmessage"] a:eq(5)').css({ 'position' : 'absolute', 'left' : 290 });
-		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });	// 'right' : 22 	
+		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });	
 
 		// Insert video
 		$('form[name="newmessage"] a:eq(4)').click(function(e) {
@@ -2470,7 +2484,7 @@ var wysiwyg_editor = {
 			
 			
 			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: http://www.youtube.com/watch?v=sUntx0pe_qI)", "http://www.youtube.com/watch?v=sUntx0pe_qI");
-				
+
 			if (thisURL && (((thisURL.length>25 && thisURL.substring(0,20) == "http://www.youtu.be/") || (thisURL.length>25 && thisURL.substring(0,16) == "http://youtu.be/") || thisURL.length>25 && thisURL.substring(0,25) == "http://www.youtube.com/v/") || (thisURL.length>31 && thisURL.substring(0,31) == "http://www.youtube.com/watch?v="))) {
 					
 				var maxurlhossz = thisURL.search("&");
@@ -2478,7 +2492,7 @@ var wysiwyg_editor = {
 				if (maxurlhossz === -1) {
 						maxurlhossz = 2000; 
 				}
-                
+
 				kezdhossz=31;
 					
 				if (thisURL.substring(0,25)=="http://www.youtube.com/v/") {
@@ -2492,9 +2506,13 @@ var wysiwyg_editor = {
 				}
               	
 				var videocode = "[flash]http://www.youtube.com/v/"+thisURL.substring(kezdhossz,maxurlhossz)+"&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
-				
+
 				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + videocode;
 				$('.cleditorMain:first iframe').contents().find('body').html(imod);
+
+				// Without this, sometimes it doesn't insert the video link into the WYSIWYG editor
+				var tarea = $('textarea[name="message"]:first').val() + videocode;
+				$('textarea[name="message"]:first').val(tarea);
 			}
 
 		});
@@ -3301,8 +3319,8 @@ var topic_whitelist = {
 	execute : function(ele) {
 		
 		// Get topic ID
-		var id = $('select[name="id"] option:selected').val();
-		
+		var id = $('nav#breadcrumb select option:selected').val();
+
 		// Add topic to whitelist
 		if($(ele).html() == '+') {
 			
@@ -3388,13 +3406,13 @@ var disable_point_system = {
 
 	activated : function() {
 		
-		$('.topichead .ertekelkep, .topichead span[id*="rates"]').hide();
-		$('.msg-text').show();
-		$('.msg-text').each(function() {
+		$('#forum-posts-list ul li .forum-post-rate').hide();
+		$('#forum-posts-list ul li .forum-post-rate-place span').hide();
+/*		$('.msg-text').each(function() {
 			if( $(this).next().attr('id') == 'leful') {
 				$(this).next().hide();
 			}
-		});
+		});*/
 	}
 };
 
@@ -3411,7 +3429,7 @@ var profiles = {
 		}
 		
 		// Iterate over the comments
-		$('.topichead:not(.checked)').each(function() {
+		$('#forum-posts-list ul li header:not(.checked)').each(function() {
 
 			// Create the wrapper if not any
 			if( !$(this).next().is('.wrapper') ) {
@@ -3420,7 +3438,7 @@ var profiles = {
 			    var wrapper = $('<div class="wrapper"></div>').insertAfter( this ).css('position', 'relative');
 			    
 			    // Place in other elements
-			    $(this).parent().find('.msg-text').appendTo( wrapper );
+			    $(this).parent().find('section.body, footer').appendTo( wrapper );
 			}
 
 			// Get nickname
@@ -3430,7 +3448,7 @@ var profiles = {
 
 			} else {
 
-				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				var nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
 			
@@ -3439,8 +3457,8 @@ var profiles = {
 			$(this).find('.titles').remove();
 			
 			// Set the background to default and remove paddings
-			$(this).next().find('.msg-text:first').css('background-color', '#F0F0F0');
-			$(this).next().find('.msg-text:first').css('padding', 3);
+			//$(this).next().find('section.body, footer').css('background-color', '#F0F0F0'); // custom topik fix
+			$(this).next().find('section.body, footer').css('padding', 3);
 			
 			// Iterate over the profile settings
 			// Search for nickname match
@@ -3451,23 +3469,23 @@ var profiles = {
 						// WE GOT A MATCH
 
 						// Title
-						var placeholder = $('<span class="titles">'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
+						var placeholder = $('<span class="titles">'+profiles[c]['title']+'</span>').appendTo( $(this).find('span.icons') );
 							placeholder.css('padding-left', 10);
 						
 						// Calc outline width 
 						var width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8;
 						
 						// Border
-						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('.msg-text:first') );
+						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('section.body, footer') );
 							outline.css({ width : 6, height : '100%', position : 'absolute', left : width, top : 0, backgroundColor : '#'+profiles[c]['color'][0] });
 						
 						// Background
 						if(profiles[c]['background']) {
-							$(this).parent().find('.msg-text:first').css('background-color', '#'+profiles[c]['color'][1]);
+							$(this).parent().find('section.body, footer').css('background-color', '#'+profiles[c]['color'][1]);
 						}
 						
 						// Fix msg-text
-						$(this).parent().find('.msg-text:first').css('padding-left', (width+3+8));	
+						$(this).parent().find('section.body, footer').css('padding-left', (width+3+8));	
 					}
 				}
 			}
@@ -3494,19 +3512,19 @@ var add_to_list = {
 		
 		
 		// Create dropdowns
-		$('.topichead:not(.ext_add_to_list_topichead) a:contains("#")').each(function() {
+		$('#forum-posts-list ul li header:not(.ext_add_to_list_topichead) a:contains("#")').each(function() {
 
 			// Insert separator
-			var separator = $('<span> | </span>').insertAfter(this);
+			var separator = $('<span class="separator pull-right"></span>').insertBefore(this);
 			
 			// Insert dropdow placeholder
-			var dropdown = $('<div class="ext_dropdown"><span>&#9660;</span></div>').insertAfter(separator);
+			var dropdown = $('<div class="ext_dropdown pull-right"><span>&#9660;</span></div>').insertBefore(separator);
 			
 			// Insert dropdown list
 			var list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list');
 			
 			// Set dropdown background color
-			var color_id = $(this).closest('.topichead').css('background-image').match(/\d+/g);
+			var color_id = $(this).closest('#forum-posts-list ul li').css('background-image').match(/\d+/g);
 
 				if(color_id) {
 					list.css('background-color', '#' + add_to_list.colors[color_id]);
@@ -3515,14 +3533,15 @@ var add_to_list = {
 				}
 			
 			// Set relative position to the container
-			$(this).closest('.topichead').css('position', 'relative').addClass('ext_add_to_list_topichead');
+			$(this).closest('#forum-posts-list ul li header').css('position', 'relative').addClass('ext_add_to_list_topichead');
+
 		});
 
 		// Create dropdown event
 		$('.ext_dropdown').off().on('click', function() {
 			
 			if( $(this).find('ul').css('display') == 'none') {
-				$(this).find('ul').css('top', $(this).closest('.topichead').height() ).slideDown();
+				$(this).find('ul').css('top', $(this).closest('#forum-posts-list ul li header').height() ).slideDown();
 			} else {
 				$(this).find('ul').slideUp();
 			}
@@ -3551,7 +3570,7 @@ var add_to_list = {
 		$('<li><h3>Hozzáadás listához</h3></li>').appendTo('.ext_addtolist_list');
 
 		// Insert separator
-		$('<li><hr></li>').appendTo('.ext_addtolist_list');
+		$('<li></li>').appendTo('.ext_addtolist_list');
 
 		// Add blocklist option
 		$('<li class="ident ext_addtoblocklist">Tiltólista</li>').appendTo('.ext_addtolist_list');
@@ -3578,7 +3597,7 @@ var add_to_list = {
 		var list = JSON.parse(dataStore['profiles']);
 		
 		// Get user's nick
-		var anchor = $(ele).closest('.topichead').find('a[href*="forumuserinfo.php"]');
+		var anchor = $(ele).closest('#forum-posts-list ul li header').find('a[href*="felhasznalo"]');
 
 		if(anchor.children('img').length > 0) {
 			var nick = anchor.children('img').attr('title').replace(" - VIP", "");
@@ -3605,15 +3624,15 @@ var add_to_list = {
 		
 		
 		// Remove checked class for update
-		$(".topichead").each( function() {
+		$("#forum-posts-list ul li").each( function() {
 			
 			if(document.location.href.match('cikkek')) {
 			
 				var nick_2 = $(this).find('a:first').html();
 
 			} else {
-			
-				var nick_2 = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+			/* BUG avatar nélküli felhasználóknál nem működik.     $(this).find("header a")[0]  undefined */ 
+				var nick_2 = ($(this).find("header a img").length == 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0].innerHTML;
 					nick_2 = nick_2.replace(/ - VIP/, "");
 			}
 			
@@ -3635,14 +3654,14 @@ var columnify_comments = {
 	
 	activated : function() {
 
-		$('.topichead:not(.columnify)').each(function() {
+		$('#forum-posts-list ul li header:not(.columnify)').each(function() {
 			
 			// Get the message element
-			var target = $(this).closest('center').find('.msg-text:first');
+			var target = $(this).next('.wrapper').find('section.body');
 			
 			// Add multi column when the text is larder than 200px
 			if( target.html().length > 800) {
-				target.css({ '-webkit-column-width' : 200, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
+				target.css({ '-webkit-column-width' : 296, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
 			}
 			
 			// Add 'columnify' class
@@ -3652,8 +3671,8 @@ var columnify_comments = {
 	
 	disabled : function() {
 		
-		$('.topichead').each(function() {
-			$(this).next().find('.msg-text').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
+		$('#forum-posts-list ul li header').each(function() {
+			$(this).next().find('section.body').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
 		});
 	}
 	
@@ -3663,7 +3682,7 @@ var quick_user_info = {
 	
 	activated : function() {
 
-		$('.topichead').closest('table').each(function() {
+		$('#forum-posts-list ul li').each(function() {
 
 			//Do not add the mouseenter function again if the element already has it
 			if(!$(this).data('events')) {
@@ -3672,7 +3691,7 @@ var quick_user_info = {
 				if ($(this).not('.quick_user_info'))
 				{
 					//Place info image
-				    $(this).addClass('quick_user_info').find('td.right').before('<td class="left" nowrap><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></td>');
+				    $(this).addClass('quick_user_info').find('span.icons').after('<span class=""><img src="'+chrome.extension.getURL('/img/content/info.png')+'" class="ext_quick_user_info_btn"></span>');
 				}
 			    $(this).append('<div class=\"infobox\"></div>');
 
@@ -3680,21 +3699,20 @@ var quick_user_info = {
 			    $('img.ext_quick_user_info_btn').click(function(e) {
 
 			    	//Get user profile URL
-					var url = $(this).closest('tr').find('td:eq(0)').find('a[href^="/forumuserinfo"]').attr('href'); 
-					console.log(url);
+					var url = $(this).closest('header').find('a[href^="/felhasznalo"]').attr('href'); 
 
 					//Fix for vip, non vip topichead height
-					var th_height = $(this).closest('.topichead').css('height').replace('px', '');
+					var th_height = $(this).closest('header').css('height').replace('px', '');
 
 					//Get topichead pos from the top of the page
-					var fromTop = $(this).parents('.topichead').offset().top;
+					var fromTop = $(this).parents('header').offset().top;
 					
 					//If "highlight_comments_for_me" is on we need to change the fromTop to the comment position
-					if ($(this).closest('center').css('position') !== 'static')
+/*					if ($(this).closest('center').css('position') !== 'static')
 					{
 						//Correct according a default padding on the messages
 						fromTop = $(this).closest('.topichead').parent('div').css('padding-top').replace('px', '');
-					}
+					}*/
 					
 					var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 
@@ -3702,7 +3720,7 @@ var quick_user_info = {
 					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
 
 					//Show user information in infobox
-				    $('.infobox').load(url + ' .std1 table'); 
+				    $('.infobox').load(url + ' table.data-table'); 
 
 				});
 
@@ -3816,13 +3834,13 @@ var quick_insertion = {
 
 		var ta;
 		var ta2;
-		if(dataStore['wysiwyg_editor'] == 'true') {
+/*		if(dataStore['wysiwyg_editor'] == 'true') {
 			ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea
 			ta2 = $('.cleditorMain:first textarea[name="message"]');
 		}
-		else {
+		else {*/
 			ta = $('form[name="newmessage"] textarea');
-		}
+		/*}*/
 
 		// Paste event on WYSIWYG view and source view
 		$(ta).add(ta2).on('paste', function(e) {
@@ -3859,73 +3877,24 @@ var quick_insertion = {
 					var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
 
 					// Otherwise when wysiwyg editor will appear even if it's disabled
-					if(dataStore['wysiwyg_editor'] == 'true') {
+/*					if(dataStore['wysiwyg_editor'] == 'true') {
 						$('textarea[name="message"]:first').val(tarea);
 						$('textarea[name="message"]:first').cleditor()[0].focus();
 						$('.cleditorMain:first iframe').contents().find('body').html(imod);
 						$('textarea[name="message"]:first').cleditor()[0].focus();
 
-					} else {
+					} else {*/
 						$('textarea[name="message"]:first').val(tarea);
-					}
+					/*}*/
 				}
 
 			} else {
 				return true;
 			}
-
+1
 		});
 	}
 
-}
-
-var spoiler_button = {
-
-	activated : function() {
-
-		if(dataStore['wysiwyg_editor'] == 'true') {
-			
-			// Place makro button somewhere else
-			$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 380 , 'width' : '17px'}); // 380
-
-			// Add spoiler button
-			$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
-			$('#spoilerButton').css({  'position' : 'absolute', 'left' : 110 , 'cursor': 'pointer'}); // 380
-		}
-		else {
-			// Make macro image smaller
-			$('form[name="newmessage"] a:eq(1) img').attr('src', chrome.extension.getURL('img/content/makro_button.png')).css({ 'width' : '17px' });
-			$('form[name="newmessage"] a:eq(1)').css({ 'left' : 360 }); //'position' : 'absolute'
-
-			// Add spoiler button
-			$('form[name="newmessage"] a:eq(5)').after('<a id="spoilerButton"><img src="'+chrome.extension.getURL('/img/content/spoiler.png')+'" width="77" height="17" border="0"></a>');
-			$('#spoilerButton').css({  'margin-left' : 5, 'cursor': 'pointer'}); // 'position' : 'absolute', 'left' : 360
-		}
-
-		// Add click event to the spoiler button
-		$('#spoilerButton img').click(function(e) {
-
-			e.preventDefault();
-					
-			var bhtml = '[spoiler] [/spoiler]';
-
-			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			
-			// Otherwise cleditor will apear even if it's turned off
-			if(dataStore['wysiwyg_editor'] == 'true') {
-				var ihtml = '<img src="'+chrome.extension.getURL("/img/content/warning.png")+'"> ';
-				var ihtml2= '<img src="'+chrome.extension.getURL("/img/content/warning2.png")+'">';
-
-				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml + ' ' +ihtml2;
-
-				$('textarea[name="message"]:first').cleditor()[0].focus();
-				$('.cleditorMain:first iframe').contents().find('body').html(imod);
-				$('textarea[name="message"]:first').cleditor()[0].focus();
-			}
-			$('textarea[name="message"]:first').val(tarea);
-
-		});
-	}
 }
 
 var tempScript = {
@@ -3962,9 +3931,9 @@ function extInit() {
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
 		// Message Center
-		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.article();
-		}
+		}*/
 
 		// Threaded_comments
 		if(dataStore['threaded_comments'] == 'true') {
@@ -4003,18 +3972,18 @@ function extInit() {
 		}
 
 		// show menitoned comment
-		if(dataStore['show_mentioned_comments'] == 'true') {
+/*		if(dataStore['show_mentioned_comments'] == 'true') {
 			show_mentioned_comments.activated();
-		}
+		}*/
 
-		// WYSIWYG Editor
+/*		// WYSIWYG Editor
 		if(dataStore['wysiwyg_editor'] == 'true') {
 			wysiwyg_editor.activated();
-		}
+		}*/
 
-		if(dataStore['disable_point_system'] == 'true') {
+/*		if(dataStore['disable_point_system'] == 'true') {
 			disable_point_system.activated();
-		}
+		}*/
 
 		// Auto resizing textarea
 		textarea_auto_resize.init();
@@ -4028,17 +3997,12 @@ function extInit() {
 		}
 
 		//Pasted text will be a hyperlink, picture, video automatically
-		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
+/*		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
 			quick_insertion.activated();
 		}
-
-		// Dedicated spoiler button
-		if(dataStore['spoiler_button'] == 'true') {
-			spoiler_button.activated();
-		}
-
+*/
 	// FORUM.PHP
-	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
+	} else if(document.location.href.match('forum\/$')) {
 
 
 		// Settings
@@ -4089,24 +4053,24 @@ function extInit() {
 		}
 		
 		// Message center
-		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.init();
-		}
+		}*/
 		
 		//Night mode
-		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+		/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 			lights.forum_switchOn();
-		}
+		}*/
 	}
 	
 	// LISTAZAS.PHP
-	else if(document.location.href.match(/listazas.php3\?id/gi) || document.location.href.match('listazas_msg.php')) {
+	else if(document.location.href.match('\/forum\/tema')) {
 
 		// Settings
 		cp.init(2);
 
 		// Get topic ID for whitelist check
-		var id = $('select[name="id"] option:selected').val();
+		var id = $('nav#breadcrumb select option:selected').val();
 
 		// Determining current status
 		var whitelist = new Array();
@@ -4123,9 +4087,9 @@ function extInit() {
 			}
 
 			// Message Center
-			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+/*			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 				message_center.topic();
-			}
+			}*/
 		
 			//gradual_comments
 			if(dataStore['threaded_comments'] == 'true') {
@@ -4170,18 +4134,18 @@ function extInit() {
 			}
 		
 			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
+/*			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
-			}
+			}*/
 
 			// WYSIWYG Editor
-			if(dataStore['wysiwyg_editor'] == 'true') {
+/*			if(dataStore['wysiwyg_editor'] == 'true') {
 				wysiwyg_editor.activated();
-			}
+			}*/
 
-			if(dataStore['disable_point_system'] == 'true') {
+/*			if(dataStore['disable_point_system'] == 'true') {
 				disable_point_system.activated();
-			}
+			}*/
 
 			// Auto resizing textarea
 			textarea_auto_resize.init();
@@ -4200,21 +4164,16 @@ function extInit() {
 			}
 
 			//Removes the default YT embed code and replace it for faster page load
-			if(dataStore['better_yt_embed'] == 'true') {
+/*			if(dataStore['better_yt_embed'] == 'true') {
 
 				//Check if the script should run or not
 				if($('embed').length >= dataStore['youtube_embed_limit'])
 					better_yt_embed.activated();
-			}
+			}*/
 
 			//Pasted text will be a hyperlink, picture, video automatically
 			if(dataStore['quick_insertion'] == 'true') {
 				quick_insertion.activated();
-			}
-
-			// Dedicated spoiler button
-			if(dataStore['spoiler_button'] == 'true') {
-				spoiler_button.activated();
 			}
 
 			tempScript.activated();
