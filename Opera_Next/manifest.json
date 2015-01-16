@@ -66,6 +66,10 @@
    "permissions": [
       "http://www.sg.hu/",
       "http://sg.hu/",
-      "http://sgsync.dev.kreatura.hu/"
+      "http://sgsync.dev.kreatura.hu/",
+      "http://www.youtu.be/",
+      "http://www.youtube.com/",
+      "http://youtu.be/",
+      "http://gdata.youtube.com/feeds/api/videos/"
    ]
 }
