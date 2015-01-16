@@ -1,12 +1,13 @@
 {
 	"license": "",
 	"description": "",
-	"contributors": [],
+	"contributors": [ "dzsani" ],
 	"author": "JimMorrison723",
 	"url": "",
 	"dependencies": ["api-utils", "addon-kit"],
-	"version": "initial.rev125", "lib": "lib",
+	"version": "3.1.9.4", "lib": "lib",
 	"fullName": "SG_forum_tuning", "main": "main",
 	"id": "jid0-lXuvrBz88C18gU77Igt8aau7ZyY",
+	"title": "SG Fórum tuning",
 	"name": "sg_forum_tuning"
 }

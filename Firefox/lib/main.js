@@ -1,11 +1,11 @@
 // Get page-mod object to load content scripts
-var pageMod = require("page-mod");
+var pageMod = require("sdk/page-mod");
 
 // Simple Storage for storing and getting settings
-var ss = require("simple-storage");
+var ss = require("sdk/simple-storage");
 
 // Get data object for loadin resources
-var data = require("self").data;
+var data = require("sdk/self").data;
 
 pageMod.PageMod({
     include: ["http://sg.hu/*", "http://www.sg.hu/*"],
