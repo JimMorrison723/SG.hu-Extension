@@ -445,10 +445,6 @@ var blocklist =  {
 };
 
 
-
-
-
-
 var highlight_forum_categories = {
 	
 	activated : function() {
@@ -463,7 +459,6 @@ var highlight_forum_categories = {
 		$('nav#favorites-list a.category').css('padding', '0px');
 	}
 }
-
 
 var autoload_next_page = {
 	
@@ -1916,7 +1911,6 @@ var fetch_new_comments_in_topic = {
 	
 		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
 		var topic_url = $('a#forum-new-messages').attr('href');
-
 		var comment_c = $('a#forum-new-messages').text().match(/\d+/g);
 			
 		$('a#forum-new-messages').attr('href',  topic_url + '&newmsg=' + comment_c);
