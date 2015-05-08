@@ -1,5 +1,6 @@
 // Predefined vars
 var userName, isLoggedIn, dataStore;
+var msgPerPage = localStorage['msg_per_page'];
 
 var port = chrome.extension.connect();
 
@@ -72,8 +73,9 @@ var chat_hide = {
 
 
 var jump_unreaded_messages = {
-	
+
 	activated : function() {
+
 	
 		$('#favorites-list span').find('a').each(function() { //.ext_faves'
 			
@@ -84,7 +86,7 @@ var jump_unreaded_messages = {
 				var newMsg = parseInt($(this).find('span[class="new"]').html().match(/\d+/g));
 
 				// Get last msn's page number
-				var page = Math.ceil( newMsg / 80 );
+				var page = Math.ceil( newMsg / msgPerPage );
 
 				// Rewrite the url
 				$(this).attr('href', $(this).attr('href') + '?order=desc&page='+page+'&newmsg='+newMsg);
@@ -124,7 +126,7 @@ var jump_unreaded_messages = {
 		}
 		
 		// Get the last msg
-		var lastMsg = newMsg % 80;
+		var lastMsg = newMsg % msgPerPage;
 		
 		// Target comment element
 		if($('.ext_new_comment').length > 0) {
@@ -280,8 +282,8 @@ var fav_show_only_unreaded = {
 			}
 		});
 
-		console.log(unreaded_length);
-		console.log($('#ext_filtered_faves_error').length);
+		/*console.log(unreaded_length);
+		console.log($('#ext_filtered_faves_error').length);*/
 		// Create an error message if theres no topik with unreaded messages
 		if( unreaded_length == 0 && $('#ext_filtered_faves_error').length == 0) {
 			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
@@ -733,10 +735,11 @@ var show_navigation_buttons = {
 		
 			// Create faves button event
 			$('#ext_nav_faves').click( function() {
-				if($('#ext_nav_faves_wrapper').css('display') == 'none') {
-				console.log('show');
+				if($('#ext_nav_faves_wrapper').css('display') == 'none')
+				{
 					show_navigation_buttons.showFaves();
-				} else {
+				} else
+				{
 					show_navigation_buttons.removeOverlay();
 				}
 			});	
@@ -801,29 +804,29 @@ var show_navigation_buttons = {
 			// Gather visible buttons
 			var buttons = new Array();
 				
-				if($('#ext_scrolltop').length) {
-					buttons.push('ext_scrolltop');
-				}
+			if($('#ext_scrolltop').length) {
+				buttons.push('ext_scrolltop');
+			}
 
-				if($('#ext_back').length) {
-					buttons.push('ext_back');
-				}
+			if($('#ext_back').length) {
+				buttons.push('ext_back');
+			}
 
-				if($('#ext_search').length) {
-					buttons.push('ext_search');
-				}
+			if($('#ext_search').length) {
+				buttons.push('ext_search');
+			}
 
-				if($('#ext_whitelist').length) {
-					buttons.push('ext_whitelist');
-				}
+			if($('#ext_whitelist').length) {
+				buttons.push('ext_whitelist');
+			}
 
-				if($('#ext_nightmode').length) {
-					buttons.push('ext_nightmode');
-				}
+			if($('#ext_nightmode').length) {
+				buttons.push('ext_nightmode');
+			}
 
-				if($('#ext_nav_faves').length) {
-					buttons.push('ext_nav_faves');
-				}
+			if($('#ext_nav_faves').length) {
+				buttons.push('ext_nav_faves');
+			}
 			
 			// Reverse the array order for bottom positioning
 			if(dataStore['navigation_buttons_position'].match('bottom')) {
@@ -2706,7 +2709,7 @@ var message_center = {
 		// HTML code to insert
 		var html = '';
 		
-			html += '<tr>';
+			/*html += '<tr>';
 				html += '<td colspan="4">';
 					html += '<div>';
 						html += '<div class="b-h-o-head ext_mc_tabs">';
@@ -2725,18 +2728,30 @@ var message_center = {
 						html += '</div>';
 					html += '</div>';
 				html += '</td>';
-			html += '</tr>';
+			html += '</tr>';*/
 		
+
+		html += '<ul id="ext_mc_tabs">';
+			html += '<li class="ext_mc_tabs">Fórumkategóriák</li>';
+			html += '<li class="ext_mc_tabs">Saját üzeneteim</li>';
+			html += '<li class="ext_mc_tabs">Válaszok</li>';
+		html += '</ul>';
+		html += '<div id="ext_mc_page">';
+		html += '<div class="ext_mc_pages"></div>';
+		html += '<div class="ext_mc_pages"><h3>Még nem érkezett válasz egyetlen kommentedre sem.</h3><div class="contents"></div></div>';
+		html += '<div class="ext_mc_pages"><h3>Még nincs egy elmentett üzenet sem.</h3></div>';
+		html += '</div>';
+
 		// Insert tabs
-		$('.cikk-2').closest('tr').before(html);
+		$('#forum-chat').after(html);
+
+		var cikkek = $('.forums-block');
 		
-		// Create DIV for each pages
-		$('.cikk-2').addClass('ext_mc_pages');
-		$('.cikk-2').after('<div class="ext_mc_pages"><h3>Még nem érkezett válasz egyetlen kommentedre sem.</h3><div class="contents"></div></div>');
-		$('.cikk-2').after('<div class="ext_mc_pages"><h3>Még nincs egy elmentett üzenet sem.</h3></div>');
+		// Add topik lists to the first page
+		$('#ext_mc_page .ext_mc_pages:eq(0)').append(cikkek);
 		
 		// Fix right sidebar top position
-		$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });
+		/*$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });*/
 		
 		// Show the last used tab
 		message_center.tab(dataStore['mc_selected_tab']);
@@ -2805,7 +2820,7 @@ var message_center = {
 	},
 
 	tab : function(n) {
-		
+
 		// Hide all pages
 		$('.ext_mc_pages').hide();
 		
@@ -2813,14 +2828,8 @@ var message_center = {
 		$('.ext_mc_pages').eq(n).show();
 		
 		// Maintain styles, remove active style 
-		$('.ext_mc_tabs').removeClass('b-h-o-head').addClass('b-h-b-head');
-		$('.ext_mc_tabs').find('img[src*="ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
-		$('.ext_mc_tabs').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		
-		// Maintain styles, add active style 
-		$('.ext_mc_tabs').eq(n).removeClass('b-h-b-head').addClass('b-h-o-head');
-		$('.ext_mc_tabs').eq(n).find('img[src*="ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
-		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		$('.ext_mc_tabs').removeClass('active');
+		$('.ext_mc_tabs:eq('+ n +')').addClass('active');
 		
 		// Store last selected tag for initial status
 		port.postMessage({ name : "setMCSelectedTab", message : n });
@@ -2842,7 +2851,7 @@ var message_center = {
 		window.location.hash = '';
 
 		// Find the comment in DOM
-		var target = $('.topichead a:contains("#'+id+'")').closest('center');
+		var target = $('#forum-posts-list ul li header a:contains("#'+id+'")').closest('header');
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -2868,7 +2877,7 @@ var message_center = {
 			var id = getCookie('updateComment');
 			
 			// Get message contents
-			var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
+			var message = $('#forum-posts-list ul li header a:contains("#'+id+'")').closest('header').find('section.body').html();
 
 			// Filter out html-s
 			$.each([
@@ -2903,10 +2912,10 @@ var message_center = {
 			
 
 			// Get the comment ID
-			var id = $('.topichead:first a:last').html().match(/\d+/g);
+			var id = $('header a:contains("#")').html().match(/\d+/g);
 			
 			// Get message contents
-			var message = $('.topichead:first').next().find('.maskwindow').html();
+			var message = $('header').next().find('.maskwindow').html();
 			
 			// Filter out html-s
 			$.each([
@@ -3184,7 +3193,7 @@ var message_center = {
 			var html = '';
 			
 				html += '<div class="ext_mc_messages">';
-					html += '<p><a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+					html += '<p><a href="http://sg.hu/forum/tema/'+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
 					html += '<span>'+time+'</span>';
 					html += '<div>'+msg+'</div>';
 				html += '</div>';
@@ -3901,7 +3910,20 @@ var tempScript = {
 	}
 }
 
+var update_settings = {
+
+	activated : function()
+	{
+		dataStore['msg_per_page'] = $("input[name='msglimit']").val();
+	}
+}
+
 function extInit() {
+
+	if (document.location.href == 'http://sg.hu/felhasznalo/beallitasok')
+	{
+		update_settings.activated();
+	}
 	
 	// SG index.php
 	if(document.location.href == 'http://www.sg.hu/' || document.location.href.match('index.php')) {
@@ -3925,9 +3947,9 @@ function extInit() {
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
 		// Message Center
-/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.article();
-		}*/
+		}
 
 		// Threaded_comments
 		if(dataStore['threaded_comments'] == 'true') {
@@ -4047,9 +4069,9 @@ function extInit() {
 		}
 		
 		// Message center
-/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.init();
-		}*/
+		}
 		
 		//Night mode
 		/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
@@ -4081,9 +4103,9 @@ function extInit() {
 			}
 
 			// Message Center
-/*			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 				message_center.topic();
-			}*/
+			}
 		
 			//gradual_comments
 			if(dataStore['threaded_comments'] == 'true') {
