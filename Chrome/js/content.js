@@ -1,6 +1,5 @@
 // Predefined vars
 var userName, isLoggedIn, dataStore;
-var msgPerPage = localStorage['msg_per_page'];
 
 var port = chrome.extension.connect();
 
@@ -76,6 +75,7 @@ var jump_unreaded_messages = {
 
 	activated : function() {
 
+		var msgPerPage = dataStore['msg_per_page'];
 	
 		$('#favorites-list span').find('a').each(function() { //.ext_faves'
 			
@@ -3914,7 +3914,10 @@ var update_settings = {
 
 	activated : function()
 	{
-		dataStore['msg_per_page'] = $("input[name='msglimit']").val();
+		var msg = $("input[name='msglimit']").val();
+		port.postMessage({ name : "setSetting", key : 'msg_per_page', val : msg });
+
+		/*dataStore['msg_per_page'] = $("input[name='msglimit']").val();*/
 	}
 }
 
@@ -4019,7 +4022,6 @@ function extInit() {
 */
 	// FORUM.PHP
 	} else if(document.location.href.match('forum\/$')) {
-
 
 		// Settings
 		cp.init(1);
