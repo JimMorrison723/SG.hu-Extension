@@ -62,11 +62,15 @@ var chat_hide = {
 	activated : function() {
 
 		$('#forum-chat').hide();
+		$('#forum-wrap > .blue-border-top').hide();
+		$('#forum-wrap > .forums-block:first').css({'margin-top':'0px'});
 	},
 	
 	disabled : function() {
 
 		$('#forum-chat').show();
+		$('#forum-wrap > .blue-border-top').show();
+		$('#forum-wrap > .forums-block:first').css({'margin-top':'35px'});
 	}
 }
 
