@@ -33,6 +33,7 @@
 			if( typeof localStorage['quick_user_info']						== 'undefined') localStorage['quick_user_info']						= 'false';
 			if( typeof localStorage['quick_insertion']						== 'undefined') localStorage['quick_insertion']						= 'false';
 			if( typeof localStorage['spoiler_button']						== 'undefined') localStorage['spoiler_button']						= 'false';
+			if( typeof localStorage['msg_per_page']							== 'undefined') localStorage['msg_per_page']						= '80';
 
 			// Message Center
 			if( typeof localStorage['message_center']						== 'undefined') localStorage['message_center']						= 'false';

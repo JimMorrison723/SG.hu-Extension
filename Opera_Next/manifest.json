@@ -1,6 +1,6 @@
 {
    "name": "SG Fórum tuning",
-   "version": "3.1.9.4",
+   "version": "3.2",
    "manifest_version" : 2,
    "description": "Az sg.hu nemhivatalos Opera bővítménye.",
 
@@ -14,7 +14,7 @@
    },
 
    "content_scripts": [{
-      "matches" : [ "http://www.sg.hu/*", "http://sg.hu/*" ],
+      "matches" : [ "http://www.sg.hu/*", "http://sg.hu/*", "https://www.sg.hu/*", "https://sg.hu/*" ],
       "js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/settings.js", "js/cleditor.js", "js/cleditor_bbcode.js", "js/date.js", "js/content.js" ],
       "css" : ["css/content.css", "css/cleditor.css", "css/settings.css"],
       "run_at" : "document_start",
@@ -51,6 +51,7 @@
       "img/content/spoiler.png",
       "img/content/warning.png",
       "img/content/warning2.png",
+      "img/content/makro_button.png",
       "img/settings/button.png",
       "img/settings/icon.png",
       "img/settings/icons.png",
@@ -66,6 +67,8 @@
    "permissions": [
       "http://www.sg.hu/",
       "http://sg.hu/",
+      "https://www.sg.hu/",
+      "https://sg.hu/",
       "http://sgsync.dev.kreatura.hu/",
       "http://www.youtu.be/",
       "http://www.youtube.com/",

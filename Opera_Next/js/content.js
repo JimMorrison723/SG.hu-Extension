@@ -62,18 +62,24 @@ var chat_hide = {
 	activated : function() {
 
 		$('#forum-chat').hide();
+		$('#forum-wrap > .blue-border-top').hide();
+		$('#forum-wrap > .forums-block:first').css({'margin-top':'0px'});
 	},
 	
 	disabled : function() {
 
 		$('#forum-chat').show();
+		$('#forum-wrap > .blue-border-top').show();
+		$('#forum-wrap > .forums-block:first').css({'margin-top':'35px'});
 	}
 }
 
 
 var jump_unreaded_messages = {
-	
+
 	activated : function() {
+
+		var msgPerPage = dataStore['msg_per_page'];
 	
 		$('#favorites-list span').find('a').each(function() { //.ext_faves'
 			
@@ -84,7 +90,7 @@ var jump_unreaded_messages = {
 				var newMsg = parseInt($(this).find('span[class="new"]').html().match(/\d+/g));
 
 				// Get last msn's page number
-				var page = Math.ceil( newMsg / 80 );
+				var page = Math.ceil( newMsg / msgPerPage );
 
 				// Rewrite the url
 				$(this).attr('href', $(this).attr('href') + '?order=desc&page='+page+'&newmsg='+newMsg);
@@ -114,17 +120,18 @@ var jump_unreaded_messages = {
 	},
 	
 	topic : function() {
-	
+		var msgPerPage = dataStore['msg_per_page'];
+
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
-		
+
 		// Return if there is not comment counter set
 		if(typeof newMsg == "undefined" || newMsg == '' || newMsg == 0) {
 			return false;
 		}
 		
 		// Get the last msg
-		var lastMsg = newMsg % 80;
+		var lastMsg = newMsg % msgPerPage;
 		
 		// Target comment element
 		if($('.ext_new_comment').length > 0) {
@@ -151,6 +158,7 @@ var jump_unreaded_messages = {
 		$('a#last-read').remove();
 
 		// Url to rewrite
+		/*var url = document.location.href.replace(/?order=desc&page=\d+/gi, "");*/
 		var url = document.location.href.replace(/&newmsg=\d+/gi, "");
 
 		// Update the url to avoid re-jump
@@ -170,13 +178,13 @@ var jump_unreaded_messages = {
 	
 	
 	jump : function() {
-		
+		console.log('jump');
 		// Get the target element
-		if($('.ext_new_comment').length > 0) {
+		/*if($('.ext_new_comment').length > 0) {
 			var target = $('.ext_new_comment:first').closest('center');
 		
-		} else if($('#ext_unreaded_hr').length > 0) {
-			var target = $('#ext_unreaded_hr');
+		} else*/ if($('a#last-read').length > 0) {
+			var target = $('a#last-read');
 		
 		} else {
 			return false;
@@ -201,11 +209,12 @@ var fav_show_only_unreaded = {
 	init : function() {
 
 		if(dataStore['fav_show_only_unreaded_remember'] == 'true') {
-			fav_show_only_unreaded.opened = convertBool(dataStore['fav_show_only_unreaded_opened']);
+			fav_show_only_unreaded.opened = false;
 		}
-		if($('#favorites-open-close-button #icon').html() == '+') {
-			fav_show_only_unreaded.opened = true;
+		if(convertBool(dataStore['fav_show_only_unreaded_opened']) == 'true') {
+			$('#favorites-open-close-button #icon').html() = '-';
 		}
+		console.log(dataStore['fav_show_only_unreaded_opened']);
 	},
 
 	activated : function() {
@@ -217,17 +226,17 @@ var fav_show_only_unreaded = {
 		$('.ext_faves').next().children('nav').removeAttr("style");
 
 		// Disable page auto-hide function
-		setCookie('sgkedvencrejtve', '0', 365);	
+		setCookie('favs', 'true', 365);	
 
 		// Move the button away to place toggle button
 		$('#ext_refresh_faves').css('right', 18);
 		$('#ext_read_faves').css('right', 36);
 		
-		var Alllength = $('#favorites-list a').length;
-		var unreaded_length = $('#favorites-list a[class="fav-not-new-msg"]').length;
-		$('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave');
+		var Alllength = $('#favorites-list a[class*="category-"]').length;
+		var unreaded_length = $('#favorites-list a[class^="category-"][class*="fav-not-new-msg"]').length;
+		// $('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave'); // No need in new design
 		//Fix
-		if (typeof unreaded_length === 'undefined') {
+		if (typeof unreaded_length === undefined) {
 			unreaded_length = 0;
 		}
 	
@@ -246,17 +255,21 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').off('click').on('click', function() {
-		
+		$('#favorites-open-close-button').on('click', function(e) {
+			e.preventDefault();
+console.log('click' + fav_show_only_unreaded.opened);
 			if(fav_show_only_unreaded.opened == false) {
+console.log('nyitva');
+				// Show topics with no new msg
 				$('#ext_filtered_faves_error').hide();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-				$('.fav-not-new-msg').show();
+				$('#favorites-list .fav-not-new-msg').hide();
 				
 				fav_show_only_unreaded.opened = true;
 
 				// Update last state in LocalStorage
 				port.postMessage({ name : "updateFavesFilterLastState", message : true });
+				port.postMessage({ name : "fav_show_only_unreaded_opened", message : true });
 
 				// Reposition the popup if any
 				if( $(this).closest('#ext_nav_faves_wrapper').length) {
@@ -264,26 +277,32 @@ var fav_show_only_unreaded = {
 				}
 			
 			} else {
+
+				// Don't show topics with new msg
 				$('#ext_filtered_faves_error').show();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-				$('.fav-not-new-msg').hide(); //.ext_hidden_fave
+				$('#favorites-list .fav-not-new-msg').show(); //.ext_hidden_fave
 				
 				fav_show_only_unreaded.opened = false;
 
 				// Update last state in LocalStorage
 				port.postMessage({ name : "updateFavesFilterLastState", message : false });
+				port.postMessage({ name : "fav_show_only_unreaded_opened", message : false });
 
 				// Reposition the popup if any
 				if( $(this).closest('#ext_nav_faves_wrapper').length) {
 					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
 				}
 			}
+			console.log(fav_show_only_unreaded.opened);
 		});
 
+		console.log(Alllength);
 		console.log(unreaded_length);
 		console.log($('#ext_filtered_faves_error').length);
+		console.log(fav_show_only_unreaded.opened);
 		// Create an error message if theres no topik with unreaded messages
-		if( unreaded_length == 0 && $('#ext_filtered_faves_error').length == 0) {
+		if( Alllength == unreaded_length && $('#ext_filtered_faves_error').length == 0) {
 			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 
@@ -291,14 +310,20 @@ var fav_show_only_unreaded = {
 		if(fav_show_only_unreaded.opened == true) {
 			$('#ext_filtered_faves_error').hide();
 			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-			$('.ext_hidden_fave').show();
+			$('.fav-not-new-msg').show();
+		}
+		else
+		{
+			$('#ext_filtered_faves_error').show();
+			$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+			$('#favorites-list .fav-not-new-msg').hide();
 		}
 	},
 	
 	disabled : function() {
 		
-		// Remove hidden class
-		$('.ext_hidden_fave').removeClass('ext_hidden_fave');
+		// Remove hidden class - No need in new design
+		//$('.ext_hidden_fave').removeClass('ext_hidden_fave');
 		
 		// Remove toggle button
 		$('#ext_show_filtered_faves').remove();
@@ -445,10 +470,6 @@ var blocklist =  {
 };
 
 
-
-
-
-
 var highlight_forum_categories = {
 	
 	activated : function() {
@@ -463,7 +484,6 @@ var highlight_forum_categories = {
 		$('nav#favorites-list a.category').css('padding', '0px');
 	}
 }
-
 
 var autoload_next_page = {
 	
@@ -506,7 +526,7 @@ var autoload_next_page = {
 			autoload_next_page.currPage = parseInt($('nav.pagination a.current').html());
 
 			// Get max page number - Fix for "Last page"
-			var temp = ($('nav.pagination a:last').attr('href'));
+			var temp = ($('nav.pagination a.last').attr('href'));
 			autoload_next_page.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1));
 		}
 		
@@ -638,10 +658,10 @@ var autoload_next_page = {
 						better_yt_embed.activated();
 				}*/
 
-				/*//Night mode
+				//Night mode
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 					lights.forum_switchOn();
-				}*/
+				}
 		});
 	}
 
@@ -666,9 +686,9 @@ var show_navigation_buttons = {
 		// Add event to back button
 		$('#ext_back').click(function() {
 			if(document.location.href.match('cikkek')) {
-				document.location.href = 'http://sg.hu/';
+				document.location.href = 'https://sg.hu/';
 			} else {
-				document.location.href = 'http://sg.hu/forum/';
+				document.location.href = 'https://sg.hu/forum/';
 			}
 		});
 		
@@ -738,17 +758,18 @@ var show_navigation_buttons = {
 		
 			// Create faves button event
 			$('#ext_nav_faves').click( function() {
-				if($('#ext_nav_faves_wrapper').css('display') == 'none') {
-				console.log('show');
+				if($('#ext_nav_faves_wrapper').css('display') == 'none')
+				{
 					show_navigation_buttons.showFaves();
-				} else {
+				} else
+				{
 					show_navigation_buttons.removeOverlay();
 				}
 			});	
 		}
 
 		//Night mode
-/*		if (dataStore['show_navigation_buttons_night'] == 'true') {
+		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
 			var state = dataStore['navigation_button_night_state'];
 				//console.log("topik:" + dataStore['navigation_button_night_state']);
@@ -798,7 +819,7 @@ var show_navigation_buttons = {
 				// Save in localStorage
 				port.postMessage({ name : "setSetting", key : 'navigation_button_night_state', val : data });
 			});	
-		};*/
+		};
 		
 		
 		// Set the button positions
@@ -806,29 +827,29 @@ var show_navigation_buttons = {
 			// Gather visible buttons
 			var buttons = new Array();
 				
-				if($('#ext_scrolltop').length) {
-					buttons.push('ext_scrolltop');
-				}
+			if($('#ext_scrolltop').length) {
+				buttons.push('ext_scrolltop');
+			}
 
-				if($('#ext_back').length) {
-					buttons.push('ext_back');
-				}
+			if($('#ext_back').length) {
+				buttons.push('ext_back');
+			}
 
-				if($('#ext_search').length) {
-					buttons.push('ext_search');
-				}
+			if($('#ext_search').length) {
+				buttons.push('ext_search');
+			}
 
-				if($('#ext_whitelist').length) {
-					buttons.push('ext_whitelist');
-				}
+			if($('#ext_whitelist').length) {
+				buttons.push('ext_whitelist');
+			}
 
-				if($('#ext_nightmode').length) {
-					buttons.push('ext_nightmode');
-				}
+			if($('#ext_nightmode').length) {
+				buttons.push('ext_nightmode');
+			}
 
-				if($('#ext_nav_faves').length) {
-					buttons.push('ext_nav_faves');
-				}
+			if($('#ext_nav_faves').length) {
+				buttons.push('ext_nav_faves');
+			}
 			
 			// Reverse the array order for bottom positioning
 			if(dataStore['navigation_buttons_position'].match('bottom')) {
@@ -910,7 +931,7 @@ var show_navigation_buttons = {
 	},
 	
 	showFaves : function() {
-		var url = "http://sg.hu/forum/";
+		var url = "https://sg.hu/forum/";
 		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list', function() {
 
 			// Write data into wrapper
@@ -1079,68 +1100,45 @@ var lights = {
 	topic_switchOn : function() {
 
 		$('body').css('background-image', 'url('+chrome.extension.getURL('/img/content/background.png')+')');
-		$('#center > table').addClass('night_mainTable');
+		$('nav#menu-family').css({'color':'#807D7D'});		 
+		$('#content').addClass('night_mainTable');
 		$('.oldal-path-2').addClass('night_mainTable');
-		$('.topichead').addClass('night_topichead');
-		$('.msg-text:not(a)').addClass('night_p');
-		$('.msg-text > a').css({'color':'#F0DC82 !important'});
-		$('.msg-bottom').addClass('night_bottom')
-		$('.msg-replyto a').css({'color':'#CC7722 !important'});
-		$('#bottom-navig').addClass('night_bottom');
-		$('#msg-head').addClass('night_msg-head');
+		$('header').addClass('night_topichead');
+		$('section.body').addClass('night_p');
+		$('li.forum-post a').css({'color':'#F0DC82 !important'});
+		$('footer.footer').addClass('night_bottom')
+		$('a.show-message').css({'color':'#CC7722 !important'});
 		$('#footer-top').css({'opacity':'0.1'});
 	},
 	
 	topic_switchOff : function() {
 	
 		$('body').css('background-image', '');
-		$('#center > table').removeClass('night_mainTable');
+		$('nav#menu-family').css({'color':'black'});
+		$('#content').removeClass('night_mainTable');
 		$('.oldal-path-2').removeClass('night_mainTable');
-		$('.topichead').removeClass('night_topichead');
-		$('.msg-text').removeClass('night_p');
-		$('.msg-text a').removeClass('night_p a');
-		$('.msg-bottom').removeClass('night_bottom');
-		$('.msg-replyto').removeClass('night_replyto');
-		$('#msg-head').removeClass('night_msg-head');
-		$('#bottom-navig').removeClass('night_bottom');
+		$('header').removeClass('night_topichead');
+		$('section.body').removeClass('night_p');
+		$('li.forum-post a').removeClass('night_p a');
+		$('footer.footer').removeClass('night_bottom');
+		$('a.show-message').removeClass('night_replyto');
 	},
 
 	forum_switchOn : function() {
 
 		$('body').css('background-image', 'url('+chrome.extension.getURL('/img/content/background.png')+')');
-		$('.cikk-2').addClass('night_mainTable');
-		//$('#center table:nth-child(3)').css({'background':'black'});
-		$('#center > table[width=980]').css({'background':'black'});
-		$('#center table tbody tr td[width=1]').css({'opacity':'0.2'});
-
-		/*$('#center table:nth-child(1)').css({'background-color':'black'}); //Main menu background*/
-		/*$('#navigmenu a').css({'color':'#F5F5DC'}); */
-
-		$('#center table:nth-child(2)').css({'background':'black'}); //Menu
+		$('#content').addClass('night_mainTable');
 
 		//Chat
 		/*setTimeout(function() {*/
-		$('td#chatablak').css({'background':'black', 'color':'#996600'});
-		$('#beiromezo').css({'background':'black', 'color':'rgb(155, 155, 155)'});
-		/*}, 4000);*/
+		$('span, a, h4').css({'color':'rgb(119, 119, 119)'});
+		$('span .new').css({'color':'darkred'});
+		$('#forum-chat-input').css({'background':'black', 'color':'rgb(155, 155, 155)'});
+		setTimeout(function() {
+			$('ul#forum-chat-list li:odd').css({'background-color':'black'});
+			$('ul#forum-chat-list li:even').css({'background-color':'#252525'});
+		}, 2000);
 		
-
-		$('td#ext_left_sidebar').css({'background':'black','border-color':'#333'});
-		$('.night_mainTable table').css({'background':'none black','border-collapse':'collapse'});
-		$('.night_mainTable table tr').removeAttr('onmouseover');
-		$('.td-list2 ').css({'background-image':'url('+chrome.extension.getURL('/img/content/ext_hsep_bg.png')+')'});
-		/*$('td.td-list-over2').css({'background':'#696969'});*/
-		
-		$('#center table:nth-child(3) tr').css({'background':'black'});
-		$('.cikk-bal-etc2').css({'background':'black'});	//Favourites background
-		$('.cikk-bal-etc2 small').css({'color':'#993333'}); //New messege indicator
-		$('.std0 b').css({'color':'#996600'}); 				//Topic heads
-
-		//Footer
-		$('#bottom-navig').css({'background':'none'});
-		$('#bottom-navig li').css({'background':'none'});
-		$('#footer-top').css({'background':'none'});
-
 	}
 }
 
@@ -1182,7 +1180,7 @@ var update_fave_list = {
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
 			success : function(data) {*/
-		$( "nav#favorites-list" ).load( "http://sg.hu/forum/ nav#favorites-list", function() {
+		$( "nav#favorites-list" ).load( "https://sg.hu/forum/ nav#favorites-list", function() {
 
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
@@ -1423,7 +1421,7 @@ var overlay_reply_to = {
 			e.preventDefault();
 
 			// Get ref msg ID and comment element
-			var msgno = $(this).attr('href').match(/\d+/g);
+			var msgno = $(this).closest('header').find('a.post-no').text().match(/\d+/g);
 			var entry = $(this).closest('li');
 
 			// Call show method
@@ -1458,7 +1456,7 @@ var overlay_reply_to = {
 		var comment_clone = $(comment).clone().prependTo('#forum-posts-list').addClass('ext_highlighted_comment');
 		
 		// Maintain comment clone positions
-		comment_clone.css({ 'left' : comment.children('header').offset().left, 'top' : comment.children('header').offset().top });
+		comment_clone.css({ 'top' : comment.offset().top });
 		
 		// Remove threaded view padding and border
 		comment_clone.css({ margin : 0 , padding : 0, border : 0 });
@@ -1916,7 +1914,6 @@ var fetch_new_comments_in_topic = {
 	
 		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
 		var topic_url = $('a#forum-new-messages').attr('href');
-
 		var comment_c = $('a#forum-new-messages').text().match(/\d+/g);
 			
 		$('a#forum-new-messages').attr('href',  topic_url + '&newmsg=' + comment_c);
@@ -1999,9 +1996,9 @@ var fetch_new_comments_in_topic = {
 					}
 
 					//
-					/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+					if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 						lights.topic_switchOn();
-					}*/
+					}
 			}
 		});
 	}
@@ -2483,7 +2480,7 @@ var wysiwyg_editor = {
 			var thisTitle="";
 			
 			
-			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: http://www.youtube.com/watch?v=sUntx0pe_qI)", "http://www.youtube.com/watch?v=sUntx0pe_qI");
+			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: https://www.youtube.com/watch?v=sUntx0pe_qI)", "https://www.youtube.com/watch?v=sUntx0pe_qI");
 
 			if (thisURL && (((thisURL.length>25 && thisURL.substring(0,20) == "http://www.youtu.be/") || (thisURL.length>25 && thisURL.substring(0,16) == "http://youtu.be/") || thisURL.length>25 && thisURL.substring(0,25) == "http://www.youtube.com/v/") || (thisURL.length>31 && thisURL.substring(0,31) == "http://www.youtube.com/watch?v="))) {
 					
@@ -2505,7 +2502,7 @@ var wysiwyg_editor = {
 					kezdhossz=20;
 				}
               	
-				var videocode = "[flash]http://www.youtube.com/v/"+thisURL.substring(kezdhossz,maxurlhossz)+"&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
+				var videocode = "[flash]https://www.youtube.com/v/"+thisURL.substring(kezdhossz,maxurlhossz)+"&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
 
 				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + videocode;
 				$('.cleditorMain:first iframe').contents().find('body').html(imod);
@@ -2712,7 +2709,7 @@ var message_center = {
 		// HTML code to insert
 		var html = '';
 		
-			html += '<tr>';
+			/*html += '<tr>';
 				html += '<td colspan="4">';
 					html += '<div>';
 						html += '<div class="b-h-o-head ext_mc_tabs">';
@@ -2731,18 +2728,30 @@ var message_center = {
 						html += '</div>';
 					html += '</div>';
 				html += '</td>';
-			html += '</tr>';
+			html += '</tr>';*/
 		
+
+		html += '<ul id="ext_mc_tabs">';
+			html += '<li class="ext_mc_tabs">Fórumkategóriák</li>';
+			html += '<li class="ext_mc_tabs">Saját üzeneteim</li>';
+			html += '<li class="ext_mc_tabs">Válaszok</li>';
+		html += '</ul>';
+		html += '<div id="ext_mc_page">';
+		html += '<div class="ext_mc_pages"></div>';
+		html += '<div class="ext_mc_pages"><h3>Még nem érkezett válasz egyetlen kommentedre sem.</h3><div class="contents"></div></div>';
+		html += '<div class="ext_mc_pages"><h3>Még nincs egy elmentett üzenet sem.</h3></div>';
+		html += '</div>';
+
 		// Insert tabs
-		$('.cikk-2').closest('tr').before(html);
+		$('#forum-chat').after(html);
+
+		var cikkek = $('.forums-block');
 		
-		// Create DIV for each pages
-		$('.cikk-2').addClass('ext_mc_pages');
-		$('.cikk-2').after('<div class="ext_mc_pages"><h3>Még nem érkezett válasz egyetlen kommentedre sem.</h3><div class="contents"></div></div>');
-		$('.cikk-2').after('<div class="ext_mc_pages"><h3>Még nincs egy elmentett üzenet sem.</h3></div>');
+		// Add topik lists to the first page
+		$('#ext_mc_page .ext_mc_pages:eq(0)').append(cikkek);
 		
 		// Fix right sidebar top position
-		$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });
+		/*$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });*/
 		
 		// Show the last used tab
 		message_center.tab(dataStore['mc_selected_tab']);
@@ -2811,7 +2820,7 @@ var message_center = {
 	},
 
 	tab : function(n) {
-		
+
 		// Hide all pages
 		$('.ext_mc_pages').hide();
 		
@@ -2819,14 +2828,8 @@ var message_center = {
 		$('.ext_mc_pages').eq(n).show();
 		
 		// Maintain styles, remove active style 
-		$('.ext_mc_tabs').removeClass('b-h-o-head').addClass('b-h-b-head');
-		$('.ext_mc_tabs').find('img[src*="ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
-		$('.ext_mc_tabs').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		
-		// Maintain styles, add active style 
-		$('.ext_mc_tabs').eq(n).removeClass('b-h-b-head').addClass('b-h-o-head');
-		$('.ext_mc_tabs').eq(n).find('img[src*="ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
-		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		$('.ext_mc_tabs').removeClass('active');
+		$('.ext_mc_tabs:eq('+ n +')').addClass('active');
 		
 		// Store last selected tag for initial status
 		port.postMessage({ name : "setMCSelectedTab", message : n });
@@ -2848,7 +2851,7 @@ var message_center = {
 		window.location.hash = '';
 
 		// Find the comment in DOM
-		var target = $('.topichead a:contains("#'+id+'")').closest('center');
+		var target = $('#forum-posts-list ul li header a:contains("#'+id+'")').closest('header');
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -2874,7 +2877,7 @@ var message_center = {
 			var id = getCookie('updateComment');
 			
 			// Get message contents
-			var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
+			var message = $('#forum-posts-list ul li header a:contains("#'+id+'")').closest('header').find('section.body').html();
 
 			// Filter out html-s
 			$.each([
@@ -2909,10 +2912,10 @@ var message_center = {
 			
 
 			// Get the comment ID
-			var id = $('.topichead:first a:last').html().match(/\d+/g);
+			var id = $('header a:contains("#")').html().match(/\d+/g);
 			
 			// Get message contents
-			var message = $('.topichead:first').next().find('.maskwindow').html();
+			var message = $('header').next().find('.maskwindow').html();
 			
 			// Filter out html-s
 			$.each([
@@ -3190,7 +3193,7 @@ var message_center = {
 			var html = '';
 			
 				html += '<div class="ext_mc_messages">';
-					html += '<p><a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+					html += '<p><a href="https://sg.hu/forum/tema/'+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
 					html += '<span>'+time+'</span>';
 					html += '<div>'+msg+'</div>';
 				html += '</div>';
@@ -3257,7 +3260,7 @@ var message_center = {
 
 			// Own comment
 			html += '<div class="ext_mc_messages">';
-				html += '<p><a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+				html += '<p><a href="https://sg.hu/forum/tema/'+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
 					html += '<span>'+time+'</span>';
 					html += '<div>'+msg+'</div>';
 			html += '</div>';
@@ -3268,7 +3271,7 @@ var message_center = {
 				html += '<div class="ext_mc_messages ident">';
 					html += '<p>';
 						html += ''+messages[c]['answers'][a]['author']+'';
-						html += ' - <a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'#komment='+messages[c]['answers'][a]['id']+'" class="ext_mc_jump_to">ugrás a hozzászólásra</a>';
+						html += ' - <a href="https://sg.hu/forum/tema/'+messages[c]['topic_id']+'#komment='+messages[c]['answers'][a]['id']+'" class="ext_mc_jump_to">ugrás a hozzászólásra</a>';
 					html +='</p>';
 					html += '<div>'+messages[c]['answers'][a]['message']+'</div>';
 				html += '</div>';
@@ -3705,19 +3708,18 @@ var quick_user_info = {
 					var th_height = $(this).closest('header').css('height').replace('px', '');
 
 					//Get topichead pos from the top of the page
-					var fromTop = $(this).parents('header').offset().top;
+					var fromTop = $(this).closest('header').offset().top - 122;
 					
 					//If "highlight_comments_for_me" is on we need to change the fromTop to the comment position
-/*					if ($(this).closest('center').css('position') !== 'static')
+					if ($(this).closest('li').has('img.ext_comments_for_me_indicator').length ? true : false )
 					{
 						//Correct according a default padding on the messages
-						fromTop = $(this).closest('.topichead').parent('div').css('padding-top').replace('px', '');
-					}*/
-					
+						fromTop = $(this).closest('header').css('padding-top').replace('px', '');
+					}
 					var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 
-					//Show infobox
-					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
+					//Show infobox -121
+					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight });
 
 					//Show user information in infobox
 				    $('.infobox').load(url + ' table.data-table'); 
@@ -3907,10 +3909,26 @@ var tempScript = {
 	}
 }
 
+var update_settings = {
+
+	activated : function()
+	{
+		var msg = $("input[name='msglimit']").val();
+		port.postMessage({ name : "setSetting", key : 'msg_per_page', val : msg });
+
+		/*dataStore['msg_per_page'] = $("input[name='msglimit']").val();*/
+	}
+}
+
 function extInit() {
+
+	if (document.location.href == 'https://sg.hu/felhasznalo/beallitasok')
+	{
+		update_settings.activated();
+	}
 	
 	// SG index.php
-	if(document.location.href == 'http://www.sg.hu/' || document.location.href.match('index.php')) {
+	if(document.location.href == 'https://www.sg.hu/' || document.location.href.match('index.php')) {
 	
 		// Settings
 		cp.init(3);
@@ -3931,9 +3949,9 @@ function extInit() {
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
 		// Message Center
-/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.article();
-		}*/
+		}
 
 		// Threaded_comments
 		if(dataStore['threaded_comments'] == 'true') {
@@ -4004,7 +4022,6 @@ function extInit() {
 	// FORUM.PHP
 	} else if(document.location.href.match('forum\/$')) {
 
-
 		// Settings
 		cp.init(1);
 
@@ -4025,7 +4042,7 @@ function extInit() {
 		if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
 			jump_unreaded_messages.activated();
 		}
-		
+
 		// Faves: show only with unreaded messages
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 			fav_show_only_unreaded.init();
@@ -4053,14 +4070,14 @@ function extInit() {
 		}
 		
 		// Message center
-/*		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.init();
-		}*/
+		}
 		
 		//Night mode
-		/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 			lights.forum_switchOn();
-		}*/
+		}
 	}
 	
 	// LISTAZAS.PHP
@@ -4087,9 +4104,9 @@ function extInit() {
 			}
 
 			// Message Center
-/*			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
+			if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 				message_center.topic();
-			}*/
+			}
 		
 			//gradual_comments
 			if(dataStore['threaded_comments'] == 'true') {
