@@ -120,10 +120,10 @@ var jump_unreaded_messages = {
 	},
 	
 	topic : function() {
-	
+	console.log('topic');
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
-		
+	console.log(newMsg);		
 		// Return if there is not comment counter set
 		if(typeof newMsg == "undefined" || newMsg == '' || newMsg == 0) {
 			return false;
@@ -157,6 +157,7 @@ var jump_unreaded_messages = {
 		$('a#last-read').remove();
 
 		// Url to rewrite
+		var url = document.location.href.replace(/?order=desc&page=\d+/gi, "");
 		var url = document.location.href.replace(/&newmsg=\d+/gi, "");
 
 		// Update the url to avoid re-jump
@@ -176,13 +177,13 @@ var jump_unreaded_messages = {
 	
 	
 	jump : function() {
-		
+		console.log('jump');
 		// Get the target element
-		if($('.ext_new_comment').length > 0) {
+		/*if($('.ext_new_comment').length > 0) {
 			var target = $('.ext_new_comment:first').closest('center');
 		
-		} else if($('#ext_unreaded_hr').length > 0) {
-			var target = $('#ext_unreaded_hr');
+		} else*/ if($('a#last-read').length > 0) {
+			var target = $('a#last-read');
 		
 		} else {
 			return false;
@@ -207,11 +208,12 @@ var fav_show_only_unreaded = {
 	init : function() {
 
 		if(dataStore['fav_show_only_unreaded_remember'] == 'true') {
-			fav_show_only_unreaded.opened = convertBool(dataStore['fav_show_only_unreaded_opened']);
+			fav_show_only_unreaded.opened = false;
 		}
-		if($('#favorites-open-close-button #icon').html() == '+') {
-			fav_show_only_unreaded.opened = true;
+		if(convertBool(dataStore['fav_show_only_unreaded_opened']) == 'true') {
+			$('#favorites-open-close-button #icon').html() = '-';
 		}
+		console.log(dataStore['fav_show_only_unreaded_opened']);
 	},
 
 	activated : function() {
@@ -223,17 +225,17 @@ var fav_show_only_unreaded = {
 		$('.ext_faves').next().children('nav').removeAttr("style");
 
 		// Disable page auto-hide function
-		setCookie('sgkedvencrejtve', '0', 365);	
+		setCookie('favs', 'true', 365);	
 
 		// Move the button away to place toggle button
 		$('#ext_refresh_faves').css('right', 18);
 		$('#ext_read_faves').css('right', 36);
 		
-		var Alllength = $('#favorites-list a').length;
-		var unreaded_length = $('#favorites-list a[class="fav-not-new-msg"]').length;
-		$('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave');
+		var Alllength = $('#favorites-list a[class*="category-"]').length;
+		var unreaded_length = $('#favorites-list a[class^="category-"][class*="fav-not-new-msg"]').length;
+		// $('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave'); // No need in new design
 		//Fix
-		if (typeof unreaded_length === 'undefined') {
+		if (typeof unreaded_length === undefined) {
 			unreaded_length = 0;
 		}
 	
@@ -252,17 +254,21 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').off('click').on('click', function() {
-		
+		$('#favorites-open-close-button').on('click', function(e) {
+			e.preventDefault();
+console.log('click' + fav_show_only_unreaded.opened);
 			if(fav_show_only_unreaded.opened == false) {
+console.log('nyitva');
+				// Show topics with no new msg
 				$('#ext_filtered_faves_error').hide();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-				$('.fav-not-new-msg').show();
+				$('#favorites-list .fav-not-new-msg').hide();
 				
 				fav_show_only_unreaded.opened = true;
 
 				// Update last state in LocalStorage
 				port.postMessage({ name : "updateFavesFilterLastState", message : true });
+				port.postMessage({ name : "fav_show_only_unreaded_opened", message : true });
 
 				// Reposition the popup if any
 				if( $(this).closest('#ext_nav_faves_wrapper').length) {
@@ -270,26 +276,32 @@ var fav_show_only_unreaded = {
 				}
 			
 			} else {
+
+				// Don't show topics with new msg
 				$('#ext_filtered_faves_error').show();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-				$('.fav-not-new-msg').hide(); //.ext_hidden_fave
+				$('#favorites-list .fav-not-new-msg').show(); //.ext_hidden_fave
 				
 				fav_show_only_unreaded.opened = false;
 
 				// Update last state in LocalStorage
 				port.postMessage({ name : "updateFavesFilterLastState", message : false });
+				port.postMessage({ name : "fav_show_only_unreaded_opened", message : false });
 
 				// Reposition the popup if any
 				if( $(this).closest('#ext_nav_faves_wrapper').length) {
 					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
 				}
 			}
+			console.log(fav_show_only_unreaded.opened);
 		});
 
-		/*console.log(unreaded_length);
-		console.log($('#ext_filtered_faves_error').length);*/
+		console.log(Alllength);
+		console.log(unreaded_length);
+		console.log($('#ext_filtered_faves_error').length);
+		console.log(fav_show_only_unreaded.opened);
 		// Create an error message if theres no topik with unreaded messages
-		if( unreaded_length == 0 && $('#ext_filtered_faves_error').length == 0) {
+		if( Alllength == unreaded_length && $('#ext_filtered_faves_error').length == 0) {
 			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 
@@ -297,14 +309,20 @@ var fav_show_only_unreaded = {
 		if(fav_show_only_unreaded.opened == true) {
 			$('#ext_filtered_faves_error').hide();
 			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-			$('.ext_hidden_fave').show();
+			$('.fav-not-new-msg').show();
+		}
+		else
+		{
+			$('#ext_filtered_faves_error').show();
+			$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+			$('#favorites-list .fav-not-new-msg').hide();
 		}
 	},
 	
 	disabled : function() {
 		
-		// Remove hidden class
-		$('.ext_hidden_fave').removeClass('ext_hidden_fave');
+		// Remove hidden class - No need in new design
+		//$('.ext_hidden_fave').removeClass('ext_hidden_fave');
 		
 		// Remove toggle button
 		$('#ext_show_filtered_faves').remove();
@@ -667,9 +685,9 @@ var show_navigation_buttons = {
 		// Add event to back button
 		$('#ext_back').click(function() {
 			if(document.location.href.match('cikkek')) {
-				document.location.href = 'http://sg.hu/';
+				document.location.href = 'https://sg.hu/';
 			} else {
-				document.location.href = 'http://sg.hu/forum/';
+				document.location.href = 'https://sg.hu/forum/';
 			}
 		});
 		
@@ -912,7 +930,7 @@ var show_navigation_buttons = {
 	},
 	
 	showFaves : function() {
-		var url = "http://sg.hu/forum/";
+		var url = "https://sg.hu/forum/";
 		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list', function() {
 
 			// Write data into wrapper
@@ -1184,7 +1202,7 @@ var update_fave_list = {
 			url : 'ajax/kedvencdb.php',
 			mimeType : 'text/html;charset=utf-8',
 			success : function(data) {*/
-		$( "nav#favorites-list" ).load( "http://sg.hu/forum/ nav#favorites-list", function() {
+		$( "nav#favorites-list" ).load( "https://sg.hu/forum/ nav#favorites-list", function() {
 
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
@@ -2484,7 +2502,7 @@ var wysiwyg_editor = {
 			var thisTitle="";
 			
 			
-			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: http://www.youtube.com/watch?v=sUntx0pe_qI)", "http://www.youtube.com/watch?v=sUntx0pe_qI");
+			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: https://www.youtube.com/watch?v=sUntx0pe_qI)", "https://www.youtube.com/watch?v=sUntx0pe_qI");
 
 			if (thisURL && (((thisURL.length>25 && thisURL.substring(0,20) == "http://www.youtu.be/") || (thisURL.length>25 && thisURL.substring(0,16) == "http://youtu.be/") || thisURL.length>25 && thisURL.substring(0,25) == "http://www.youtube.com/v/") || (thisURL.length>31 && thisURL.substring(0,31) == "http://www.youtube.com/watch?v="))) {
 					
@@ -2506,7 +2524,7 @@ var wysiwyg_editor = {
 					kezdhossz=20;
 				}
               	
-				var videocode = "[flash]http://www.youtube.com/v/"+thisURL.substring(kezdhossz,maxurlhossz)+"&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
+				var videocode = "[flash]https://www.youtube.com/v/"+thisURL.substring(kezdhossz,maxurlhossz)+"&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
 
 				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + videocode;
 				$('.cleditorMain:first iframe').contents().find('body').html(imod);
@@ -3197,7 +3215,7 @@ var message_center = {
 			var html = '';
 			
 				html += '<div class="ext_mc_messages">';
-					html += '<p><a href="http://sg.hu/forum/tema/'+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+					html += '<p><a href="https://sg.hu/forum/tema/'+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
 					html += '<span>'+time+'</span>';
 					html += '<div>'+msg+'</div>';
 				html += '</div>';
@@ -3264,7 +3282,7 @@ var message_center = {
 
 			// Own comment
 			html += '<div class="ext_mc_messages">';
-				html += '<p><a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+				html += '<p><a href="https://sg.hu/forum/tema/'+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
 					html += '<span>'+time+'</span>';
 					html += '<div>'+msg+'</div>';
 			html += '</div>';
@@ -3275,7 +3293,7 @@ var message_center = {
 				html += '<div class="ext_mc_messages ident">';
 					html += '<p>';
 						html += ''+messages[c]['answers'][a]['author']+'';
-						html += ' - <a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'#komment='+messages[c]['answers'][a]['id']+'" class="ext_mc_jump_to">ugrás a hozzászólásra</a>';
+						html += ' - <a href="https://sg.hu/forum/tema/'+messages[c]['topic_id']+'#komment='+messages[c]['answers'][a]['id']+'" class="ext_mc_jump_to">ugrás a hozzászólásra</a>';
 					html +='</p>';
 					html += '<div>'+messages[c]['answers'][a]['message']+'</div>';
 				html += '</div>';
@@ -3712,19 +3730,18 @@ var quick_user_info = {
 					var th_height = $(this).closest('header').css('height').replace('px', '');
 
 					//Get topichead pos from the top of the page
-					var fromTop = $(this).parents('header').offset().top;
+					var fromTop = $(this).closest('header').offset().top - 122;
 					
 					//If "highlight_comments_for_me" is on we need to change the fromTop to the comment position
-/*					if ($(this).closest('center').css('position') !== 'static')
+					if ($(this).closest('li').has('img.ext_comments_for_me_indicator').length ? true : false )
 					{
 						//Correct according a default padding on the messages
-						fromTop = $(this).closest('.topichead').parent('div').css('padding-top').replace('px', '');
-					}*/
-					
+						fromTop = $(this).closest('header').css('padding-top').replace('px', '');
+					}
 					var fullHeight = parseInt(fromTop,10) + parseInt(th_height,10);
 
-					//Show infobox
-					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight});
+					//Show infobox -121
+					$('.infobox').css({ 'font-size' : '10px' , 'display' : 'block', 'top' : fullHeight });
 
 					//Show user information in infobox
 				    $('.infobox').load(url + ' table.data-table'); 
@@ -3927,13 +3944,13 @@ var update_settings = {
 
 function extInit() {
 
-	if (document.location.href == 'http://sg.hu/felhasznalo/beallitasok')
+	if (document.location.href == 'https://sg.hu/felhasznalo/beallitasok')
 	{
 		update_settings.activated();
 	}
 	
 	// SG index.php
-	if(document.location.href == 'http://www.sg.hu/' || document.location.href.match('index.php')) {
+	if(document.location.href == 'https://www.sg.hu/' || document.location.href.match('index.php')) {
 	
 		// Settings
 		cp.init(3);
@@ -4047,7 +4064,7 @@ function extInit() {
 		if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
 			jump_unreaded_messages.activated();
 		}
-		
+
 		// Faves: show only with unreaded messages
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 			fav_show_only_unreaded.init();
