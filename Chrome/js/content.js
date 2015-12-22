@@ -526,7 +526,7 @@ var autoload_next_page = {
 			autoload_next_page.currPage = parseInt($('nav.pagination a.current').html());
 
 			// Get max page number - Fix for "Last page"
-			var temp = ($('nav.pagination a:last').attr('href'));
+			var temp = ($('nav.pagination a.last').attr('href'));
 			autoload_next_page.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1));
 		}
 		
