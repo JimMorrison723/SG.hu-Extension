@@ -71,8 +71,11 @@
       "https://sg.hu/",
       "http://sgsync.dev.kreatura.hu/",
       "http://www.youtu.be/",
+      "https://www.youtu.be/",
       "http://www.youtube.com/",
+      "https://www.youtube.com/",
       "http://youtu.be/",
+      "https://youtu.be/",
       "http://gdata.youtube.com/feeds/api/videos/"
    ]
 }
