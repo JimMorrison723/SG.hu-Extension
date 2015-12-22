@@ -590,7 +590,7 @@ var settings = {
 
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
-				window[$(ele).attr('id')].disabled();
+				window[$(ele).attr('id')].disabled
 			}
 		}
 	},

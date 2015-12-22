@@ -657,10 +657,10 @@ var autoload_next_page = {
 						better_yt_embed.activated();
 				}*/
 
-				/*//Night mode
+				//Night mode
 				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 					lights.forum_switchOn();
-				}*/
+				}
 		});
 	}
 
@@ -768,7 +768,7 @@ var show_navigation_buttons = {
 		}
 
 		//Night mode
-/*		if (dataStore['show_navigation_buttons_night'] == 'true') {
+		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
 			var state = dataStore['navigation_button_night_state'];
 				//console.log("topik:" + dataStore['navigation_button_night_state']);
@@ -818,7 +818,7 @@ var show_navigation_buttons = {
 				// Save in localStorage
 				port.postMessage({ name : "setSetting", key : 'navigation_button_night_state', val : data });
 			});	
-		};*/
+		};
 		
 		
 		// Set the button positions
@@ -1443,7 +1443,7 @@ var overlay_reply_to = {
 			e.preventDefault();
 
 			// Get ref msg ID and comment element
-			var msgno = $(this).attr('href').match(/\d+/g);
+			var msgno = $(this).closest('header').find('a.post-no').text().match(/\d+/g);
 			var entry = $(this).closest('li');
 
 			// Call show method
@@ -1478,7 +1478,7 @@ var overlay_reply_to = {
 		var comment_clone = $(comment).clone().prependTo('#forum-posts-list').addClass('ext_highlighted_comment');
 		
 		// Maintain comment clone positions
-		comment_clone.css({ 'left' : comment.children('header').offset().left, 'top' : comment.children('header').offset().top });
+		comment_clone.css({ 'top' : comment.offset().top });
 		
 		// Remove threaded view padding and border
 		comment_clone.css({ margin : 0 , padding : 0, border : 0 });
@@ -2018,9 +2018,9 @@ var fetch_new_comments_in_topic = {
 					}
 
 					//
-					/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+					if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 						lights.topic_switchOn();
-					}*/
+					}
 			}
 		});
 	}
@@ -4097,9 +4097,9 @@ function extInit() {
 		}
 		
 		//Night mode
-		/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
 			lights.forum_switchOn();
-		}*/
+		}
 	}
 	
 	// LISTAZAS.PHP
