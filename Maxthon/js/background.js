@@ -52,6 +52,7 @@ if(mxstorage.getItem('youtube_embed_limit')					== 'undefined') mxstorage.setIte
 if(mxstorage.getItem('quick_user_info')						== 'undefined') mxstorage.setItem('quick_user_info', 'false');
 if(mxstorage.getItem('quick_insertion')						== 'undefined') mxstorage.setItem('quick_insertion', 'false');
 if(mxstorage.getItem('spoiler_button')						== 'undefined') mxstorage.setItem('spoiler_button', 'false');
+if(mxstorage.getItem('msg_per_page')						== 'undefined') mxstorage.setItem('msg_per_page', '80');
 
 // Message Center
 if(mxstorage.getItem('message_center')						== 'undefined') mxstorage.setItem('message_center', 'false');
