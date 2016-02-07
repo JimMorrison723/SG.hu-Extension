@@ -373,7 +373,7 @@ var short_comment_marker = {
 			if($(this).find('span[class*=new]').length > 0) {
 			
 				// Received new messages counter
-				var newMsg = parseInt( $(this).find('span').html().match(/\d+/g) ); // \d - non-digit character
+				var newMsg = parseInt( $(this).find('span[class=new]').html().match(/\d+/g) ); // \d - non-digit character
 			
 				// Remove the old marker text
 				$(this).find('span[class*=new]').hide();

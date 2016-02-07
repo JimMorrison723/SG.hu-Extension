@@ -297,10 +297,6 @@ console.log('nyitva');
 			console.log(fav_show_only_unreaded.opened);
 		});
 
-		console.log(Alllength);
-		console.log(unreaded_length);
-		console.log($('#ext_filtered_faves_error').length);
-		console.log(fav_show_only_unreaded.opened);
 		// Create an error message if theres no topik with unreaded messages
 		if( Alllength == unreaded_length && $('#ext_filtered_faves_error').length == 0) {
 			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
@@ -344,7 +340,7 @@ var short_comment_marker = {
 			if($(this).find('span[class*=new]').length > 0) {
 			
 				// Received new messages counter
-				var newMsg = parseInt( $(this).find('span').html().match(/\d+/g) ); // \d - non-digit character
+				var newMsg = parseInt( $(this).find('span[class=new]').html().match(/\d+/g) ); // \d - non-digit character
 			
 				// Remove the old marker text
 				$(this).find('span[class*=new]').hide();
