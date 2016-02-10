@@ -178,13 +178,9 @@ var jump_unreaded_messages = {
 	
 	
 	jump : function() {
-		console.log('jump');
-		// Get the target element
-		/*if($('.ext_new_comment').length > 0) {
-			var target = $('.ext_new_comment:first').closest('center');
 		
-		} else*/ if($('a#last-read').length > 0) {
-			var target = $('a#last-read');
+		if($('#ext_unreaded_hr').length > 0) {
+			var target = $('#ext_unreaded_hr');
 		
 		} else {
 			return false;
@@ -358,12 +354,10 @@ var short_comment_marker = {
 		
 			if($(this).find('span[class*=new]').length > 0) {
 						
-				// Remove the old marker text
+				// Show old marker text
 				$(this).find('span[class*=new]').show();
-				/*$(this).find('font:last').show();*/
 			
-				// Add the new marker after the topic title
-				
+				// Remove ext_short_comment_marker
 				$(this).find('.ext_short_comment_marker').remove();
 			}
 		});

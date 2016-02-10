@@ -226,11 +226,7 @@ var jump_unreaded_messages = {
 	
 	jump : function() {
 		
-		// Get the target element
-		if($('.ext_new_comment').length > 0) {
-			var target = $('.ext_new_comment:first').closest('center');
-		
-		} else if($('#ext_unreaded_hr').length > 0) {
+		if($('#ext_unreaded_hr').length > 0) {
 			var target = $('#ext_unreaded_hr');
 		
 		} else {
