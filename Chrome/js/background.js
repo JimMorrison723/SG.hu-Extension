@@ -34,12 +34,13 @@
 			if( typeof localStorage['quick_insertion']						== 'undefined') localStorage['quick_insertion']						= 'false';
 			if( typeof localStorage['spoiler_button']						== 'undefined') localStorage['spoiler_button']						= 'false';
 			if( typeof localStorage['msg_per_page']							== 'undefined') localStorage['msg_per_page']						= '80';
+			if( typeof localStorage['inline_image_viewer']					== 'undefined') localStorage['inline_image_viewer']					= 'false';
 
 			// Message Center
 			if( typeof localStorage['message_center']						== 'undefined') localStorage['message_center']						= 'false';
 			if( typeof localStorage['mc_messages']							== 'undefined') localStorage['mc_messages']							= '';
 			if( typeof localStorage['mc_selected_tab']						== 'undefined') localStorage['mc_selected_tab']						= 0;
-			
+
 			// Sync
 			if( typeof localStorage['sync_auth_key']						== 'undefined') localStorage['sync_auth_key']						= '';
 			if( typeof localStorage['sync_nick']							== 'undefined') localStorage['sync_nick']							= '';

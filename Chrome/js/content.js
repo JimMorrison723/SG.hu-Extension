@@ -517,7 +517,10 @@ var autoload_next_page = {
 
 			// Get max page number - Fix for "Last page"
 			var temp = ($('nav.pagination a.last').attr('href'));
-			autoload_next_page.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1));
+			if (temp)
+			{
+				autoload_next_page.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1));	
+			}
 		}
 		
 		$(document).scroll(function() {
@@ -1994,8 +1997,6 @@ var fetch_new_comments_in_topic = {
 	}
 };
 
-
-
 /*var show_mentioned_comments = {
 
 	activated : function() {
@@ -2043,7 +2044,6 @@ var fetch_new_comments_in_topic = {
 		}
 	}
 };*/
-
 
 var custom_blocks = {
 	
@@ -2117,7 +2117,6 @@ var custom_blocks = {
 		// Update in dataStore var
 		dataStore['blocks_config'] = JSON.stringify(config);
 	},
-	
 	
 	setConfigByKey : function(id, key, value) {
 		
@@ -2393,44 +2392,8 @@ var remove_adds = {
 
 	activated : function() {
 
-/*		// Page top
-		$('img[src*="hirdetes.gif"]').parent().remove();
-		
-		// Home sidebar
-		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
-		$('.std0:contains("Hirdetés")').remove();*/
-
 		// Home facebook widget
 		$('#forum-fb-likebox').remove();
-		
-		// Under menu
-/*		$('p[style="background-color: #fff;padding: 8px 0;"]').css({ display : 'none' });
-		
-		// Save init time in unix timestamp
-		var time = Math.round(new Date().getTime() / 1000) 
-
-		// Text ads
-		var interval = setInterval(function() {
-
-			var newTime = Math.round(new Date().getTime() / 1000);
-			
-			if($('.etargetintext').length > 0) {
-
-				$('.etargetintext').each(function() {
-					
-					$('<span>'+$(this).html()+'</span>').insertAfter(this);
-					$(this).remove();
-				});
-
-				clearInterval(interval);
-			}
-			
-			// Break the cycle in 5 sec
-			if( (time+5) < newTime ) {
-				clearInterval(interval);
-			}
-		}, 500, interval);*/
-		
 	},
 };
 
@@ -3305,8 +3268,6 @@ function removeCookie( name, path, domain ) {
 	";expires=Thu, 01-Jan-1970 00:00:01 GMT";
 }
 
-
-
 var topic_whitelist = {
 
 	execute : function(ele) {
@@ -3340,7 +3301,6 @@ var topic_whitelist = {
 		}
 	},
 };
-
 
 var textarea_auto_resize = {
 	
@@ -3489,7 +3449,6 @@ var profiles = {
 	}
 };
 
-
 var add_to_list = {
 	
 	colors : {
@@ -3502,7 +3461,6 @@ var add_to_list = {
 	},
 	
 	init : function() {
-		
 		
 		// Create dropdowns
 		$('#forum-posts-list ul li header:not(.ext_add_to_list_topichead) a:contains("#")').each(function() {
@@ -3889,16 +3847,6 @@ var quick_insertion = {
 
 }
 
-var tempScript = {
-
-	activated : function() {
-		$(".msg-text").each(function(){
-        	var msg=$(this).html();
-        	$(this).html(msg.replace(/(&amp;|&)<a href="JavaScript.+?(#\d+)<\/a>.+?;/g,'&$2;'));
-    	});
-	}
-}
-
 var update_settings = {
 
 	activated : function()
@@ -3907,6 +3855,43 @@ var update_settings = {
 		port.postMessage({ name : "setSetting", key : 'msg_per_page', val : msg });
 
 		/*dataStore['msg_per_page'] = $("input[name='msglimit']").val();*/
+	}
+}
+
+var inline_image_viewer = {
+
+	activated : function ()
+	{
+		// Get the proper domnodes
+		var comment_links = $('#forum-posts-list ul .post .body .bb-link');
+		var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
+	
+		// Iterate over them
+		comment_links.each(function() {
+			var url = $(this).attr('href');
+			if(imgpattern.test( url ))
+			{
+				$(this).after('<div class="ext-inline-view closed" data-url="' + url + '" style="display:inline;"><span> &#9654; </span></div>');
+			}
+
+		});
+
+		$('.ext-inline-view').on('click', function(e)
+		{
+			//inline_image_viewer.append();
+			if ( $(this).hasClass('closed') )
+			{
+				$(this).find('span').html('&#9660;');
+				$(this).after('<img class="inline-image" src="'+ $(this).data('url') +'" style="display:block;">');
+				$(this).removeClass('closed');
+			}
+			else
+			{
+				$(this).find('span').html(' &#9654; ');
+				$(this).parent().find('.inline-image').remove();
+				$(this).addClass('closed');
+			}
+		});
 	}
 }
 
@@ -3989,9 +3974,9 @@ function extInit() {
 			wysiwyg_editor.activated();
 		}*/
 
-/*		if(dataStore['disable_point_system'] == 'true') {
+		if(dataStore['disable_point_system'] == 'true') {
 			disable_point_system.activated();
-		}*/
+		}
 
 		// Auto resizing textarea
 		textarea_auto_resize.init();
@@ -4007,9 +3992,14 @@ function extInit() {
 		//Pasted text will be a hyperlink, picture, video automatically
 /*		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
 			quick_insertion.activated();
+		}*/
+
+		// image, video urls in msg box can be previewed inline
+		if(dataStore['inline_image_viewer'] == 'true') {
+			inline_image_viewer.activated();
 		}
-*/
-	// FORUM.PHP
+
+	// FORUM
 	} else if(document.location.href.match('forum\/$')) {
 
 		// Settings
@@ -4070,7 +4060,7 @@ function extInit() {
 		}
 	}
 	
-	// LISTAZAS.PHP
+	// TOPIK
 	else if(document.location.href.match('\/forum\/tema')) {
 
 		// Settings
@@ -4150,10 +4140,6 @@ function extInit() {
 				wysiwyg_editor.activated();
 			}*/
 
-/*			if(dataStore['disable_point_system'] == 'true') {
-				disable_point_system.activated();
-			}*/
-
 			// Auto resizing textarea
 			textarea_auto_resize.init();
 
@@ -4183,7 +4169,10 @@ function extInit() {
 				quick_insertion.activated();
 			}
 
-			tempScript.activated();
+			// image, video urls in msg box can be previewed inline
+			if(dataStore['inline_image_viewer'] == 'true') {
+				inline_image_viewer.activated();
+			}
 
 		// Topic if whitelisted, show the navigation
 		// buttons for removal

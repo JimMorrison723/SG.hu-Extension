@@ -36,8 +36,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.2.1.1</p>';
-				html += '<p>Kiadás dátuma: 2016. 02. 10.</p>';
+				html += '<p>Verzió: 3.2.4.5</p>';
+				html += '<p>Kiadás dátuma: 2016. 05. 09.</p>';
 				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -142,11 +142,11 @@ var cp = {
 					html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
 					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
-/*				html += '<div>';
+				html += '<div>';
 					html += '<h3>Pontrendszer letiltása</h3>';
 					html += '<p>Ez az opció eltávolítja a pontozó gombokat és minden rejtett hozzászólást láthatóvá tesz.</p>';
 					html += '<div class="button" id="disable_point_system"></div>';
-				html += '</div>';*/
+				html += '</div>';
 				html += '<div>';
 					html += '<h3>Hosszú kommentek oszloposítása</h3>';
 					html += '<p>Meghatározott karakterszám felett a bővítmény oszlopokra bontja az üzeneteket a könnyebb olvashatóság miatt. </p>';
@@ -178,6 +178,11 @@ var cp = {
 					html += '<h3>Gyors beszúrás</h3>';
 					html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
 					html += '<div class="button" id="quick_insertion"></div>';
+				html += '</div>';
+				html += '<div>';
+					html += '<h3>Külső média hivatkozások előnézete</h3>';
+					html += '<p>Hozzászólásokban a hivatkozások zután egy kis gombra kattintva betöltdődik a hivatkozott tartalom (Kép, videó, tweet).</p>';
+					html += '<div class="button" id="inline_image_viewer"></div>';
 				html += '</div>';
 			html += '</div>';
 
