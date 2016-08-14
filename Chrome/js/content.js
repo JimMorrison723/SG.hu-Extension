@@ -812,7 +812,7 @@ var show_navigation_buttons = {
 				// Save in localStorage
 				port.postMessage({ name : "setSetting", key : 'navigation_button_night_state', val : data });
 			});	
-		};
+		}
 		
 		
 		// Set the button positions
