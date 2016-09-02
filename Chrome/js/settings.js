@@ -157,23 +157,6 @@ var cp = {
 					html += '<p>Létrehoz egy "info" gombot a hozzászólás fejlécében, amiben megjelennek a felhasználó adatai.</p>';
 					html += '<div class="button" id="quick_user_info"></div>';
 				html += '</div>';
-/*				html += '<div>';
-					html += '<h3>Youtube Őrület</h3>';
-					html += '<p>A script kiveszi a beágyazott videót az oldalból, és egy fekete sávot rak be a helyére, amiben a videó címe látható. A sávra kattintva megjelenik maga a videó. Mennyi beágyazott videó után linkesítsen?';
-						html += '<select id="youtube_embed_limit">';
-							html += '<option value="1">1 (Összeset)</option>';
-							html += '<option value="5">5</option>';
-							html += '<option value="10">10</option>';
-							html += '<option value="20">20</option>';
-							html += '<option value="30">30</option>';
-							html += '<option value="40">40</option>';
-							html += '<option value="50">50</option>';
-							html += '<option value="60">60</option>';
-							html += '<option value="70">70</option>';
-						html += '</select>';
-					html += '</p>';
-					html += '<div class="button" id="better_yt_embed"></div>';
-				html += '</div>';*/
 				html += '<div>';
 					html += '<h3>Gyors beszúrás</h3>';
 					html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';

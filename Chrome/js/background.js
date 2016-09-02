@@ -28,7 +28,6 @@
 			if( typeof localStorage['profiles']								== 'undefined') localStorage['profiles']							= '';
 			if( typeof localStorage['debugger_messages']					== 'undefined') localStorage['debugger_messages']					= '';
 			if( typeof localStorage['columnify_comments']					== 'undefined') localStorage['columnify_comments']					= 'false';
-			if( typeof localStorage['better_yt_embed']						== 'undefined') localStorage['better_yt_embed']						= 'true';
 			if( typeof localStorage['youtube_embed_limit']					== 'undefined') localStorage['youtube_embed_limit']					= '10';
 			if( typeof localStorage['quick_user_info']						== 'undefined') localStorage['quick_user_info']						= 'false';
 			if( typeof localStorage['quick_insertion']						== 'undefined') localStorage['quick_insertion']						= 'false';
