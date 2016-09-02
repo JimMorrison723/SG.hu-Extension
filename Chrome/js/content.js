@@ -31,16 +31,15 @@ function isLoggedIn() {
 
 	// Article page
 	if (document.location.href.match('cikkek')) {
-		return $('form[name="newmessage"]').length ? true : false;
-
+		return $('form[name="newmessage"]').length;
 
 		// Forum main page
 	} else if (document.location.href.match('forum\/$')) {
-		return $('.user-hello').length ? true : false;
+		return $('.user-hello').length;
 
 		// Topic page
 	} else if (document.location.href.match('\/forum\/tema')) {
-		return ( $('.comments-login').length === 0) ? true : false;
+		return $('#comments-login').length;
 	}
 
 }
@@ -57,29 +56,28 @@ function getUserName() {
 
 		// Topic page
 	} else if (document.location.href.match('\/forum\/tema')) {
-
-		return $('#comments-login span').text();
+		return $('#comments-login').find('span').text();
 	}
 }
-
 
 var chat_hide = {
 
 	activated: function () {
 
 		$('#forum-chat').hide();
-		$('#forum-wrap > .blue-border-top').hide();
-		$('#forum-wrap > .forums-block:first').css({'margin-top': '0px'});
+		$('#forum-wrap')
+			.find('.blue-border-top').hide()
+			.find('.forums-block:first').css({'margin-top': '0px'});
 	},
 
 	disabled: function () {
 
 		$('#forum-chat').show();
-		$('#forum-wrap > .blue-border-top').show();
-		$('#forum-wrap > .forums-block:first').css({'margin-top': '35px'});
+		$('#forum-wrap')
+			.find('.blue-border-top').show()
+			.find('.forums-block:first').css({'margin-top': '35px'});
 	}
 };
-
 
 var jump_unreaded_messages = {
 
@@ -87,7 +85,7 @@ var jump_unreaded_messages = {
 
 		var msgPerPage = dataStore['msg_per_page'];
 
-		$('#favorites-list span').find('a').each(function () { //.ext_faves'
+		$('#favorites-list').find('span').find('a').each(function () { //.ext_faves'
 
 			// If theres a new message
 			if ($(this).find('span[class="new"]').length > 0) {
@@ -127,10 +125,8 @@ var jump_unreaded_messages = {
 
 	topic: function () {
 		var msgPerPage = dataStore['msg_per_page'];
-
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
-
 		// Return if there is not comment counter set
 		if (typeof newMsg == "undefined" || newMsg === '' || newMsg === 0) {
 			return false;
@@ -185,17 +181,15 @@ var jump_unreaded_messages = {
 
 	jump: function () {
 
-		if ($('#ext_unreaded_hr').length > 0) {
-			var target = $('#ext_unreaded_hr');
-
-		} else {
+		var hr = $('#ext_unreaded_hr');
+		if (!hr) {
 			return false;
 		}
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
-		var targetHalf = $(target).outerHeight() / 2;
-		var targetTop = $(target).offset().top;
+		var targetHalf = $(hr).outerHeight() / 2;
+		var targetTop = $(hr).offset().top;
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 
 		// Scroll to target element
@@ -214,8 +208,7 @@ var fav_show_only_unreaded = {
 			fav_show_only_unreaded.opened = false;
 		}
 		if (convertBool(dataStore['fav_show_only_unreaded_opened']) == 'true') {
-			console.log('asd');
-			$('#favorites-open-close-button #icon').html('-');
+			$('#favorites-open-close-button').find('#icon').html('-');
 		}
 		console.log(dataStore['fav_show_only_unreaded_opened']);
 	},
@@ -382,7 +375,7 @@ var blocklist = {
 
 		var deletelist = dataStore['block_list'].split(',');
 
-		$("#forum-posts-list ul li header").each(function () {
+		$("#forum-posts-list").find("ul li header").each(function () {
 			var nick;
 			if (document.location.href.match('cikkek')) {
 
@@ -390,7 +383,12 @@ var blocklist = {
 
 			} else {
 
-				nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
+				if ($(this).find("a img").length == 1) {
+					nick = $(this).find("a img").attr("alt");
+				} else {
+					nick = $(this).find("a")[0].innerHTML;
+				}
+
 				nick = nick.replace(/ - VIP/, "");
 			}
 
@@ -418,7 +416,7 @@ var blocklist = {
 
 		if (confirm('Biztos tiltólistára teszed "' + nick + '" nevű felhasználót?')) {
 
-			$('#forum-posts-list ul li header a[href="' + tmpUrl + '"]').each(function () {
+			$('#forum-posts-list').find('ul li header a[href="' + tmpUrl + '"]').each(function () {
 
 				// Remove the comment
 				$(this).closest('li.forum-post').animate({height: 0, opacity: 0}, 500, function () {
@@ -439,7 +437,7 @@ var blocklist = {
 
 	unblock: function (user) {
 
-		$("#forum-posts-list ul li header").each(function () {
+		$("#forum-posts-list").find("ul li header").each(function () {
 
 			var nick;
 			if (document.location.href.match('cikkek')) {
@@ -470,15 +468,19 @@ var blocklist = {
 var highlight_forum_categories = {
 
 	activated: function () {
-		$('nav#favorites-list a.category').css('color', '#ffffff');
-		$('nav#favorites-list a.category').css('background-color', '#6c9ff7');
-		$('nav#favorites-list a.category').css('padding', '2px');
+		$('nav#favorites-list a.category').css({
+			'color': '#ffffff',
+			'background-color': '#6c9ff7',
+			'padding': '2px'
+		});
 	},
 
 	disabled: function () {
-		$('nav#favorites-list a.category').css('color', '#444');
-		$('nav#favorites-list a.category').css('background-color', '#fff');
-		$('nav#favorites-list a.category').css('padding', '0px');
+		$('nav#favorites-list a.category').css({
+			'color': '#444',
+			'background-color': '#fff',
+			'padding': '0px'
+		});
 	}
 };
 
@@ -817,7 +819,7 @@ var show_navigation_buttons = {
 		// Set the button positions
 
 		// Gather visible buttons
-		var buttons = new Array();
+		var buttons = [];
 
 		if ($('#ext_scrolltop').length) {
 			buttons.push('ext_scrolltop');
@@ -1371,7 +1373,8 @@ function replyTo() {
 
 function ext_valaszmsg(target, id, no, callerid) {
 
-	if ($('#' + target).css('display') != 'block') {
+	var targetSelector = $('#' + target);
+	if (targetSelector.css('display') != 'block') {
 
 		var url;
 		if (document.location.href.match('cikkek')) {
@@ -1383,13 +1386,13 @@ function ext_valaszmsg(target, id, no, callerid) {
 		$.get(url, function (data) {
 
 			// Show the comment
-			$('#' + target).html(data).hide().slideDown();
+			targetSelector.html(data).hide().slideDown();
 
 			// Maintain style settings
 			if (document.location.href.match('cikkek')) {
-				$('#' + target).find('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
-				$('#' + target).find('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
-				$('#' + target).find('.b-h-o-head .msg-dateicon a').css('color', '#444');
+				targetSelector.find('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+				targetSelector.find('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
+				targetSelector.find('.b-h-o-head .msg-dateicon a').css('color', '#444');
 			}
 
 			// show menitoned comment
@@ -1424,7 +1427,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 		});
 	}
 	else {
-		$('#' + target).slideUp();
+		targetSelector.slideUp();
 	}
 }
 
@@ -1578,7 +1581,7 @@ var overlay_reply_to = {
 		 // Normal textarea
 		 } else {*/
 
-		var textarea_clone
+		var textarea_clone;
 		if (document.location.href.match('cikkek')) {
 
 			textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
@@ -1742,7 +1745,7 @@ var highlight_comments_for_me = {
 	activated: function () {
 
 		// Return false when no username set
-		if (userName == '') {
+		if (userName === '') {
 			return false;
 		}
 
@@ -1757,14 +1760,13 @@ var highlight_comments_for_me = {
 		if (TesTcomment == userName) {
 			var comments = comment.closest('li');
 		}
-		;
 
 		if (comments != undefined) {
 
 			// Iterate over them
 			comments.each(function () {
 
-				if ($(this).find('.ext_comments_for_me_indicator').length == 0) {
+				if ($(this).find('.ext_comments_for_me_indicator').length === 0) {
 
 					$(this).css('position', 'relative').append('<img src="' + chrome.extension.getURL('/img/content/comments_for_me_indicator.png') + '" class="ext_comments_for_me_indicator">');
 
@@ -1776,7 +1778,6 @@ var highlight_comments_for_me = {
 				}
 			});
 		}
-		;
 	},
 
 	disabled: function () {
@@ -1824,7 +1825,7 @@ var threaded_comments = {
 		var index = $(ele).index('.thread_prev');
 
 		// Check if is it the first element
-		if (index == 0) {
+		if (index === 0) {
 			return false;
 		}
 
@@ -1868,7 +1869,7 @@ var threaded_comments = {
 		$($('.topichead:not(.checked)').closest('center').get().reverse()).each(function () {
 
 			// Check if theres an answered message
-			if ($(this).find('.msg-replyto a').length == 0) {
+			if ($(this).find('.msg-replyto a').length === 0) {
 
 				// Add checked class
 				$(this).find('.topichead:first').addClass('checked');
@@ -1911,7 +1912,7 @@ var fetch_new_comments_in_topic = {
 
 	init: function () {
 
-		if ($('a#forum-new-messages').length == 0) {
+		if ($('a#forum-new-messages').length === 0) {
 			return false;
 		}
 
@@ -1919,7 +1920,7 @@ var fetch_new_comments_in_topic = {
 		$('a#forum-new-messages').html('0 új hozzászólás érkezett!');
 
 		// Hide the notification when fetch new comments settgngs is enabled
-		if (dataStore['fetch_new_comments'] == 'true') {
+		if (dataStore['fetch_new_comments'] === 'true') {
 			$('a#forum-new-messages').css({
 				display: 'none !important',
 				visibility: 'hidden',
@@ -1936,14 +1937,14 @@ var fetch_new_comments_in_topic = {
 			// Get new comments counter
 			var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
 
-			if (newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked == false) {
+			if (newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false) {
 
 				// Rewrite the notification url
 				fetch_new_comments_in_topic.rewrite();
 
 				// Fetch the comments if this option is enabled
 				// Set locked status to prevent multiple requests
-				if (dataStore['fetch_new_comments'] == 'true') {
+				if (dataStore['fetch_new_comments'] === 'true') {
 					fetch_new_comments_in_topic.locked = true;
 					fetch_new_comments_in_topic.fetch();
 				}
@@ -2442,7 +2443,7 @@ var remove_adds = {
 
 		// Home facebook widget
 		$('#forum-fb-likebox').remove();
-	},
+	}
 };
 
 var wysiwyg_editor = {
@@ -2463,7 +2464,6 @@ var wysiwyg_editor = {
 			// CLEditor init
 			$('textarea[name="message"]').cleditor();
 		}
-
 
 		$('form[name="newmessage"]').css('position', 'relative');
 		$('form[name="newmessage"] a:eq(0)').css({'position': 'absolute', 'left': 20});
@@ -2981,13 +2981,13 @@ var message_center = {
 					time: time,
 					message: message,
 					checked: time,
-					answers: new Array()
+					answers: []
 				};
 
 
 				// If theres no previous messages
 				if (dataStore['mc_messages'] == '') {
-					messages = new Array();
+					messages = [];
 					messages.push(tmp);
 
 					// There is other messages
@@ -3066,8 +3066,8 @@ var message_center = {
 						var tmp = '';
 						tmp = $(data);
 
-						var answers = new Array();
-						var TmpAnswers = new Array();
+						var answers = [];
+						var TmpAnswers = [];
 						var time;
 
 						// Search posts that is an answer to us
@@ -3358,21 +3358,23 @@ var textarea_auto_resize = {
 
 	init: function () {
 
+		var textarea = $('form[name="newmessage"] textarea');
 		// Create the text holder element
 		$('<div id="ext_textheight"></div>').prependTo('body');
 
 		// Create the keyup event
-		$('form[name="newmessage"] textarea').on('keyup', function () {
+		textarea.on('keyup', function () {
 			textarea_auto_resize.setHeight(this);
 		});
 
-		textarea_auto_resize.height = $('form[name="newmessage"] textarea').height();
+		textarea_auto_resize.height = textarea.height();
 	},
 
 	setHeight: function (ele) {
 
 		// Get element value
 		var val = $(ele).val();
+		var ext_height = $('#ext_textheight');
 
 		// Escape the value
 		val = val.replace(/</gi, '&lt;');
@@ -3381,13 +3383,13 @@ var textarea_auto_resize = {
 		val = val.replace(/\n/gi, '<br>');
 
 		// Set the textholder element width
-		$('#ext_textheight').css('width', $(ele).width());
+		ext_height.css('width', $(ele).width());
 
 		// Set the text holder element's HTML
-		$('#ext_textheight').html(val);
+		ext_height.html(val);
 
 		// Get the text holder element's height
-		var height = $('#ext_textheight').height() + 14;
+		var height = ext_height.height() + 14;
 
 		// Check for expand
 		if (height > $(ele).height()) {
@@ -3408,14 +3410,7 @@ var textarea_auto_resize = {
 var disable_point_system = {
 
 	activated: function () {
-
-		$('#forum-posts-list ul li .forum-post-rate').hide();
-		$('#forum-posts-list ul li .forum-post-rate-place span').hide();
-		/*		$('.msg-text').each(function() {
-		 if( $(this).next().attr('id') == 'leful') {
-		 $(this).next().hide();
-		 }
-		 });*/
+		$('#forum-posts-list').find('span.forum-post-rate-place').hide();
 	}
 };
 
@@ -3432,7 +3427,7 @@ var profiles = {
 		}
 
 		// Iterate over the comments
-		$('#forum-posts-list ul li header:not(.checked)').each(function () {
+		$('#forum-posts-list').find('ul li header:not(.checked)').each(function () {
 			var nick;
 
 			// Create the wrapper if not any
@@ -3521,7 +3516,7 @@ var add_to_list = {
 	init: function () {
 
 		// Create dropdowns
-		$('#forum-posts-list ul li header:not(.ext_add_to_list_topichead) a:contains("#")').each(function () {
+		$('#forum-posts-list').find('ul li header:not(.ext_add_to_list_topichead) a:contains("#")').each(function () {
 
 			// Insert separator
 			var separator = $('<span class="separator pull-right"></span>').insertBefore(this);
@@ -3634,8 +3629,8 @@ var add_to_list = {
 
 
 		// Remove checked class for update
-		$("#forum-posts-list ul li").each(function () {
-			var nic_2;
+		$("#forum-posts-list").find("ul li").each(function () {
+			var nick_2;
 
 			if (document.location.href.match('cikkek')) {
 
@@ -3665,10 +3660,10 @@ var columnify_comments = {
 
 	activated: function () {
 
-		$('#forum-posts-list ul li header:not(.columnify)').each(function () {
+		$('#forum-posts-list').find('.post:not(.columnify)').each(function () {
 
 			// Get the message element
-			var target = $(this).next('.wrapper').find('section.body');
+			var target = $(this).find('section.body');
 
 			// Add multi column when the text is larder than 200px
 			if (target.html().length > 800) {
@@ -3682,7 +3677,7 @@ var columnify_comments = {
 
 	disabled: function () {
 
-		$('#forum-posts-list ul li header').each(function () {
+		$('#forum-posts-list').find('.columnify').each(function () {
 			$(this).next().find('section.body').css({'-webkit-column-width': 'auto', '-webkit-column-gap': 0});
 		});
 	}
@@ -3693,7 +3688,7 @@ var quick_user_info = {
 
 	activated: function () {
 
-		$('#forum-posts-list ul li').each(function () {
+		$('#forum-posts-list').find('ul li').each(function () {
 
 			//Do not add the mouseenter function again if the element already has it
 			if (!$(this).data('events')) {
@@ -3707,6 +3702,7 @@ var quick_user_info = {
 
 					//Add EventListener
 					$('img.ext_quick_user_info_btn').click(function (e) {
+						var infobox = $('.infobox');
 
 						//Get user profile URL
 						var url = $(this).closest('header').find('a[href^="/felhasznalo"]').attr('href');
@@ -3725,11 +3721,10 @@ var quick_user_info = {
 						var fullHeight = parseInt(fromTop, 10) + parseInt(th_height, 10);
 
 						//Show infobox -121
-						$('.infobox').css({'font-size': '10px', 'display': 'block', 'top': fullHeight});
+						infobox.css({'font-size': '10px', 'display': 'block', 'top': fullHeight});
 
 						//Show user information in infobox
-						$('.infobox').load(url + ' table.data-table');
-
+						infobox.load(url + ' table.data-table');
 					});
 
 				}).mouseleave(function () {
@@ -3763,7 +3758,7 @@ var quick_insertion = {
 			var data = e.originalEvent.clipboardData.getData('Text');
 			if (data.length > 10) {
 
-				var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+				var urlpattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
 				var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
 
 				var bhtml;
@@ -3788,7 +3783,8 @@ var quick_insertion = {
 				}
 
 				if (bhtml != undefined) {
-					var tarea = $('textarea[name="message"]:first').val() + bhtml;
+					var ta = $('textarea[name="message"]:first');
+					var tarea = ta.val() + bhtml;
 					var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
 
 					// Otherwise when wysiwyg editor will appear even if it's disabled
@@ -3799,14 +3795,13 @@ var quick_insertion = {
 					 $('textarea[name="message"]:first').cleditor()[0].focus();
 
 					 } else {*/
-					$('textarea[name="message"]:first').val(tarea);
+					ta.val(tarea);
 					/*}*/
 				}
 
 			} else {
 				return true;
 			}
-			1
 		});
 	}
 
@@ -3826,7 +3821,7 @@ var inline_image_viewer = {
 
 	activated: function () {
 		// Get the proper domnodes
-		var comment_links = $('#forum-posts-list ul .post .body .bb-link');
+		var comment_links = $('#forum-posts-list').find('ul .post .body .bb-link');
 		var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
 
 		// Iterate over them
@@ -4028,7 +4023,7 @@ function extInit() {
 		var id = $('nav#breadcrumb select option:selected').val();
 
 		// Determining current status
-		var whitelist = new Array();
+		var whitelist = [];
 		whitelist = dataStore['topic_whitelist'].split(',');
 
 		if (whitelist.indexOf(id) == -1) {
@@ -4170,4 +4165,3 @@ port.onMessage.addListener(function (event) {
 		}
 	}
 });
-
