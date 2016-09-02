@@ -103,11 +103,11 @@ var cp = {
 					html += '<p>Bármely topikban a neked címzett üzenetek mellé egy narancssárga nyíl kerül, ezzel jelezve hogy ezt az üzenetet neked szánták.</p>';
 					html += '<div class="button" id="highlight_comments_for_me"></div>';
 				html += '</div>';	
-/*				html += '<div>';
+				html += '<div>';
 					html += '<h3>Kommentek szálonkénti elrendezése</h3>';
 					html += '<p>Bármely topikban a megkezdett beszélgetéseket szálonként átrendezi a script. Egy megválaszolt üzenet az eredeti üzenet alá kerül, ezzel jelezve és elkülönítve az egymásnak szánt üzeneteket.</p>';
 					html += '<div class="button" id="threaded_comments"></div>';
-				html += '</div>';*/
+				html += '</div>';
 /*				html += '<div>';
 					html += '<h3>Említett kommentek beidézése</h3>';
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';

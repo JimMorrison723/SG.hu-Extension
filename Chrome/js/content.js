@@ -1795,12 +1795,12 @@ var threaded_comments = {
 
 		// Mark new messages if any
 		if (typeof newMsg != "undefined" && newMsg != '') {
-			$('.topichead:lt(' + newMsg + ')').find('a:last').after($('<span class="thread_sep"> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>'));
+			$('.header:lt(' + newMsg + ')').find('a:last').after($('<span class="thread_sep"> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>'));
 		}
 
 		// Set prev and next button if any new messages
 		if (newMsg > 0) {
-
+			//TODO: fix this
 			$('<span class="thread_prev">&laquo;</span>').insertBefore($('.ext_new_comment'));
 			$('<span class="thread_next">&raquo;</span>').insertAfter($('.ext_new_comment'));
 
@@ -1866,34 +1866,34 @@ var threaded_comments = {
 	sort: function () {
 
 		// Sort to thread
-		$($('.topichead:not(.checked)').closest('center').get().reverse()).each(function () {
+		$($('.post:not(.checked)').get().reverse()).each(function () {
 
 			// Check if theres an answered message
-			if ($(this).find('.msg-replyto a').length === 0) {
+			if ($(this).find('.reply').length === 0) {
 
 				// Add checked class
-				$(this).find('.topichead:first').addClass('checked');
+				$(this).addClass('checked');
 
 				// Return 'true'
 				return true;
 			}
 
 			// Get answered comment numer
-			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g);
-
+			var commentNum = $(this).find('.reply').text().split('#')[1].match(/\d+/g);
 
 			// Seach for parent node via comment number
-			$($(this)).appendTo($('.topichead a:contains("#' + commentNum + '"):last').closest('center'));
+			$($(this)).appendTo($('.header a:contains("#' + commentNum[0] + '"):last').closest('.post'));
 
 			// Set style settings
+			//TODO: set proper style
 			if (document.location.href.match('cikkek')) {
 				$(this).css({'margin-left': 0, 'padding-left': 30, 'border-left': '1px solid #ddd'});
-				$(this).find('.topichead').parent().css('width', 700 - $(this).parents('center').length * 30);
-				$(this).find('.msg-replyto').hide();
+				$(this).find('.header').parent().css('width', 700 - $(this).parents('center').length * 30);
+				$(this).find('.reply').hide();
 			} else {
 				$(this).css({'margin-left': 15, 'padding-left': 15, 'border-left': '1px solid #ddd'});
-				$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length - 2) * 30);
-				$(this).find('.msg-replyto').hide();
+				$(this).find('.header').parent().css('width', 810 - ($(this).parents('.post').length - 2) * 30);
+				$(this).find('.reply').hide();
 			}
 
 			// Add checked class
@@ -1908,20 +1908,21 @@ var fetch_new_comments_in_topic = {
 
 	counter: 0,
 	last_new_msg: 0,
+	last_new_msg_counter: 0,
 	locked: false,
 
 	init: function () {
 
-		if ($('a#forum-new-messages').length === 0) {
+		if ($('span#newMessage').length === 0) {
 			return false;
 		}
 
 		// Set new messages number to zero
-		$('a#forum-new-messages').html('0 új hozzászólás érkezett!');
+		$('span#newMessage').html('0 új hozzászólás érkezett!');
 
 		// Hide the notification when fetch new comments settgngs is enabled
 		if (dataStore['fetch_new_comments'] === 'true') {
-			$('a#forum-new-messages').css({
+			$('span#newMessage').css({
 				display: 'none !important',
 				visibility: 'hidden',
 				height: 0,
@@ -1935,9 +1936,11 @@ var fetch_new_comments_in_topic = {
 		setInterval(function () {
 
 			// Get new comments counter
-			var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
+			//TODO: j0nNyKa has to modify the script, so we know the exact numbers of new msg
+			var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
 
-			if (newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false) {
+			// newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false
+			if ($('span#newMessage').length && fetch_new_comments_in_topic.locked === false) {
 
 				// Rewrite the notification url
 				fetch_new_comments_in_topic.rewrite();
@@ -1955,27 +1958,30 @@ var fetch_new_comments_in_topic = {
 	rewrite: function () {
 
 		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
-		var topic_url = $('a#forum-new-messages').attr('href');
-		var comment_c = $('a#forum-new-messages').text().match(/\d+/g);
+		var topic_url = $('span#newMessage').attr('href');
+		var comment_c = $('span#newMessage').text().match(/\d+/g);
 
-		$('a#forum-new-messages').attr('href', topic_url + '&newmsg=' + comment_c);
+		$('span#newMessage').attr('href', topic_url + '&newmsg=' + comment_c);
 	},
 
 	fetch: function () {
 
 		// Check the page number
-		var page = parseInt($('.lapozo:last span.current:first').html());
+		var page = parseInt($('nav.pagination a:first').text());
 
 		// Do nothing if we not in the first page
 		if (page != 1) {
 			return false;
 		}
 
+		//TODO: j0nNyKa has to modify the script, so we know the exact numbers of new msg
 		// Get new comments counter
-		var newmsg = parseInt($('a#forum-new-messages').text().match(/\d+/g));
+		//var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
+		var newmsg = 1;
 
 		// Update the newmsg
-		var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
+		//var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
+		var new_comments = 1;
 
 		// Update the last new msg number
 		fetch_new_comments_in_topic.last_new_msg = newmsg;
@@ -2728,7 +2734,6 @@ var message_center = {
 		 html += '</div>';
 		 html += '</td>';
 		 html += '</tr>';*/
-
 
 		html += '<ul id="ext_mc_tabs">';
 		html += '<li class="ext_mc_tabs">Fórumkategóriák</li>';
