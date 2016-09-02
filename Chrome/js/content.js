@@ -3354,16 +3354,17 @@ var topic_whitelist = {
 
 var textarea_auto_resize = {
 
-	height: 150,
+	height: 122,
 
 	init: function () {
 
-		var textarea = $('form[name="newmessage"] textarea');
+		var textarea = $('textarea[name=message]');
+
 		// Create the text holder element
 		$('<div id="ext_textheight"></div>').prependTo('body');
 
 		// Create the keyup event
-		textarea.on('keyup', function () {
+		textarea.on('input', function () {
 			textarea_auto_resize.setHeight(this);
 		});
 
@@ -3389,7 +3390,7 @@ var textarea_auto_resize = {
 		ext_height.html(val);
 
 		// Get the text holder element's height
-		var height = ext_height.height() + 14;
+		var height = ext_height.height() + 12;
 
 		// Check for expand
 		if (height > $(ele).height()) {
@@ -3403,7 +3404,6 @@ var textarea_auto_resize = {
 
 			$(ele).height(newHeight);
 		}
-
 	}
 };
 
