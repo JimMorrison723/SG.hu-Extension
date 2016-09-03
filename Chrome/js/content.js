@@ -48,7 +48,7 @@ function getUserName() {
 
 	// Article page
 	if (document.location.href.match('cikkek')) {
-		return $('#msg-head b a').html();
+		return $('#msg-head').find('b a').html();
 
 		// Forum main page
 	} else if (document.location.href.match('forum\/$')) {
@@ -135,12 +135,14 @@ var jump_unreaded_messages = {
 		// Get the last msg
 		var lastMsg = newMsg % msgPerPage;
 		var target;
+		var last_read = $('a#last-read');
+
 		// Target comment element
 		if ($('.ext_new_comment').length > 0) {
-			target = $('.ext_new_comment:first').closest('li.forum-post');
+			// target = $('.ext_new_comment:first').closest('li.forum-post');
 
-		} else if ($('a#last-read').length > 0) {
-			target = $('a#last-read').prev();
+		} else if (last_read.length > 0) {
+			target = last_read.prev();
 
 			// Insert the horizontal rule
 			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
@@ -157,7 +159,7 @@ var jump_unreaded_messages = {
 		//var content = $('a#last-read').find('li.forum-post').insertBefore('a#last-read');
 
 		// Remove original hr tag
-		$('a#last-read').remove();
+		last_read.remove();
 
 		// Url to rewrite
 		/*var url = document.location.href.replace(/?order=desc&page=\d+/gi, "");*/
@@ -215,11 +217,13 @@ var fav_show_only_unreaded = {
 
 	activated: function () {
 
+		var ext_faves = $('.ext_faves');
+
 		// Remove original toggle button
 		$('div[class*="csakujuzi"]').remove();
 
 		// Remove style tags from faves containers
-		$('.ext_faves').next().children('nav').removeAttr("style");
+		ext_faves.next().children('nav').removeAttr('style');
 
 		// Disable page auto-hide function
 		setCookie('favs', 'true', 365);
@@ -228,38 +232,42 @@ var fav_show_only_unreaded = {
 		$('#ext_refresh_faves').css('right', 18);
 		$('#ext_read_faves').css('right', 36);
 
-		var Alllength = $('#favorites-list a[class*="category-"]').length;
-		var unreaded_length = $('#favorites-list a[class^="category-"][class*="fav-not-new-msg"]').length;
-		// $('#favorites-list .fav-not-new-msg').addClass('ext_hidden_fave'); // No need in new design
+		var fav_list = $('#favorites-list');
+		var ext_wrapper = $('#ext_nav_faves_wrapper');
+		var ext_filtered_faves = $('#ext_show_filtered_faves');
+		var ext_filtered_faves_arrow = $('#ext_show_filtered_faves_arrow');
+		var ext_filtered_error = $('#ext_filtered_faves_error');
+		var Alllength = fav_list.find('a[class*="category-"]').length;
+		var unreaded_length = fav_list.find('a[class^="category-"][class*="fav-not-new-msg"]').length;
+
 		//Fix
 		if (typeof unreaded_length == 'undefined') {
 			unreaded_length = 0;
 		}
 
 		// Remove old toggle button if any
-		$('#ext_show_filtered_faves').remove();
+		ext_filtered_faves.remove();
 
 		// Set the toggle button
-		if ($('#ext_nav_faves_wrapper').length) {
-			$('#ext_nav_faves_wrapper').prepend('<div id="ext_show_filtered_faves"></div>');
+		if (ext_wrapper.length) {
+			ext_wrapper.prepend('<div id="ext_show_filtered_faves"></div>');
 		} else {
-			$('.ext_faves').next().append('<div id="ext_show_filtered_faves"></div>');
+			ext_faves.next().append('<div id="ext_show_filtered_faves"></div>');
 		}
-		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
+		ext_filtered_faves.append('<span id="ext_show_filtered_faves_arrow"></span>');
 
 		// Apply some styles
-		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+		ext_filtered_faves_arrow.attr('class', 'show');
 
 		// Set event handling
 		$('#favorites-open-close-button').on('click', function (e) {
 			e.preventDefault();
-			console.log('click' + fav_show_only_unreaded.opened);
 			if (fav_show_only_unreaded.opened === false) {
-				console.log('nyitva');
+				// nyitva
 				// Show topics with no new msg
-				$('#ext_filtered_faves_error').hide();
-				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-				$('#favorites-list .fav-not-new-msg').hide();
+				ext_filtered_error.hide();
+				ext_filtered_faves_arrow.attr('class', 'hide');
+				fav_list.find('.fav-not-new-msg').hide();
 
 				fav_show_only_unreaded.opened = true;
 
@@ -269,15 +277,15 @@ var fav_show_only_unreaded = {
 
 				// Reposition the popup if any
 				if ($(this).closest('#ext_nav_faves_wrapper').length) {
-					show_navigation_buttons.findPosition($('#ext_nav_faves_wrapper'), $('#ext_nav_faves'));
+					show_navigation_buttons.findPosition(ext_wrapper, $('#ext_nav_faves'));
 				}
 
 			} else {
 
 				// Don't show topics with new msg
-				$('#ext_filtered_faves_error').show();
-				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-				$('#favorites-list .fav-not-new-msg').show(); //.ext_hidden_fave
+				ext_filtered_error.show();
+				ext_filtered_faves_arrow.attr('class', 'show');
+				fav_list.find('.fav-not-new-msg').show(); //.ext_hidden_fave
 
 				fav_show_only_unreaded.opened = false;
 
@@ -287,27 +295,26 @@ var fav_show_only_unreaded = {
 
 				// Reposition the popup if any
 				if ($(this).closest('#ext_nav_faves_wrapper').length) {
-					show_navigation_buttons.findPosition($('#ext_nav_faves_wrapper'), $('#ext_nav_faves'));
+					show_navigation_buttons.findPosition(ext_wrapper, $('#ext_nav_faves'));
 				}
 			}
-			console.log(fav_show_only_unreaded.opened);
 		});
 
 		// Create an error message if theres no topik with unreaded messages
-		if (Alllength == unreaded_length && $('#ext_filtered_faves_error').length === 0) {
-			$('.ext_faves').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+		if (Alllength == unreaded_length && ext_filtered_error.length === 0) {
+			ext_faves.after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 
 		// Check opened status
 		if (fav_show_only_unreaded.opened === true) {
-			$('#ext_filtered_faves_error').hide();
-			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
+			ext_filtered_error.hide();
+			ext_filtered_faves_arrow.attr('class', 'hide');
 			$('.fav-not-new-msg').show();
 		}
 		else {
-			$('#ext_filtered_faves_error').show();
-			$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-			$('#favorites-list .fav-not-new-msg').hide();
+			ext_filtered_error.show();
+			ext_filtered_faves_arrow.attr('class', 'show');
+			fav_list.find('.fav-not-new-msg').hide();
 		}
 	},
 
@@ -365,7 +372,6 @@ var short_comment_marker = {
 
 var blocklist = {
 
-
 	hidemessages: function () {
 
 		// Return false if theres no blocklist entry
@@ -375,7 +381,7 @@ var blocklist = {
 
 		var deletelist = dataStore['block_list'].split(',');
 
-		$("#forum-posts-list").find("ul li header").each(function () {
+		$('#forum-posts-list').find('ul li header').each(function () {
 			var nick;
 			if (document.location.href.match('cikkek')) {
 
@@ -383,10 +389,10 @@ var blocklist = {
 
 			} else {
 
-				if ($(this).find("a img").length == 1) {
-					nick = $(this).find("a img").attr("alt");
+				if ($(this).find('a img').length == 1) {
+					nick = $(this).find('a img').attr('alt');
 				} else {
-					nick = $(this).find("a")[0].innerHTML;
+					nick = $(this).find('a')[0].innerHTML;
 				}
 
 				nick = nick.replace(/ - VIP/, "");
@@ -532,9 +538,9 @@ var autoload_next_page = {
 		}
 
 		$(document).scroll(function () {
-
-			var docHeight = $('body').height();
-			var scrollTop = $('body').scrollTop();
+			var body = $('body');
+			var docHeight = body.height();
+			var scrollTop = body.scrollTop();
 
 			if (docHeight - scrollTop < 3000 && !autoload_next_page.progress && autoload_next_page.currPage < autoload_next_page.maxPage) {
 				autoload_next_page.progress = true;
@@ -668,11 +674,18 @@ var show_navigation_buttons = {
 
 	activated: function () {
 
+		var ext_search = $('#ext_search');
+		var ext_scrolltop = $('#ext_scrolltop');
+		var ext_back = $('#ext_back');
+		var ext_nav_faves = $('#ext_nav_faves');
+		var ext_whitelist = $('#ext_whitelist');
+		var ext_nightmode = $('#ext_nightmode');
+
 		// Create the scrolltop button
 		$('<div id="ext_scrolltop">&#9650;</div>').prependTo('body');
 
 		// Add click event to scrolltop button
-		$('#ext_scrolltop').click(function () {
+		ext_scrolltop.click(function () {
 			$('body').animate({scrollTop: 0}, 1000);
 		});
 
@@ -680,7 +693,7 @@ var show_navigation_buttons = {
 		$('<div id="ext_back">&#9664;</div>').prependTo('body');
 
 		// Add event to back button
-		$('#ext_back').click(function () {
+		ext_back.click(function () {
 			if (document.location.href.match('cikkek')) {
 				document.location.href = 'https://sg.hu/';
 			} else {
@@ -698,10 +711,10 @@ var show_navigation_buttons = {
 			$('<div id="ext_overlay_search_arrow"></div>').appendTo('body');
 
 			// Place search icon background
-			$('#ext_search').css('background-image', 'url(' + chrome.extension.getURL('/img/content/search.png') + ')');
+			ext_search.css('background-image', 'url(' + chrome.extension.getURL('/img/content/search.png') + ')');
 
 			// Create the search event
-			$('#ext_search').click(function () {
+			ext_search.click(function () {
 				if ($('#ext_overlay_search').length) {
 					show_navigation_buttons.removeOverlay();
 				} else {
@@ -714,8 +727,7 @@ var show_navigation_buttons = {
 
 			// Determining current status
 			var status, title = '';
-			var whitelist = [];
-			whitelist = dataStore['topic_whitelist'].split(',');
+			var whitelist = dataStore['topic_whitelist'].split(',');
 
 			if (whitelist.indexOf(id) == -1) {
 				status = '+';
@@ -729,7 +741,7 @@ var show_navigation_buttons = {
 			$('<div id="ext_whitelist" title="' + title + '">' + status + '</div>').prependTo('body');
 
 			// Create whitelist event
-			$('#ext_whitelist').click(function () {
+			ext_whitelist.click(function () {
 
 				topic_whitelist.execute(this);
 
@@ -744,7 +756,7 @@ var show_navigation_buttons = {
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
 
 			// Place the faves icon
-			$('#ext_nav_faves').css('background-image', 'url(' + chrome.extension.getURL('/img/content/star.png') + ')');
+			ext_nav_faves.css('background-image', 'url(' + chrome.extension.getURL('/img/content/star.png') + ')');
 
 			// Place faves opened cotainer
 			$('<p id="ext_nav_faves_arrow"></p>').prependTo('body');
@@ -753,7 +765,7 @@ var show_navigation_buttons = {
 			$('<div class="ext_nav_fave_list"></div>').appendTo('#ext_nav_faves_wrapper');
 
 			// Create faves button event
-			$('#ext_nav_faves').click(function () {
+			ext_nav_faves.click(function () {
 				if ($('#ext_nav_faves_wrapper').css('display') == 'none') {
 					show_navigation_buttons.showFaves();
 				} else {
@@ -781,17 +793,17 @@ var show_navigation_buttons = {
 			$('<div id="ext_nightmode"></div>').prependTo('body');
 
 			//Set the proper Bulp button
-			$('#ext_nightmode').css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
+			ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
 
 			// Add click event to Bulp button
-			$('#ext_nightmode').click(function () {
+			ext_nightmode.click(function () {
 
 				var state = dataStore['navigation_button_night_state'];
 
 				if (state) {
 
 					//Night mode ON
-					$('#ext_nightmode').css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOff.png') + ')');
+					ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOff.png') + ')');
 
 					//Save in dataStore
 					dataStore['navigation_button_night_state'] = false;
@@ -800,7 +812,7 @@ var show_navigation_buttons = {
 				} else {
 
 					//Night mode Off
-					$('#ext_nightmode').css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOn.png') + ')');
+					ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOn.png') + ')');
 
 					//Save in dataStore
 					dataStore['navigation_button_night_state'] = true;
@@ -821,27 +833,27 @@ var show_navigation_buttons = {
 		// Gather visible buttons
 		var buttons = [];
 
-		if ($('#ext_scrolltop').length) {
+		if (ext_scrolltop.length) {
 			buttons.push('ext_scrolltop');
 		}
 
-		if ($('#ext_back').length) {
+		if (ext_back.length) {
 			buttons.push('ext_back');
 		}
 
-		if ($('#ext_search').length) {
+		if (ext_search.length) {
 			buttons.push('ext_search');
 		}
 
-		if ($('#ext_whitelist').length) {
+		if (ext_whitelist.length) {
 			buttons.push('ext_whitelist');
 		}
 
-		if ($('#ext_nightmode').length) {
+		if (ext_nightmode.length) {
 			buttons.push('ext_nightmode');
 		}
 
-		if ($('#ext_nav_faves').length) {
+		if (ext_nav_faves.length) {
 			buttons.push('ext_nav_faves');
 		}
 
@@ -903,6 +915,10 @@ var show_navigation_buttons = {
 
 	showSearch: function () {
 
+		var ext_search = $('#ext_search');
+		var ext_overlay_search = $('#ext_overlay_search');
+		var ext_overlay_search_arrow = $('#ext_overlay_search_arrow');
+
 		// Hide opened overlays
 		show_navigation_buttons.removeOverlay();
 
@@ -914,12 +930,12 @@ var show_navigation_buttons = {
 		clone.attr('id', 'ext_overlay_search');
 
 		// Set position
-		show_navigation_buttons.findArrowPosition($('#ext_overlay_search_arrow'), $('#ext_search'));
-		show_navigation_buttons.findPosition($('#ext_overlay_search'), $('#ext_search'));
+		show_navigation_buttons.findArrowPosition(ext_overlay_search_arrow, ext_search);
+		show_navigation_buttons.findPosition(ext_overlay_search, ext_search);
 
 		// Show the elements
-		$('#ext_overlay_search_arrow').show();
-		$('#ext_overlay_search').show();
+		ext_overlay_search_arrow.show();
+		ext_overlay_search.show();
 
 		// Create the hiding overlay
 		show_navigation_buttons.createOverlay();
@@ -927,7 +943,11 @@ var show_navigation_buttons = {
 
 	showFaves: function () {
 		var url = "https://sg.hu/forum/";
-		$('#ext_nav_faves_wrapper .ext_nav_fave_list').load(url + ' nav#favorites-list', function () {
+		var ext_nav_faves_wrapper = $('#ext_nav_faves_wrapper');
+		var ext_nav_faves = $('#ext_nav_faves');
+		var ext_nav_faves_arrow = $('#ext_nav_faves_arrow');
+
+		ext_nav_faves_wrapper.find('.ext_nav_fave_list').load(url + ' nav#favorites-list', function () {
 
 			// Write data into wrapper
 			if (dataStore['jump_unreaded_messages'] == 'true') {
@@ -943,15 +963,15 @@ var show_navigation_buttons = {
 			}
 
 			// Set position
-			show_navigation_buttons.findArrowPosition($('#ext_nav_faves_arrow'), $('#ext_nav_faves'));
-			show_navigation_buttons.findPosition($('#ext_nav_faves_wrapper'), $('#ext_nav_faves'));
+			show_navigation_buttons.findArrowPosition(ext_nav_faves_arrow, ext_nav_faves);
+			show_navigation_buttons.findPosition(ext_nav_faves_wrapper, ext_nav_faves);
 
 			// Hide opened overlays
 			show_navigation_buttons.removeOverlay();
 
 			// Show the container
-			$('#ext_nav_faves_wrapper').show();
-			$('#ext_nav_faves_arrow').show();
+			ext_nav_faves_wrapper.show();
+			ext_nav_faves_arrow.show();
 
 			// Create the hiding overlay
 			show_navigation_buttons.createOverlay();
@@ -1169,6 +1189,7 @@ var lights = {
 var update_fave_list = {
 
 	activated: function () {
+		var refresh_faves = $('#ext_refresh_faves');
 
 		// Disable site's built-in auto-update by remove "fkedvenc" ID
 		$('#fkedvenc').removeAttr('id');
@@ -1178,14 +1199,14 @@ var update_fave_list = {
 
 		// Move the button away if unreaded faves is on
 		if (dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn()) {
-			$('#ext_refresh_faves').css('right', 18);
+			refresh_faves.css('right', 18);
 		}
 
 		// Set refresh image
 		$('<img src="' + chrome.extension.getURL('/img/content/refresh.png') + '" style="background-color: rgba(128, 128, 128, 0.17);">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
 
 		// Add click event
-		$('#ext_refresh_faves').click(function () {
+		refresh_faves.click(function () {
 			update_fave_list.refresh();
 		});
 
@@ -1196,9 +1217,10 @@ var update_fave_list = {
 	},
 
 	refresh: function () {
+		var refresh_img = $('#ext_refresh_faves').find('img');
 
 		// Set 'in progress' icon
-		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png'));
+		refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png'));
 
 		/*$.ajax({
 		 url : 'ajax/kedvencdb.php',
@@ -1207,11 +1229,11 @@ var update_fave_list = {
 		$("nav#favorites-list").load("https://sg.hu/forum/ nav#favorites-list", function () {
 
 			// Set 'completed' icon
-			$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png'));
+			refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_done.png'));
 
 			// Set back the normal icon in 1 sec
 			setTimeout(function () {
-				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh.png'));
+				refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh.png'));
 			}, 2000);
 
 			// Append new fave list
@@ -1254,9 +1276,10 @@ var make_read_all_faves = {
 		// Create the 'read them all' button
 		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_read_faves" style="display: inline-block;"></div>]</span>');
 
+		var read_faves = $('#ext_read_faves');
 		// Move the button away if unreaded faves is on
 		if (dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn()) {
-			$('#ext_read_faves').css('right', 36);
+			read_faves.css('right', 36);
 		}
 
 		// Append the image
@@ -1264,7 +1287,7 @@ var make_read_all_faves = {
 		$('<div id="icon">&#9675;</div>').appendTo('#ext_read_faves');
 
 		// Add click event
-		$('#ext_read_faves').click(function () {
+		read_faves.click(function () {
 			make_read_all_faves.makeread();
 		});
 	},
@@ -1275,13 +1298,15 @@ var make_read_all_faves = {
 
 			// Set 'in progress' icon
 			//$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
-			$('#ext_read_faves #icon').html('&#9684;');
+			$('#ext_read_faves').find('#icon').html('&#9684;');
 
 			var count = 0;
 			var counter = 0;
 
+			var links = $('.ext_faves').find('a');
+
 			// Get unreaded topics count
-			$('.ext_faves').find('a').each(function () {
+			links.each(function () {
 
 				// Dont bother the forum categories
 				if ($(this).is('.category')) {
@@ -1297,7 +1322,7 @@ var make_read_all_faves = {
 			});
 
 			// Iterate over all faves
-			$('.ext_faves').find('a').each(function () {
+			links.each(function () {
 
 				// Dont bother the forum categories
 				if ($(this).is('.category')) {
@@ -1438,8 +1463,9 @@ var overlay_reply_to = {
 	activated: function () {
 
 		// Change tabindexes for suit the overlay textarea
-		$('textarea:first').attr('tabindex', '3');
-		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
+		var ta = $('textarea:first');
+		ta.attr('tabindex', '3');
+		ta.closest('div').find('a:last').attr('tabindex', '4');
 
 		// Change the behavior the replyto button
 		$('li[id*=post] header a:contains("válasz")').on('click', function (e) {
@@ -1620,6 +1646,9 @@ var overlay_reply_to = {
 			textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
 		}
 
+		var ext_clone_textarea = $('.ext_clone_textarea');
+		var body = $('body');
+
 		// Copy textarea original comment to the tmp element
 		textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
 
@@ -1658,11 +1687,11 @@ var overlay_reply_to = {
 
 		// Autoscroll
 		var pageBottom = $(window).scrollTop() + $(window).height();
-		var textBottom = $('.ext_clone_textarea').offset().top + $('.ext_clone_textarea').height();
+		var textBottom = ext_clone_textarea.offset().top + ext_clone_textarea.height();
 
 		if (textBottom > pageBottom) {
 			var scT = textBottom - $(window).height() + 50;
-			$('body').animate({scrollTop: scT}, 500);
+			body.animate({scrollTop: scT}, 500);
 		}
 
 		// Set the right tabindex
@@ -1678,7 +1707,7 @@ var overlay_reply_to = {
 		 }*/
 
 		// Block default tab action in non-WYSIWYG editor
-		$('body').keydown(function (event) {
+		body.keydown(function (event) {
 			if (event.keyCode == '9') {
 				event.preventDefault();
 				textarea_clone.find('a:last').focus();
@@ -1731,7 +1760,7 @@ var overlay_reply_to = {
 						overlay_reply_to.opened = false;
 
 						// Remove keydown event
-						$('body').unbind('keydown');
+						body.unbind('keydown');
 					});
 				});
 			});
@@ -1790,6 +1819,7 @@ var highlight_comments_for_me = {
 var threaded_comments = {
 
 	activated: function () {
+
 		// New message counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
 
@@ -1800,9 +1830,9 @@ var threaded_comments = {
 
 		// Set prev and next button if any new messages
 		if (newMsg > 0) {
-			//TODO: fix this
-			$('<span class="thread_prev">&laquo;</span>').insertBefore($('.ext_new_comment'));
-			$('<span class="thread_next">&raquo;</span>').insertAfter($('.ext_new_comment'));
+
+			$('<span class="thread_prev">&laquo;</span>').insertBefore('.ext_new_comment');
+			$('<span class="thread_next">&raquo;</span>').insertAfter('.ext_new_comment');
 
 			// Bind events
 			$('.thread_prev').on('click', function () {
@@ -1820,7 +1850,7 @@ var threaded_comments = {
 
 
 	prev: function (ele) {
-
+		//TODO: fix this
 		// Get the index value of the current element
 		var index = $(ele).index('.thread_prev');
 
@@ -1829,7 +1859,7 @@ var threaded_comments = {
 			return false;
 		}
 
-		var target = $('.ext_new_comment').eq((index - 1)).closest('center').children('table');
+		var target = $('.ext_new_comment').eq((index - 1)).closest('.post').children('header');
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -1842,16 +1872,18 @@ var threaded_comments = {
 	},
 
 	next: function (ele) {
+		//TODO: fix this
+		var ext_new_comment = $('.ext_new_comment');
 
 		// Get the index value of the current element
 		var index = $(ele).index('.thread_next');
 
 		// Check if is it the last element
-		if (index + 1 >= $('.ext_new_comment').length) {
+		if (index + 1 >= ext_new_comment.length) {
 			return false;
 		}
 
-		var target = $('.ext_new_comment').eq((index + 1)).closest('center').children('table');
+		var target = ext_new_comment.eq((index + 1)).closest('.post').children('header');
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -1882,7 +1914,7 @@ var threaded_comments = {
 			var commentNum = $(this).find('.reply').text().split('#')[1].match(/\d+/g);
 
 			// Seach for parent node via comment number
-			$($(this)).appendTo($('.header a:contains("#' + commentNum[0] + '"):last').closest('.post'));
+			$(this).appendTo( $('.header a:contains("#' + commentNum[0] + '"):last').closest('.post') );
 
 			// Set style settings
 			//TODO: set proper style
@@ -1913,16 +1945,18 @@ var fetch_new_comments_in_topic = {
 
 	init: function () {
 
-		if ($('span#newMessage').length === 0) {
+		var newMessage = $('span#newMessage');
+
+		if (newMessage.length === 0) {
 			return false;
 		}
 
 		// Set new messages number to zero
-		$('span#newMessage').html('0 új hozzászólás érkezett!');
+		newMessage.html('0 új hozzászólás érkezett!');
 
 		// Hide the notification when fetch new comments settgngs is enabled
 		if (dataStore['fetch_new_comments'] === 'true') {
-			$('span#newMessage').css({
+			newMessage.css({
 				display: 'none !important',
 				visibility: 'hidden',
 				height: 0,
@@ -1935,12 +1969,14 @@ var fetch_new_comments_in_topic = {
 		// Monitor new comments nofification 
 		setInterval(function () {
 
+			var newMessage = $('span#newMessage');
+
 			// Get new comments counter
 			//TODO: j0nNyKa has to modify the script, so we know the exact numbers of new msg
-			var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
+			//var newmsg = parseInt(newMessage.text().match(/\d+/g));
 
 			// newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false
-			if ($('span#newMessage').length && fetch_new_comments_in_topic.locked === false) {
+			if (newMessage.length && fetch_new_comments_in_topic.locked === false) {
 
 				// Rewrite the notification url
 				fetch_new_comments_in_topic.rewrite();
@@ -1957,11 +1993,13 @@ var fetch_new_comments_in_topic = {
 
 	rewrite: function () {
 
-		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
-		var topic_url = $('span#newMessage').attr('href');
-		var comment_c = $('span#newMessage').text().match(/\d+/g);
+		var newMessage = $('span#newMessage');
 
-		$('span#newMessage').attr('href', topic_url + '&newmsg=' + comment_c);
+		/*var topic_url = $('a#forum-new-messages').attr('href').substring(0, 12);*/
+		var topic_url = newMessage.attr('href');
+		var comment_c = newMessage.text().match(/\d+/g);
+
+		newMessage.attr('href', topic_url + '&newmsg=' + comment_c);
 	},
 
 	fetch: function () {
@@ -2206,7 +2244,7 @@ var custom_blocks = {
 	reindexOrderConfig: function () {
 
 		// Var for config
-		var config = JSON.parse(dataStore['blocks_config']);
+		//var config = JSON.parse(dataStore['blocks_config']);
 		var _config = [];
 
 		// Iterate over the blocks
@@ -2231,6 +2269,9 @@ var custom_blocks = {
 	},
 
 	executeConfig: function () {
+
+		var ext_left_sidebar = $('#ext_left_sidebar');
+		var ext_right_sidebar = $('#ext_right_sidebar');
 
 		var config = JSON.parse(dataStore['blocks_config']);
 		config = config.reverse();
@@ -2259,15 +2300,14 @@ var custom_blocks = {
 		}
 
 		// Maintain style settings
-		$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
-		$('#ext_left_sidebar').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-		$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		ext_left_sidebar.find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+		ext_left_sidebar.find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		ext_left_sidebar.find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
 
 		// Maintain style settings
-		$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
-		$('#ext_right_sidebar').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
-
+		ext_right_sidebar.find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+		ext_right_sidebar.find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+		ext_right_sidebar.find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
 
 		// Fix welcome block for private messages
 		$('.ext_welcome:first').next().find('br').css('display', 'inline');
@@ -2334,18 +2374,20 @@ var custom_blocks = {
 
 	contentHide: function (id, clicked) {
 
+		var c_id = $('#' + id).children('div:eq(1)');
+
 		if (clicked == false) {
-			$('#' + id).children('div:eq(1)').hide();
+			c_id.hide();
 			return true;
 		}
 
-		if ($('#' + id).children('div:eq(1)').css('display') == 'none') {
+		if (c_id.css('display') == 'none') {
 
 			// Change the config
 			custom_blocks.setConfigByKey(id, 'contentHide', false);
 
 			// Hide the item
-			$('#' + id).children('div:eq(1)').show();
+			c_id.show();
 
 		} else {
 
@@ -2353,22 +2395,24 @@ var custom_blocks = {
 			custom_blocks.setConfigByKey(id, 'contentHide', true);
 
 			// Hide the item
-			$('#' + id).children('div:eq(1)').hide();
+			c_id.hide();
 		}
 	},
 
 	left: function (id) {
+		var ext_left_sidebar = $('#ext_left_sidebar');
+		var c_id = $('#' + id);
 
 		// Check current side settings
-		if ($('#' + id).find('.b-h-o-head').length == 0) {
+		if (c_id.find('.b-h-o-head').length == 0) {
 
 			// Move the block
-			$('#' + id).prependTo('#ext_left_sidebar');
+			c_id.prependTo('#ext_left_sidebar');
 
 			// Maintain style settings
-			$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
-			$('#ext_left_sidebar').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-			$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+			ext_left_sidebar.find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+			ext_left_sidebar.find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+			ext_left_sidebar.find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
 
 			// Store data in localStorage
 			custom_blocks.reindexOrderConfig();
@@ -2377,16 +2421,19 @@ var custom_blocks = {
 
 	right: function (id) {
 
+		var ext_right_sidebar = $('#ext_right_sidebar');
+		var c_id = $('#' + id);
+
 		// Check current side settings
-		if ($('#' + id).find('.b-h-b-head').length == 0) {
+		if (c_id.find('.b-h-b-head').length == 0) {
 
 			// Move the block
-			$('#' + id).prependTo('#ext_right_sidebar');
+			c_id.prependTo('#ext_right_sidebar');
 
 			// Maintain style settings
-			$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
-			$('#ext_right_sidebar').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-			$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+			ext_right_sidebar.find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+			ext_right_sidebar.find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+			ext_right_sidebar.find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
 
 			// Store data in localStorage
 			custom_blocks.reindexOrderConfig();
@@ -2395,11 +2442,13 @@ var custom_blocks = {
 
 	up: function (id) {
 
+		var c_id = $('#' + id);
+
 		// Get index val
-		var index = $('#' + id).index('.ext_block');
+		var index = c_id.index('.ext_block');
 
 		// Current position
-		if ($('#' + id).closest('#ext_left_sidebar').length > 0) {
+		if (c_id.closest('#ext_left_sidebar').length > 0) {
 
 			if (index == 0) {
 				return false;
@@ -2407,14 +2456,14 @@ var custom_blocks = {
 
 		} else {
 
-			var first = $('#ext_left_sidebar .ext_block').length;
+			var first = $('#ext_left_sidebar').find('.ext_block').length;
 			if (index == first) {
 				return false;
 			}
 		}
 
 		// Move to target
-		$('#' + id).insertBefore('.ext_block:eq(' + (index - 1) + ')');
+		c_id.insertBefore('.ext_block:eq(' + (index - 1) + ')');
 
 		// Store data in localStorage
 		custom_blocks.reindexOrderConfig();
@@ -2422,13 +2471,15 @@ var custom_blocks = {
 
 	down: function (id) {
 
+		var c_id = $('#' + id);
+
 		// Get index val
-		var index = $('#' + id).index('.ext_block');
+		var index = c_id.index('.ext_block');
 
 		// Current position
-		if ($('#' + id).closest('#ext_left_sidebar').length > 0) {
+		if (c_id.closest('#ext_left_sidebar').length > 0) {
 
-			var last = $('#ext_left_sidebar .ext_block').length - 1;
+			var last = $('#ext_left_sidebar').find('.ext_block').length - 1;
 
 			if (last == index) {
 				return false;
@@ -2436,7 +2487,7 @@ var custom_blocks = {
 		}
 
 		// Move to target
-		$('#' + id).insertAfter('.ext_block:eq(' + (index + 1) + ')');
+		c_id.insertAfter('.ext_block:eq(' + (index + 1) + ')');
 
 		// Store data in localStorage
 		custom_blocks.reindexOrderConfig();
@@ -2456,6 +2507,10 @@ var wysiwyg_editor = {
 
 	activated: function () {
 
+		var cleditor_iframe = $('.cleditorMain:first iframe');
+		var textarea_message = $('textarea[name="message"]:first');
+		var buttons = $('form[name="newmessage"]');
+
 		// Rearrange buttons
 		if (document.location.href.match('cikkek')) {
 
@@ -2471,21 +2526,20 @@ var wysiwyg_editor = {
 			$('textarea[name="message"]').cleditor();
 		}
 
-		$('form[name="newmessage"]').css('position', 'relative');
-		$('form[name="newmessage"] a:eq(0)').css({'position': 'absolute', 'left': 20});
-		$('form[name="newmessage"] a:eq(1)').css({'position': 'absolute', 'left': 110}); // 380
-		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
-		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
-		$('form[name="newmessage"] a:eq(4)').css({'position': 'absolute', 'left': 200});
-		$('form[name="newmessage"] a:eq(5)').css({'position': 'absolute', 'left': 290});
-		$('form[name="newmessage"] a:eq(6)').css({'position': 'absolute', 'right': 22});
+		$('form[name="newmessage"] a:eq(11)');
+
+		buttons.css('position', 'relative');
+		buttons.find('button:eq(1)').css({'position': 'absolute', 'left': 20});
+		buttons.find('button:eq(2)').css({'position': 'absolute', 'left': 110}); // 380
+		buttons.find('button:eq(3)').css('visibility', 'hidden');
+		buttons.find('button:eq(5)').css('visibility', 'hidden');
+		buttons.find('button:eq(6)').css({'position': 'absolute', 'left': 200});
+		buttons.find('button:eq(7)').css({'position': 'absolute', 'left': 290});
+		buttons.find('button:eq(8)').css({'position': 'absolute', 'right': 22});
 
 		// Insert video
-		$('form[name="newmessage"] a:eq(4)').click(function (e) {
+		buttons.find('button:eq(6)').click(function (e) {
 			e.preventDefault();
-
-			var thisTitle = "";
-
 
 			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: https://www.youtube.com/watch?v=sUntx0pe_qI)", "https://www.youtube.com/watch?v=sUntx0pe_qI");
 
@@ -2497,7 +2551,7 @@ var wysiwyg_editor = {
 					maxurlhossz = 2000;
 				}
 
-				kezdhossz = 31;
+				var kezdhossz = 31;
 
 				if (thisURL.substring(0, 25) == "http://www.youtube.com/v/") {
 					kezdhossz = 25;
@@ -2511,12 +2565,12 @@ var wysiwyg_editor = {
 
 				var videocode = "[flash]https://www.youtube.com/v/" + thisURL.substring(kezdhossz, maxurlhossz) + "&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
 
-				var imod = $(".cleditorMain:first iframe").contents().find('body').html() + videocode;
-				$('.cleditorMain:first iframe').contents().find('body').html(imod);
+				var imod = cleditor_iframe.contents().find('body').html() + videocode;
+				cleditor_iframe.contents().find('body').html(imod);
 
 				// Without this, sometimes it doesn't insert the video link into the WYSIWYG editor
-				var tarea = $('textarea[name="message"]:first').val() + videocode;
-				$('textarea[name="message"]:first').val(tarea);
+				var tarea = textarea_message.val() + videocode;
+				textarea_message.val(tarea);
 			}
 
 		});
@@ -2525,7 +2579,7 @@ var wysiwyg_editor = {
 		$('<div id="ext_smiles"></div>').appendTo('form[name="newmessage"]');
 
 		// Add click event to show or hide smile list
-		$('form[name="newmessage"] a:eq(0)').toggle(
+		buttons.find('button:eq(0)').toggle(
 			function (e) {
 				e.preventDefault();
 				$('#ext_smiles').slideDown();
@@ -2682,9 +2736,8 @@ var wysiwyg_editor = {
 
 		$(html).appendTo('#ext_smiles');
 
-
 		// Add click event to the smiles
-		$('#ext_smiles img').click(function (e) {
+		$('#ext_smiles').find('img').click(function (e) {
 
 			e.preventDefault();
 
@@ -2693,13 +2746,13 @@ var wysiwyg_editor = {
 			var bhtml = '[#' + tag + ']';
 			var ihtml = '<img src="/kep/faces/' + tag + '.gif">';
 
-			var tarea = $('textarea[name="message"]:first').val() + bhtml;
-			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
+			var tarea = textarea_message.val() + bhtml;
+			var imod = cleditor_iframe.contents().find('body').html() + ihtml;
 
-			$('textarea[name="message"]:first').val(tarea);
-			$('textarea[name="message"]:first').cleditor()[0].focus();
-			$('.cleditorMain:first iframe').contents().find('body').html(imod);
-			$('textarea[name="message"]:first').cleditor()[0].focus();
+			textarea_message.val(tarea);
+			textarea_message.cleditor()[0].focus();
+			cleditor_iframe.contents().find('body').html(imod);
+			textarea_message.cleditor()[0].focus();
 		});
 
 	}
@@ -2752,7 +2805,7 @@ var message_center = {
 		var cikkek = $('.forums-block');
 
 		// Add topik lists to the first page
-		$('#ext_mc_page .ext_mc_pages:eq(0)').append(cikkek);
+		$('#ext_mc_page').find('.ext_mc_pages:eq(0)').append(cikkek);
 
 		// Fix right sidebar top position
 		/*$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });*/
@@ -2825,11 +2878,13 @@ var message_center = {
 
 	tab: function (n) {
 
+		var mc_pages = $('.ext_mc_pages');
+
 		// Hide all pages
-		$('.ext_mc_pages').hide();
+		mc_pages.hide();
 
 		// Show selected page
-		$('.ext_mc_pages').eq(n).show();
+		mc_pages.eq(n).show();
 
 		// Maintain styles, remove active style 
 		$('.ext_mc_tabs').removeClass('active');
@@ -2855,7 +2910,7 @@ var message_center = {
 		window.location.hash = '';
 
 		// Find the comment in DOM
-		var target = $('#forum-posts-list ul li header a:contains("#' + id + '")').closest('header');
+		var target = $('#forum-posts-list').find('ul li header a:contains("#' + id + '")').closest('header');
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -2882,7 +2937,7 @@ var message_center = {
 			id = getCookie('updateComment');
 
 			// Get message contents
-			message = $('#forum-posts-list ul li header a:contains("#' + id + '")').closest('header').find('section.body').html();
+			message = $('#forum-posts-list').find('ul li header a:contains("#' + id + '")').closest('header').find('section.body').html();
 
 			// Filter out html-s
 			$.each([
@@ -2969,7 +3024,7 @@ var message_center = {
 					topic_name = $('select[name="id"] option:selected').text();
 
 					// Get topic ID
-					topic_id = $('select[name="id"] option:selected').val();
+					topic_id = $('#topicdata').data('tid');
 				}
 
 				// Get comment time
@@ -3068,15 +3123,13 @@ var message_center = {
 					success: function (data) {
 
 						// Parse html response
-						var tmp = '';
-						tmp = $(data);
+						var tmp = $(data);
 
 						var answers = [];
-						var TmpAnswers = [];
 						var time;
 
 						// Search posts that is an answer to us
-						TmpAnswers = $(tmp.find('.msg-replyto a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
+						var TmpAnswers = $(tmp.find('.msg-replyto a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
 
 						// Iterate over the answers
 						if (TmpAnswers.length == 0) {
@@ -3099,7 +3152,7 @@ var message_center = {
 
 						for (c = 0; c < TmpAnswers.length; c++) {
 
-							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
+							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find('.topichead table tr:eq(0) td:eq(0) a img').attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
 							nick = nick.replace(/ - VIP/, "");
 
 							var message = $(TmpAnswers[c]).find('.maskwindow').html();
@@ -3706,7 +3759,7 @@ var quick_user_info = {
 					$(this).append('<div class=\"infobox\"></div>');
 
 					//Add EventListener
-					$('img.ext_quick_user_info_btn').click(function (e) {
+					$('img.ext_quick_user_info_btn').click(function () {
 						var infobox = $('.infobox');
 
 						//Get user profile URL
@@ -3735,8 +3788,8 @@ var quick_user_info = {
 				}).mouseleave(function () {
 
 					//Remove info image and infobox on mouseleave
-					$(this).find(".ext_quick_user_info_btn").parent().remove();
-					$(this).find(".infobox").remove();
+					$(this).find('.ext_quick_user_info_btn').parent().remove();
+					$(this).find('.infobox').remove();
 				});
 			}
 		});
@@ -3750,9 +3803,9 @@ var quick_insertion = {
 		var ta;
 		var ta2;
 		/*		if(dataStore['wysiwyg_editor'] == 'true') {
-		 ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea
+		 ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea*/
 		 ta2 = $('.cleditorMain:first textarea[name="message"]');
-		 }
+		 /*}
 		 else {*/
 		ta = $('form[name="newmessage"] textarea');
 		/*}*/
@@ -3767,12 +3820,12 @@ var quick_insertion = {
 				var imgpattern = /^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$/;
 
 				var bhtml;
-				var ihtml;
+				//var ihtml;
 
 				if (imgpattern.test(data)) {
 					e.preventDefault();
 					bhtml = '[img]' + data + '[/img]';
-					ihtml = '<img src="' + data + '">';
+					//ihtml = '<img src="' + data + '">';
 				}
 				else if (urlpattern.test(data)) {
 					e.preventDefault();
@@ -3784,13 +3837,13 @@ var quick_insertion = {
 						url_pathname = data;
 					}
 					bhtml = '[url=' + data + ']' + url_pathname + '[/url]';
-					ihtml = '<a href="' + data + '">' + url_pathname + '</a>';
+					//ihtml = '<a href="' + data + '">' + url_pathname + '</a>';
 				}
 
 				if (bhtml != undefined) {
 					var ta = $('textarea[name="message"]:first');
 					var tarea = ta.val() + bhtml;
-					var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
+					//var imod = $('.cleditorMain:first iframe').contents().find('body').html() + ihtml;
 
 					// Otherwise when wysiwyg editor will appear even if it's disabled
 					/*					if(dataStore['wysiwyg_editor'] == 'true') {
@@ -3838,7 +3891,7 @@ var inline_image_viewer = {
 
 		});
 
-		$('.ext-inline-view').on('click', function (e) {
+		$('.ext-inline-view').on('click', function () {
 			//inline_image_viewer.append();
 			if ($(this).hasClass('closed')) {
 				$(this).find('span').html('&#9660;');
@@ -4028,8 +4081,7 @@ function extInit() {
 		var id = $('nav#breadcrumb select option:selected').val();
 
 		// Determining current status
-		var whitelist = [];
-		whitelist = dataStore['topic_whitelist'].split(',');
+		var whitelist = dataStore['topic_whitelist'].split(',');
 
 		if (whitelist.indexOf(id) == -1) {
 
