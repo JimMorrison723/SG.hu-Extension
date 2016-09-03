@@ -30,15 +30,15 @@ function setPredefinedVars() {
 function isLoggedIn() {
 
 	// Article page
-	if (document.location.href.match('cikkek')) {
+	if (document.location.href.match(/cikkek/)) {
 		return $('form[name="newmessage"]').length;
 
 		// Forum main page
-	} else if (document.location.href.match('forum\/$')) {
+	} else if (document.location.href.match(/forum\/$/)) {
 		return $('.user-hello').length;
 
 		// Topic page
-	} else if (document.location.href.match('\/forum\/tema')) {
+	} else if (document.location.href.match(/forum\/tema/)) {
 		return $('#comments-login').length;
 	}
 
@@ -47,15 +47,15 @@ function isLoggedIn() {
 function getUserName() {
 
 	// Article page
-	if (document.location.href.match('cikkek')) {
+	if (document.location.href.match(/cikkek/)) {
 		return $('#msg-head').find('b a').html();
 
 		// Forum main page
-	} else if (document.location.href.match('forum\/$')) {
+	} else if (document.location.href.match(/forum\/$/)) {
 		return $('.user-hello').text().match(/Üdv, (.*)!/)[1];
 
 		// Topic page
-	} else if (document.location.href.match('\/forum\/tema')) {
+	} else if (document.location.href.match(/forum\/tema/)) {
 		return $('#comments-login').find('span').text();
 	}
 }
@@ -383,7 +383,7 @@ var blocklist = {
 
 		$('#forum-posts-list').find('ul li header').each(function () {
 			var nick;
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 
 				nick = $(this).find('a:first').html();
 
@@ -446,7 +446,7 @@ var blocklist = {
 		$("#forum-posts-list").find("ul li header").each(function () {
 
 			var nick;
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 
 				nick = $(this).find('a:first').html();
 			} else {
@@ -500,7 +500,7 @@ var autoload_next_page = {
 	activated: function () {
 
 		// Artcile
-		if (document.location.href.match('cikkek')) {
+		if (document.location.href.match(/cikkek/)) {
 
 			// Current page index
 			autoload_next_page.currPage = 1;
@@ -560,14 +560,14 @@ var autoload_next_page = {
 		var url;
 		// Url to call
 		// date ASC order
-		if (document.location.href.match('timeline')) {
+		if (document.location.href.match(/timeline/)) {
 			url = document.location.href.substring(0, 44);
 			url = url + '&order=timeline&index=' + (autoload_next_page.currPage + 1) + '';
 
 			// Date DESC order
 		} else {
 
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 
 				// Get topic ID
 				var topic_id = $('nav#breadcrumb select option:selected').val();
@@ -587,7 +587,7 @@ var autoload_next_page = {
 
 			// Create the 'next page' indicator
 			if (dataStore['threaded_comments'] != 'true') {
-				if (document.location.href.match('cikkek')) {
+				if (document.location.href.match(/cikkek/)) {
 					$('<div class="ext_autopager_idicator">' + (autoload_next_page.currPage + 1) + '. oldal</div>').insertAfter('.std2:last');
 				} else {
 					$('<div class="ext_autopager_idicator">' + (autoload_next_page.currPage + 1) + '. oldal</div>').insertAfter('div#forum-posts-list:last');
@@ -598,7 +598,7 @@ var autoload_next_page = {
 			var tmp = $(data);
 
 			// Articles
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 				tmp = tmp.find('.b-h-o-head a').closest('.b-h-o-head');
 				tmp.each(function () {
 
@@ -694,7 +694,7 @@ var show_navigation_buttons = {
 
 		// Add event to back button
 		ext_back.click(function () {
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 				document.location.href = 'https://sg.hu/';
 			} else {
 				document.location.href = 'https://sg.hu/forum/';
@@ -702,7 +702,7 @@ var show_navigation_buttons = {
 		});
 
 
-		if (!document.location.href.match('cikkek') && !document.location.href.match('\/uzenetek')) {
+		if (!document.location.href.match(/cikkek/) && !document.location.href.match(/uzenetek/)) {
 
 			// Create search button
 			$('<div id="ext_search"></div>').prependTo('body');
@@ -750,7 +750,7 @@ var show_navigation_buttons = {
 
 
 		// Execute when the user is logged in
-		if (isLoggedIn() || document.location.href.match('\/uzenetek')) {
+		if (isLoggedIn() || document.location.href.match(/uzenetek/)) {
 
 			// Create faves button
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
@@ -1402,7 +1402,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 	if (targetSelector.css('display') != 'block') {
 
 		var url;
-		if (document.location.href.match('cikkek')) {
+		if (document.location.href.match(/cikkek/)) {
 			url = '/listazas_egy.php3?callerid=1&id=' + id + '&no=' + no;
 		} else {
 			url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
@@ -1414,7 +1414,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 			targetSelector.html(data).hide().slideDown();
 
 			// Maintain style settings
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 				targetSelector.find('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
 				targetSelector.find('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
 				targetSelector.find('.b-h-o-head .msg-dateicon a').css('color', '#444');
@@ -1527,7 +1527,7 @@ var overlay_reply_to = {
 		comment_clone.find('ul.post-answer').remove();
 		/*.parent('div') */
 
-		if (document.location.href.match('cikkek')) {
+		if (document.location.href.match(/cikkek/)) {
 			comment_clone.css('width', 700);
 		}
 
@@ -1536,7 +1536,7 @@ var overlay_reply_to = {
 		// WYSIWYG editor
 		/*if(dataStore['wysiwyg_editor'] == 'true') {
 
-		 if(document.location.href.match('cikkek')) {
+		 if(document.location.href.match(/cikkek/)) {
 
 		 var textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
 		 $('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
@@ -1588,7 +1588,7 @@ var overlay_reply_to = {
 		 textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 
 		 // Fix smile list
-		 if(document.location.href.match('cikkek')) {
+		 if(document.location.href.match(/cikkek/)) {
 		 textarea_clone.find('#ext_smiles').css({ 'padding-left' : 50, 'padding-right' : 50, 'margin-top' : 20 });
 		 } else {
 		 textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
@@ -1596,7 +1596,7 @@ var overlay_reply_to = {
 		 textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 
 		 // CLEditor init
-		 if(document.location.href.match('cikkek')) {
+		 if(document.location.href.match(/cikkek/)) {
 		 $(".ext_clone_textarea textarea").cleditor({ width : 696, height: 200 })[0].focus();
 		 textarea_clone.find('.cleditorMain').css({ position : 'relative', top : -10 });
 		 } else {
@@ -1608,7 +1608,7 @@ var overlay_reply_to = {
 		 } else {*/
 
 		var textarea_clone;
-		if (document.location.href.match('cikkek')) {
+		if (document.location.href.match(/cikkek/)) {
 
 			textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
 			$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
@@ -1667,7 +1667,7 @@ var overlay_reply_to = {
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
 		var left;
-		if (document.location.href.match('cikkek')) {
+		if (document.location.href.match(/cikkek/)) {
 			left = $(document).width() / 2 - 350;
 		} else {
 			left = $(document).width() / 2 - 475;
@@ -1799,7 +1799,7 @@ var highlight_comments_for_me = {
 
 					$(this).css('position', 'relative').append('<img src="' + chrome.extension.getURL('/img/content/comments_for_me_indicator.png') + '" class="ext_comments_for_me_indicator">');
 
-					if (document.location.href.match('cikkek')) {
+					if (document.location.href.match(/cikkek/)) {
 						$(this).find('.ext_comments_for_me_indicator').addClass('article');
 					} else {
 						$(this).find('.ext_comments_for_me_indicator').addClass('topic');
@@ -1918,7 +1918,7 @@ var threaded_comments = {
 
 			// Set style settings
 			//TODO: set proper style
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 				$(this).css({'margin-left': 0, 'padding-left': 30, 'border-left': '1px solid #ddd'});
 				$(this).find('.header').parent().css('width', 700 - $(this).parents('center').length * 30);
 				$(this).find('.reply').hide();
@@ -2116,7 +2116,7 @@ var fetch_new_comments_in_topic = {
  // Get comment number
  var no = $(ele).html().match(/\d+/g);
 
- if(document.location.href.match('cikkek')) {
+ if(document.location.href.match(/cikkek/)) {
 
  var id = $('.std2 a').attr('href').split('?id=')[1];
 
@@ -2130,7 +2130,7 @@ var fetch_new_comments_in_topic = {
 
  var target = $(ele).next().attr('id');
 
- if(document.location.href.match('cikkek')) {
+ if(document.location.href.match(/cikkek/)) {
  eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);");
  } else {
  eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
@@ -2512,7 +2512,7 @@ var wysiwyg_editor = {
 		var buttons = $('form[name="newmessage"]');
 
 		// Rearrange buttons
-		if (document.location.href.match('cikkek')) {
+		if (document.location.href.match(/cikkek/)) {
 
 			// Remove username
 			$('form[name="newmessage"] b').remove();
@@ -2898,7 +2898,7 @@ var message_center = {
 
 		// Check for message ID in the url
 		// Do nothing if not find any comment id
-		if (!document.location.href.match('#komment')) {
+		if (!document.location.href.match(/#komment/)) {
 			return false;
 		}
 
@@ -3001,14 +3001,14 @@ var message_center = {
 		}
 
 		// Catch comment event
-		if (!document.location.href.match('szerkcode')) {
+		if (!document.location.href.match(/szerkcode/)) {
 
 			$('form[name="newmessage"]').submit(function () {
 
 				var topic_name, topic_id;
 
 				// Article
-				if (document.location.href.match('cikkek')) {
+				if (document.location.href.match(/cikkek/)) {
 
 					// Get topic name
 					topic_name = $('.cikk-title:first').html();
@@ -3499,7 +3499,7 @@ var profiles = {
 			}
 
 			// Get nickname
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 
 				nick = $(this).find('a:first').html();
 
@@ -3690,7 +3690,7 @@ var add_to_list = {
 		$("#forum-posts-list").find("ul li").each(function () {
 			var nick_2;
 
-			if (document.location.href.match('cikkek')) {
+			if (document.location.href.match(/cikkek/)) {
 
 				nick_2 = $(this).find('a:first').html();
 
@@ -3914,14 +3914,14 @@ function extInit() {
 	}
 
 	// SG index.php
-	if (document.location.href == 'https://www.sg.hu/' || document.location.href.match('index.php')) {
+	if (document.location.href == 'https://www.sg.hu/' || document.location.href.match(/index.php/)) {
 
 		// Settings
 		cp.init(3);
 
 
 		// Articles
-	} else if (document.location.href.match('cikkek')) {
+	} else if (document.location.href.match(/cikkek/)) {
 
 		// Settings
 		cp.init(2);
@@ -4011,7 +4011,7 @@ function extInit() {
 		}
 
 		// FORUM
-	} else if (document.location.href.match('forum\/$')) {
+	} else if (document.location.href.match(/forum\/$/)) {
 
 		// Settings
 		cp.init(1);
@@ -4072,7 +4072,7 @@ function extInit() {
 	}
 
 	// TOPIK
-	else if (document.location.href.match('\/forum\/tema')) {
+	else if (document.location.href.match(/forum\/tema/)) {
 
 		// Settings
 		cp.init(2);
