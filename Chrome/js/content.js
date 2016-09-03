@@ -2,10 +2,12 @@
 //noinspection JSDuplicatedDeclaration
 var userName, isLoggedIn, dataStore;
 
+//noinspection JSUnresolvedFunction
 var port = chrome.extension.connect();
 
 function convertBool(string) {
 
+	//noinspection JSUnresolvedFunction
 	switch (string.toLowerCase()) {
 		case "true":case "yes":case "1":
 			return true;
@@ -151,6 +153,7 @@ var jump_unreaded_messages = {
 			target = $('.topichead').closest('center').eq(lastMsg - 1);
 
 			// Insert the horizontal rule
+			//noinspection JSCheckFunctionSignatures
 			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 		}
 		$('#ext_unreaded_hr').css({'height': '0px'});
@@ -869,7 +872,7 @@ var show_navigation_buttons = {
 		var top = ( $(window).height() / 2 ) - ( height / 2);
 
 		// Iterate over the buttons
-		for (c = 0; c < buttons.length; c++) {
+		for (var c = 0; c < buttons.length; c++) {
 
 			if (dataStore['navigation_buttons_position'] == 'lefttop') {
 
@@ -1686,6 +1689,7 @@ var overlay_reply_to = {
 		textarea_clone.find('input[name=no_ref]').attr('value', msgno);
 
 		// Autoscroll
+		//noinspection JSValidateTypes
 		var pageBottom = $(window).scrollTop() + $(window).height();
 		var textBottom = ext_clone_textarea.offset().top + ext_clone_textarea.height();
 
@@ -2039,7 +2043,8 @@ var fetch_new_comments_in_topic = {
 
 				// Append horizonal line
 				if (fetch_new_comments_in_topic.counter == 1) {
-					$('<hr>').insertAfter($('.std1:first').parent()).addClass('ext_unreaded_hr');
+					//noinspection JSCheckFunctionSignatures
+					$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
 				}
 
 				// Parse the content
@@ -2215,7 +2220,7 @@ var custom_blocks = {
 
 		var config = JSON.parse(dataStore['blocks_config']);
 
-		for (c = 0; c < config.length; c++) {
+		for (var c = 0; c < config.length; c++) {
 
 			if (config[c]['id'] == id) {
 				config[c][key] = value;
@@ -2233,7 +2238,7 @@ var custom_blocks = {
 
 		var config = JSON.parse(dataStore['blocks_config']);
 
-		for (c = 0; c < config.length; c++) {
+		for (var c = 0; c < config.length; c++) {
 
 			if (config[c]['id'] == id) {
 				return config[c][key];
@@ -2276,7 +2281,7 @@ var custom_blocks = {
 		var config = JSON.parse(dataStore['blocks_config']);
 		config = config.reverse();
 
-		for (c = 0; c < config.length; c++) {
+		for (var c = 0; c < config.length; c++) {
 
 			// Visibility
 			if (config[c]['visibility'] == false) {
@@ -2321,12 +2326,14 @@ var custom_blocks = {
 			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
 
 			// Contenthide
+			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/minimalize.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.contentHide($(this).closest('div').attr('id'), true);
 			});
 
 			// Hide
+			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/close.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.hide($(this).closest('div').attr('id'), true);
@@ -2334,23 +2341,27 @@ var custom_blocks = {
 
 
 			// Down
+			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/down.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.down($(this).closest('div').attr('id'), true);
 			});
 
 			// Up
+			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/up.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.up($(this).closest('div').attr('id'), true);
 			});
 
 			// Right
+			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/right.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.right($(this).closest('div').attr('id'), true);
 			});
 			// Left
+			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/left.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.left($(this).closest('div').attr('id'), true);
@@ -2946,7 +2957,7 @@ var message_center = {
 				message = message.replace(item[0], item[1]);
 			});
 
-			for (c = 0; c < messages.length; c++) {
+			for (var c = 0; c < messages.length; c++) {
 				if (messages[c]['comment_id'] == id) {
 
 					// Update message content
@@ -3099,7 +3110,7 @@ var message_center = {
 		var newmessages = 0;
 
 		// Iterate over the posts
-		for (key = 0; key < messages.length; key++) {
+		for (var key = 0; key < messages.length; key++) {
 
 			// Get current timestamp
 			var time = Math.round(new Date().getTime() / 1000);
@@ -3150,7 +3161,7 @@ var message_center = {
 
 						}
 
-						for (c = 0; c < TmpAnswers.length; c++) {
+						for (var c = 0; c < TmpAnswers.length; c++) {
 
 							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find('.topichead table tr:eq(0) td:eq(0) a img').attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
 							nick = nick.replace(/ - VIP/, "");
@@ -3218,7 +3229,7 @@ var message_center = {
 		}
 
 		// Iterate over the messages
-		for (c = 0; c < messages.length; c++) {
+		for (var c = 0; c < messages.length; c++) {
 
 			// Get the post date and time
 			var time = date('Y. m. d. -  H:i', messages[c]['time']);
@@ -3245,7 +3256,7 @@ var message_center = {
 			// Filter out BB tags and add line breaks
 			$.each([
 				[/[\r|\n]/g, "<br>"],
-				[/\[.*?\]([\s\S]*?)\[\/.*?\]/g, "$1"]
+				[/\[.*?]([\s\S]*?)\[\/.*?]/g, "$1"]
 
 			], function (index, item) {
 				msg = msg.replace(item[0], item[1]);
@@ -3278,7 +3289,7 @@ var message_center = {
 
 
 		// Iterate over the messages
-		for (c = 0; c < messages.length; c++) {
+		for (var c = 0; c < messages.length; c++) {
 
 			// Html to insert
 			var html = '';
@@ -3313,7 +3324,7 @@ var message_center = {
 			// Filter out BB tags and add line breaks
 			$.each([
 				[/[\r|\n]/g, "<br>"],
-				[/\[.*?\]([\s\S]*?)\[\/.*?\]/g, "$1"]
+				[/\[.*?]([\s\S]*?)\[\/.*?]/g, "$1"]
 
 			], function (index, item) {
 				msg = msg.replace(item[0], item[1]);
@@ -3327,7 +3338,7 @@ var message_center = {
 			html += '</div>';
 
 			// Iterate over the answers
-			for (a = 0; a < messages[c]['answers'].length; a++) {
+			for (var a = 0; a < messages[c]['answers'].length; a++) {
 
 				html += '<div class="ext_mc_messages ident">';
 				html += '<p>';
@@ -3353,7 +3364,7 @@ var message_center = {
 function setCookie(c_name, value, exdays) {
 	var exdate = new Date();
 	exdate.setDate(exdate.getDate() + exdays);
-	var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+	var c_value = encodeURI(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
 	document.cookie = c_name + "=" + c_value;
 }
 
@@ -3364,7 +3375,7 @@ function getCookie(c_name) {
 		y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
 		x = x.replace(/^\s+|\s+$/g, "");
 		if (x == c_name) {
-			return unescape(y);
+			return decodeURI(y);
 		}
 	}
 }
@@ -3495,6 +3506,7 @@ var profiles = {
 				var wrapper = $('<div class="wrapper"></div>').insertAfter(this).css('position', 'relative');
 
 				// Place in other elements
+				//noinspection JSCheckFunctionSignatures
 				$(this).parent().find('section.body, footer').appendTo(wrapper);
 			}
 
@@ -3519,21 +3531,23 @@ var profiles = {
 
 			// Iterate over the profile settings
 			// Search for nickname match
-			for (c = 0; c < profiles.length; c++) {
-				for (u = 0; u < profiles[c]['users'].length; u++) {
+			for (var c = 0; c < profiles.length; c++) {
+				for (var u = 0; u < profiles[c]['users'].length; u++) {
 					if (jQuery.trim(profiles[c]['users'][u]) == nick) {
 
 						// WE GOT A MATCH
 
 						// Title
-						var placeholder = $('<span class="titles">' + profiles[c]['title'] + '</span>').appendTo($(this).find('span.icons'));
+						//noinspection JSCheckFunctionSignatures
+						var placeholder = $('<span class="titles">' + profiles[c]['title'] + '</span>').appendTo( $(this).find('span.icons') );
 						placeholder.css('padding-left', 10);
 
 						// Calc outline width 
 						var width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8;
 
 						// Border
-						var outline = $('<div class="outline"></div>').insertBefore($(this).parent().find('section.body, footer'));
+						//noinspection JSCheckFunctionSignatures
+						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('section.body, footer') );
 						outline.css({
 							width: 6,
 							height: '100%',
@@ -3580,9 +3594,11 @@ var add_to_list = {
 			var separator = $('<span class="separator pull-right"></span>').insertBefore(this);
 
 			// Insert dropdow placeholder
+			//noinspection JSCheckFunctionSignatures
 			var dropdown = $('<div class="ext_dropdown pull-right"><span>&#9660;</span></div>').insertBefore(separator);
 
 			// Insert dropdown list
+			//noinspection JSCheckFunctionSignatures
 			var list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list');
 
 			// Set dropdown background color
@@ -3645,7 +3661,7 @@ var add_to_list = {
 		var profiles = JSON.parse(dataStore['profiles']);
 
 		// Iterate over the groups, add each one to the list
-		for (c = 0; c < profiles.length; c++) {
+		for (var c = 0; c < profiles.length; c++) {
 			$('<li><hr></li>').appendTo('.ext_addtolist_list');
 			$('<li class="ident ext_addtolist profile_' + c + '" style="color: #' + profiles[c]['color'][0] + ';">' + profiles[c]['title'] + '</li>').appendTo('.ext_addtolist_list');
 		}
@@ -3885,6 +3901,7 @@ var inline_image_viewer = {
 		// Iterate over them
 		comment_links.each(function () {
 			var url = $(this).attr('href');
+			//noinspection JSCheckFunctionSignatures
 			if (imgpattern.test(url)) {
 				$(this).after('<div class="ext-inline-view closed" data-url="' + url + '" style="display:inline;"><span> &#9654; </span></div>');
 			}
@@ -4199,6 +4216,7 @@ if (window.top === window) {
 	port.postMessage({name: "getSettings"});
 }
 
+//noinspection JSCheckFunctionSignatures
 port.onMessage.addListener(function (event) {
 
 	if (event.name == 'setSettings') {
