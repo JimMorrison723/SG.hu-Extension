@@ -865,7 +865,6 @@ var show_navigation_buttons = {
 		if (dataStore['navigation_buttons_position'].match('bottom')) {
 			buttons = buttons.reverse();
 		}
-		console.log(dataStore['navigation_buttons_position']);
 
 		// Calculate buttons height
 		var height = buttons.length * 36;
