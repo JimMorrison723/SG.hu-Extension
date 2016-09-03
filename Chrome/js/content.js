@@ -677,33 +677,28 @@ var show_navigation_buttons = {
 
 	activated: function () {
 
-		var ext_search = $('#ext_search');
-		var ext_scrolltop = $('#ext_scrolltop');
-		var ext_back = $('#ext_back');
-		var ext_nav_faves = $('#ext_nav_faves');
-		var ext_whitelist = $('#ext_whitelist');
-		var ext_nightmode = $('#ext_nightmode');
-
 		// Create the scrolltop button
 		$('<div id="ext_scrolltop">&#9650;</div>').prependTo('body');
-
-		// Add click event to scrolltop button
-		ext_scrolltop.click(function () {
-			$('body').animate({scrollTop: 0}, 1000);
-		});
-
 		// Created the back button
 		$('<div id="ext_back">&#9664;</div>').prependTo('body');
 
+		var ext_scrolltop = $('#ext_scrolltop');
+		var ext_back = $('#ext_back');
+		var ext_nightmode = '';
+
+		// Add click event to scrolltop button
+		ext_scrolltop.on('click', function () {
+			$('body').animate({scrollTop: 0}, 1000);
+		});
+
 		// Add event to back button
-		ext_back.click(function () {
+		ext_back.on('click', function () {
 			if (document.location.href.match(/cikkek/)) {
 				document.location.href = 'https://sg.hu/';
 			} else {
 				document.location.href = 'https://sg.hu/forum/';
 			}
 		});
-
 
 		if (!document.location.href.match(/cikkek/) && !document.location.href.match(/uzenetek/)) {
 
@@ -712,6 +707,8 @@ var show_navigation_buttons = {
 
 			// Place search overlay arrow
 			$('<div id="ext_overlay_search_arrow"></div>').appendTo('body');
+
+			var ext_search = $('#ext_search');
 
 			// Place search icon background
 			ext_search.css('background-image', 'url(' + chrome.extension.getURL('/img/content/search.png') + ')');
@@ -743,6 +740,8 @@ var show_navigation_buttons = {
 			// Create the whitelist button
 			$('<div id="ext_whitelist" title="' + title + '">' + status + '</div>').prependTo('body');
 
+			var ext_whitelist = $('#ext_whitelist');
+
 			// Create whitelist event
 			ext_whitelist.click(function () {
 
@@ -751,12 +750,13 @@ var show_navigation_buttons = {
 			});
 		}
 
-
 		// Execute when the user is logged in
 		if (isLoggedIn() || document.location.href.match(/uzenetek/)) {
 
 			// Create faves button
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
+
+			var ext_nav_faves = $('#ext_nav_faves');
 
 			// Place the faves icon
 			ext_nav_faves.css('background-image', 'url(' + chrome.extension.getURL('/img/content/star.png') + ')');
@@ -781,7 +781,6 @@ var show_navigation_buttons = {
 		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
 			var state = dataStore['navigation_button_night_state'];
-			//console.log("topik:" + dataStore['navigation_button_night_state']);
 
 			if (state == "true") {
 				state = "On";
@@ -794,6 +793,8 @@ var show_navigation_buttons = {
 
 			// Create the Bulp button
 			$('<div id="ext_nightmode"></div>').prependTo('body');
+
+			ext_nightmode = $('#ext_nightmode');
 
 			//Set the proper Bulp button
 			ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
@@ -864,6 +865,7 @@ var show_navigation_buttons = {
 		if (dataStore['navigation_buttons_position'].match('bottom')) {
 			buttons = buttons.reverse();
 		}
+		console.log(dataStore['navigation_buttons_position']);
 
 		// Calculate buttons height
 		var height = buttons.length * 36;
@@ -926,7 +928,7 @@ var show_navigation_buttons = {
 		show_navigation_buttons.removeOverlay();
 
 		// Clone and append the original search form to body
-		var clone = $('.std1:last').find('form').clone().appendTo('body');
+		var clone = $('form#search-top').clone().appendTo('body');
 		/* $('.lapozo:last').next().next() nem működik*/
 
 		// Add class
