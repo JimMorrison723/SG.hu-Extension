@@ -778,55 +778,9 @@ var show_navigation_buttons = {
 		//Night mode
 		if (dataStore['show_navigation_buttons_night'] == 'true') {
 
-			var state = dataStore['navigation_button_night_state'];
-
-			if (state == "true") {
-				state = "On";
-				lights.topic_switchOn();
-			}
-			else {
-				state = "Off";
-				lights.topic_switchOff();
-			}
-
-			// Create the Bulp button
-			$('<div id="ext_nightmode"></div>').prependTo('body');
+			lights.init();
 
 			var ext_nightmode = $('#ext_nightmode');
-
-			//Set the proper Bulp button
-			ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
-
-			// Add click event to Bulp button
-			ext_nightmode.click(function () {
-
-				var state = dataStore['navigation_button_night_state'];
-
-				if (state) {
-
-					//Night mode ON
-					ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOff.png') + ')');
-
-					//Save in dataStore
-					dataStore['navigation_button_night_state'] = false;
-
-					lights.topic_switchOff();
-				} else {
-
-					//Night mode Off
-					ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOn.png') + ')');
-
-					//Save in dataStore
-					dataStore['navigation_button_night_state'] = true;
-
-					lights.topic_switchOn();
-				}
-
-				var data = dataStore['navigation_button_night_state'];
-
-				// Save in localStorage
-				port.postMessage({name: "setSetting", key: 'navigation_button_night_state', val: data});
-			});
 		}
 
 		// Set the button positions
@@ -1143,6 +1097,59 @@ var show_navigation_buttons = {
 
 var lights = {
 
+	init: function () {
+
+		var state = dataStore['navigation_button_night_state'];
+
+		if (state == "true") {
+			state = "On";
+			lights.topic_switchOn();
+		}
+		else {
+			state = "Off";
+			lights.topic_switchOff();
+		}
+
+		// Create the Bulp button
+		$('<div id="ext_nightmode"></div>').prependTo('body');
+
+		var ext_nightmode = $('#ext_nightmode');
+
+		//Set the proper Bulp button
+		ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
+
+		// Add click event to Bulp button
+		ext_nightmode.click(function () {
+
+			var state = dataStore['navigation_button_night_state'];
+
+			if (state) {
+
+				//Night mode ON
+				ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOff.png') + ')');
+
+				//Save in dataStore
+				dataStore['navigation_button_night_state'] = false;
+
+				lights.topic_switchOff();
+			} else {
+
+				//Night mode Off
+				ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOn.png') + ')');
+
+				//Save in dataStore
+				dataStore['navigation_button_night_state'] = true;
+
+				lights.topic_switchOn();
+			}
+
+			var data = dataStore['navigation_button_night_state'];
+
+			// Save in localStorage
+			port.postMessage({name: "setSetting", key: 'navigation_button_night_state', val: data});
+		});
+	},
+
 	topic_switchOn: function () {
 
 		$('body').css('background-image', 'url(' + chrome.extension.getURL('/img/content/background.png') + ')');
@@ -1263,7 +1270,7 @@ var update_fave_list = {
 
 			//Night mode
 			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
-				/*lights.forum_switchOn();*/
+				lights.forum_switchOn();
 			}
 		});
 		/*});*/
@@ -1442,9 +1449,9 @@ function ext_valaszmsg(target, id, no, callerid) {
 				quick_user_info.activated();
 			}
 
-			/*if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
-			 lights.topic_switchOn();
-			 }*/
+			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+				lights.topic_switchOn();
+			}
 
 		});
 	}
