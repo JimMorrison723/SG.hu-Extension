@@ -684,8 +684,9 @@ var show_navigation_buttons = {
 
 		var ext_scrolltop = $('#ext_scrolltop');
 		var ext_back = $('#ext_back');
-		var ext_search = $('#ext_search');
-		var ext_whitelist = $('#ext_whitelist');
+		var ext_nav_faves = '';
+		var ext_search = '';
+		var ext_whitelist = '';
 
 		// Add click event to scrolltop button
 		ext_scrolltop.on('click', function () {
@@ -758,7 +759,7 @@ var show_navigation_buttons = {
 			// Create faves button
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
 
-			var ext_nav_faves = $('#ext_nav_faves');
+			ext_nav_faves = $('#ext_nav_faves');
 
 			// Place the faves icon
 			ext_nav_faves.css('background-image', 'url(' + chrome.extension.getURL('/img/content/star.png') + ')');
@@ -1474,14 +1475,14 @@ var overlay_reply_to = {
 		ta.closest('div').find('a:last').attr('tabindex', '4');
 
 		// Change the behavior the replyto button
-		$('li[id*=post] header a:contains("válasz")').on('click', function (e) {
+		$('.post header a:contains("válasz")').on('click', function (e) {
 
 			// Prevent default submission
 			e.preventDefault();
 
 			// Get ref msg ID and comment element
 			var msgno = $(this).closest('header').find('a.post-no').text().match(/\d+/g);
-			var entry = $(this).closest('li');
+			var entry = $(this).closest('.post');
 
 			// Call show method
 			overlay_reply_to.show(entry, msgno);
@@ -1515,10 +1516,10 @@ var overlay_reply_to = {
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 
 		// Highlight the reply comment
-		var comment_clone = $(comment).clone().prependTo('#forum-posts-list').addClass('ext_highlighted_comment');
+		var comment_clone = $(comment).clone().prependTo('#forum-posts-list ul').addClass('ext_highlighted_comment');
 
 		// Maintain comment clone positions
-		comment_clone.css({'top': comment.offset().top});
+		comment_clone.css({'top': comment.position().top});
 
 		// Remove threaded view padding and border
 		comment_clone.css({margin: 0, padding: 0, border: 0});
@@ -1659,13 +1660,13 @@ var overlay_reply_to = {
 		textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
 
 		// Fix buttons
-		textarea_clone.find('button:eq(1)').css({position: 'absolute', left: 0});
-		textarea_clone.find('button:eq(2)').css({position: 'absolute', left: 90});  //90   // Makrók 90
-		textarea_clone.find('button:eq(3)').css({position: 'absolute', left: 180}); //180
-		textarea_clone.find('button:eq(4)').css({position: 'absolute', left: 270}); //270
-		textarea_clone.find('button:eq(5)').css({position: 'absolute', left: 371}); //360
-		textarea_clone.find('button:eq(6)').css({position: 'absolute', left: 471}); //450
-		textarea_clone.find('button:eq(7)').css({position: 'absolute', left: 583}); //450
+		textarea_clone.find('button:eq(1)').css({position: 'absolute', left: 0}); // -85
+		textarea_clone.find('button:eq(2)').css({position: 'absolute', left: 90});  // -175
+		textarea_clone.find('button:eq(3)').css({position: 'absolute', left: 180}); // -265
+		textarea_clone.find('button:eq(4)').css({position: 'absolute', left: 270}); // -375
+		textarea_clone.find('button:eq(5)').css({position: 'absolute', left: 380}); // -486
+		textarea_clone.find('button:eq(6)').css({position: 'absolute', left: 491}); // -608
+		textarea_clone.find('button:eq(7)').css({position: 'absolute', left: 613}); // -711,52
 
 		/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
 		/*}*/
@@ -1694,7 +1695,7 @@ var overlay_reply_to = {
 		// Autoscroll
 		//noinspection JSValidateTypes
 		var pageBottom = $(window).scrollTop() + $(window).height();
-		var textBottom = ext_clone_textarea.offset().top + ext_clone_textarea.height();
+		var textBottom = ext_clone_textarea.position().top + ext_clone_textarea.height();
 
 		if (textBottom > pageBottom) {
 			var scT = textBottom - $(window).height() + 50;
@@ -2776,27 +2777,6 @@ var message_center = {
 		// HTML code to insert
 		var html = '';
 
-		/*html += '<tr>';
-		 html += '<td colspan="4">';
-		 html += '<div>';
-		 html += '<div class="b-h-o-head ext_mc_tabs">';
-		 html += '<img src="images/ful_o_l.png" width="1" height="21" vspace="0" hspace="0" align="left">';
-		 html += '<span class="hasab-head-o">Fórumkategóriák</span>';
-		 html += '</div>';
-
-		 html += '<div class="b-h-b-head ext_mc_tabs">';
-		 html += '<img src="images/ful_b_l.png" width="1" height="21" vspace="0" hspace="0" align="left">';
-		 html += '<span class="hasab-head-b">Saját üzeneteim</span>';
-		 html += '</div>';
-
-		 html += '<div class="b-h-b-head ext_mc_tabs">';
-		 html += '<img src="images/ful_b_l.png" width="1" height="21" vspace="0" hspace="0" align="left">';
-		 html += '<span class="hasab-head-b">Válaszok</span>';
-		 html += '</div>';
-		 html += '</div>';
-		 html += '</td>';
-		 html += '</tr>';*/
-
 		html += '<ul id="ext_mc_tabs">';
 		html += '<li class="ext_mc_tabs">Fórumkategóriák</li>';
 		html += '<li class="ext_mc_tabs">Saját üzeneteim</li>';
@@ -2811,10 +2791,10 @@ var message_center = {
 		// Insert tabs
 		$('#forum-chat').after(html);
 
-		var cikkek = $('.forums-block');
+		var topics = $('.forums-block');
 
 		// Add topik lists to the first page
-		$('#ext_mc_page').find('.ext_mc_pages:eq(0)').append(cikkek);
+		$('#ext_mc_page').find('.ext_mc_pages:eq(0)').append(topics);
 
 		// Fix right sidebar top position
 		/*$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });*/
@@ -2946,7 +2926,7 @@ var message_center = {
 			id = getCookie('updateComment');
 
 			// Get message contents
-			message = $('#forum-posts-list').find('ul li header a:contains("#' + id + '")').closest('header').find('section.body').html();
+			message = $('#forum-posts-list').find('.post header a:contains("#' + id + '")').closest('header').find('section.body').html();
 
 			// Filter out html-s
 			$.each([
@@ -3138,7 +3118,7 @@ var message_center = {
 						var time;
 
 						// Search posts that is an answer to us
-						var TmpAnswers = $(tmp.find('.msg-replyto a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
+						var TmpAnswers = $(tmp.find('.header a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
 
 						// Iterate over the answers
 						if (TmpAnswers.length == 0) {
