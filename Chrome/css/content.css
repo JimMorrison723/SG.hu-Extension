@@ -119,11 +119,7 @@
 #ext_unreaded_hr {
 	margin-top: 20px;
 	border: 1px solid red;
-}
-
-.ext_unreaded_hr {
-	margin-top: 20px;
-	border: 1px solid red;
+	height: 0px;
 }
 
 /* autopager */

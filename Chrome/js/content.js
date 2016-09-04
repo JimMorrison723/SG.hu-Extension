@@ -156,7 +156,6 @@ var jump_unreaded_messages = {
 			//noinspection JSCheckFunctionSignatures
 			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 		}
-		$('#ext_unreaded_hr').css({'height': '0px'});
 
 		// Append hr tag content if any
 		//var content = $('a#last-read').find('li.forum-post').insertBefore('a#last-read');
@@ -215,7 +214,6 @@ var fav_show_only_unreaded = {
 		if (convertBool(dataStore['fav_show_only_unreaded_opened']) == 'true') {
 			$('#favorites-open-close-button').find('#icon').html('-');
 		}
-		console.log(dataStore['fav_show_only_unreaded_opened']);
 	},
 
 	activated: function () {
@@ -640,10 +638,6 @@ var autoload_next_page = {
 			if (dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 				highlight_comments_for_me.activated();
 			}
-
-			/*	if(dataStore['disable_point_system'] == 'true') {
-			 disable_point_system.activated();
-			 }*/
 
 			// Profiles
 			if (dataStore['profiles'] !== '') {
@@ -1947,31 +1941,29 @@ var fetch_new_comments_in_topic = {
 
 	init: function () {
 
-		var newMessage = $('span#newMessage');
-
-		if (newMessage.length === 0) {
-			return false;
-		}
-
-		// Set new messages number to zero
-		newMessage.html('0 új hozzászólás érkezett!');
-
-		// Hide the notification when fetch new comments settgngs is enabled
-		if (dataStore['fetch_new_comments'] === 'true') {
-			newMessage.css({
-				display: 'none !important',
-				visibility: 'hidden',
-				height: 0,
-				margin: 0,
-				padding: 0,
-				border: 0
-			});
-		}
-
+		// // Set new messages number to zero
+		// newMessage.html('0 új hozzászólás érkezett!');
+		//TODO: fix this
 		// Monitor new comments nofification 
 		setInterval(function () {
 
 			var newMessage = $('span#newMessage');
+
+			if (newMessage.length === 0) {
+				return false;
+			}
+
+			// Hide the notification when fetch new comments settgngs is enabled
+			if (dataStore['fetch_new_comments'] === 'true') {
+				newMessage.css({
+					display: 'none !important',
+					visibility: 'hidden',
+					height: 0,
+					margin: 0,
+					padding: 0,
+					border: 0
+				});
+			}
 
 			// Get new comments counter
 			//var newmsg = parseInt(newMessage.text().match(/\d+/g));
@@ -2025,13 +2017,17 @@ var fetch_new_comments_in_topic = {
 		fetch_new_comments_in_topic.last_new_msg = newmsg;
 
 		// Get the topik ID and URL
-		var id = $('select[name="id"] option:selected').val();
-		var url = 'listazas.php3?id=' + id;
-
+		var id = $('#topicdata').data('tid');
+		//noinspection JSUnresolvedVariable
+		var hsz = $('.post:first').data('post-info').msg_unique + 1;
+		// var url = 'https://sg.hu/api/forum/message?topicId=' + id + '&unique=' + hsz;
+		var url = 'https://sg.hu/forum/uzenet/' + id + '/' + hsz;
+		console.log(url);
 		// Get topic contents
 		$.ajax({
 			url: url,
 			mimeType: 'text/html;charset=iso-8859-2',
+			contentType: "application/x-www-form-urlencoded;charset=ISO-8859-15",
 			success: function (data) {
 
 				// Increase the counter
@@ -2040,19 +2036,19 @@ var fetch_new_comments_in_topic = {
 				// Append horizonal line
 				if (fetch_new_comments_in_topic.counter == 1) {
 					//noinspection JSCheckFunctionSignatures
-					$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
+					$('<hr>').insertBefore( $('.post:first') ).attr('id', 'ext_unreaded_hr');
 				}
 
 				// Parse the content
 				var tmp = $(data);
 
 				// Fetch new comments
-				var comments = $(tmp).find('.topichead:lt(' + new_comments + ')').closest('center');
-
+				var comments = $(tmp).find('.post');
 				// Append new comments
-				$(comments.get().reverse()).each(function () {
-					$(this).insertAfter($('.std1:first').parent());
-				});
+				// $(comments.get().reverse()).each(function () {
+				// 	$(this).insertAfter($('.std1:first').parent());
+				// });
+				$(comments).insertBefore( $('#ext_unreaded_hr') );
 
 				// Remove locked status
 				fetch_new_comments_in_topic.locked = false;
@@ -3651,7 +3647,6 @@ var add_to_list = {
 	}
 };
 
-
 var columnify_comments = {
 
 	activated: function () {
@@ -3684,7 +3679,7 @@ var quick_user_info = {
 
 	activated: function () {
 
-		$('#forum-posts-list').find('ul li').each(function () {
+		$('#forum-posts-list').find('.post').each(function () {
 
 			//Do not add the mouseenter function again if the element already has it
 			if (!$(this).data('events')) {
