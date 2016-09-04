@@ -580,7 +580,7 @@ var autoload_next_page = {
 				url = url + '?page=' + (autoload_next_page.currPage + 1) + '&callerid=1';
 
 			} else {
-				url = document.location.href.substring(0, 34);
+				url = document.location.href.substring(0, 35);
 				url = url + '?page=' + (autoload_next_page.currPage + 1) + '';
 			}
 		}
@@ -641,12 +641,7 @@ var autoload_next_page = {
 				highlight_comments_for_me.activated();
 			}
 
-			// show menitoned comment
-			/*				if(dataStore['show_mentioned_comments'] == 'true') {
-			 show_mentioned_comments.activated();
-			 }*/
-
-			/*				if(dataStore['disable_point_system'] == 'true') {
+			/*	if(dataStore['disable_point_system'] == 'true') {
 			 disable_point_system.activated();
 			 }*/
 
@@ -1427,12 +1422,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 				targetSelector.find('.b-h-o-head .msg-dateicon a').css('color', '#444');
 			}
 
-			// show menitoned comment
-			/*			if(dataStore['show_mentioned_comments'] == 'true') {
-			 show_mentioned_comments.activated();
-			 }*/
-
-			/*			if(dataStore['disable_point_system'] == 'true') {
+			/*	if(dataStore['disable_point_system'] == 'true') {
 			 disable_point_system.activated();
 			 }*/
 
@@ -2070,11 +2060,6 @@ var fetch_new_comments_in_topic = {
 					highlight_comments_for_me.activated();
 				}
 
-				// show menitoned comment
-				/*					if(dataStore['show_mentioned_comments'] == 'true') {
-				 show_mentioned_comments.activated();
-				 }*/
-
 				// User profiles
 				if (dataStore['profiles'] != '') {
 					profiles.init();
@@ -2093,54 +2078,6 @@ var fetch_new_comments_in_topic = {
 		});
 	}
 };
-
-/*var show_mentioned_comments = {
-
- activated : function() {
-
- $('a[href*="hszmutat"]:not(.checked)').each(function() {
-
- // Remove original event
- $(this).attr('class', 'ext_mentioned').addClass('checked');
- });
-
- // Attach click events
- $('.ext_mentioned').unbind('click').click(function(e) {
-
- // Prevent browser default submission
- e.preventDefault();
-
- // Call the show method
- show_mentioned_comments.show(this);
- });
- },
-
- show : function(ele) {
-
- // Get comment number
- var no = $(ele).html().match(/\d+/g);
-
- if(document.location.href.match(/cikkek/)) {
-
- var id = $('.std2 a').attr('href').split('?id=')[1];
-
- } else {
-
- // Get topic ID
- var id = document.location.href.split('?id=')[1];
- id = id.split('#')[0];
- id = id.split('&')[0];
- }
-
- var target = $(ele).next().attr('id');
-
- if(document.location.href.match(/cikkek/)) {
- eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);");
- } else {
- eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
- }
- }
- };*/
 
 var custom_blocks = {
 
@@ -3970,11 +3907,6 @@ function extInit() {
 			highlight_comments_for_me.activated();
 		}
 
-		// show menitoned comment
-		/*		if(dataStore['show_mentioned_comments'] == 'true') {
-		 show_mentioned_comments.activated();
-		 }*/
-
 		/*		// WYSIWYG Editor
 		 if(dataStore['wysiwyg_editor'] == 'true') {
 		 wysiwyg_editor.activated();
@@ -4134,11 +4066,6 @@ function extInit() {
 			if (dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 				highlight_comments_for_me.activated();
 			}
-
-			// show menitoned comment
-			/*			if(dataStore['show_mentioned_comments'] == 'true') {
-			 show_mentioned_comments.activated();
-			 }*/
 
 			// WYSIWYG Editor
 			/*			if(dataStore['wysiwyg_editor'] == 'true') {
