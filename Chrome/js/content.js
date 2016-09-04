@@ -674,6 +674,7 @@ var show_navigation_buttons = {
 		var ext_scrolltop = $('#ext_scrolltop');
 		var ext_back = $('#ext_back');
 		var ext_nav_faves = '';
+		var ext_nightmode = '';
 		var ext_search = '';
 		var ext_whitelist = '';
 
@@ -774,7 +775,7 @@ var show_navigation_buttons = {
 
 			lights.init();
 
-			var ext_nightmode = $('#ext_nightmode');
+			ext_nightmode = $('#ext_nightmode');
 		}
 
 		// Set the button positions
@@ -2007,14 +2008,14 @@ var fetch_new_comments_in_topic = {
 
 		// Get new comments counter
 		//var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
-		var newmsg = 1;
+		// var newmsg = 1;
 
 		// Update the newmsg
 		//var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
-		var new_comments = 1;
+		// var new_comments = 1;
 
-		// Update the last new msg number
-		fetch_new_comments_in_topic.last_new_msg = newmsg;
+		// Update the last new msg number = newmsg
+		fetch_new_comments_in_topic.last_new_msg = 1;
 
 		// Get the topik ID and URL
 		var id = $('#topicdata').data('tid');
@@ -2048,6 +2049,7 @@ var fetch_new_comments_in_topic = {
 				// $(comments.get().reverse()).each(function () {
 				// 	$(this).insertAfter($('.std1:first').parent());
 				// });
+				//noinspection JSCheckFunctionSignatures
 				$(comments).insertBefore( $('#ext_unreaded_hr') );
 
 				// Remove locked status

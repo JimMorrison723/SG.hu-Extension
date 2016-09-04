@@ -36,9 +36,9 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.2.4.7</p>';
-				html += '<p>Kiadás dátuma: 2016. 05. 09.</p>';
-				html += '<p>Fejlesztő: JimMorrison723, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
+				html += '<p>Verzió: 3.2.9</p>';
+				html += '<p>Kiadás dátuma: 2016. 09. 04.</p>';
+				html += '<p>Fejlesztő: JimMorrison723 <a href="http://jimmorrison723.hu" target="_blank">http://jimmorrison723.hu</a>, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
 			
