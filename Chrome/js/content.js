@@ -684,7 +684,8 @@ var show_navigation_buttons = {
 
 		var ext_scrolltop = $('#ext_scrolltop');
 		var ext_back = $('#ext_back');
-		var ext_nightmode = '';
+		var ext_search = $('#ext_search');
+		var ext_whitelist = $('#ext_whitelist');
 
 		// Add click event to scrolltop button
 		ext_scrolltop.on('click', function () {
@@ -708,13 +709,13 @@ var show_navigation_buttons = {
 			// Place search overlay arrow
 			$('<div id="ext_overlay_search_arrow"></div>').appendTo('body');
 
-			var ext_search = $('#ext_search');
+			ext_search = $('#ext_search');
 
 			// Place search icon background
 			ext_search.css('background-image', 'url(' + chrome.extension.getURL('/img/content/search.png') + ')');
 
 			// Create the search event
-			ext_search.click(function () {
+			ext_search.on('click', function () {
 				if ($('#ext_overlay_search').length) {
 					show_navigation_buttons.removeOverlay();
 				} else {
@@ -723,7 +724,8 @@ var show_navigation_buttons = {
 			});
 
 			// Get topic ID
-			var id = $('nav#breadcrumb select option:selected').val();
+			//var id = $('nav#breadcrumb select option:selected').val();
+			var id = $('form[name=newmessage]').find('input[name=cid]').val();
 
 			// Determining current status
 			var status, title = '';
@@ -740,7 +742,7 @@ var show_navigation_buttons = {
 			// Create the whitelist button
 			$('<div id="ext_whitelist" title="' + title + '">' + status + '</div>').prependTo('body');
 
-			var ext_whitelist = $('#ext_whitelist');
+			ext_whitelist = $('#ext_whitelist');
 
 			// Create whitelist event
 			ext_whitelist.click(function () {
@@ -794,7 +796,7 @@ var show_navigation_buttons = {
 			// Create the Bulp button
 			$('<div id="ext_nightmode"></div>').prependTo('body');
 
-			ext_nightmode = $('#ext_nightmode');
+			var ext_nightmode = $('#ext_nightmode');
 
 			//Set the proper Bulp button
 			ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
@@ -830,7 +832,6 @@ var show_navigation_buttons = {
 				port.postMessage({name: "setSetting", key: 'navigation_button_night_state', val: data});
 			});
 		}
-
 
 		// Set the button positions
 
@@ -920,7 +921,6 @@ var show_navigation_buttons = {
 	showSearch: function () {
 
 		var ext_search = $('#ext_search');
-		var ext_overlay_search = $('#ext_overlay_search');
 		var ext_overlay_search_arrow = $('#ext_overlay_search_arrow');
 
 		// Hide opened overlays
@@ -932,6 +932,8 @@ var show_navigation_buttons = {
 
 		// Add class
 		clone.attr('id', 'ext_overlay_search');
+
+		var ext_overlay_search = $('#ext_overlay_search');
 
 		// Set position
 		show_navigation_buttons.findArrowPosition(ext_overlay_search_arrow, ext_search);
@@ -1855,7 +1857,6 @@ var threaded_comments = {
 
 
 	prev: function (ele) {
-		//TODO: fix this
 		// Get the index value of the current element
 		var index = $(ele).index('.thread_prev');
 
@@ -1877,7 +1878,6 @@ var threaded_comments = {
 	},
 
 	next: function (ele) {
-		//TODO: fix this
 		var ext_new_comment = $('.ext_new_comment');
 
 		// Get the index value of the current element
@@ -1922,14 +1922,13 @@ var threaded_comments = {
 			$(this).appendTo( $('.header a:contains("#' + commentNum[0] + '"):last').closest('.post') );
 
 			// Set style settings
-			//TODO: set proper style
 			if (document.location.href.match(/cikkek/)) {
-				$(this).css({'margin-left': 0, 'padding-left': 30, 'border-left': '1px solid #ddd'});
-				$(this).find('.header').parent().css('width', 700 - $(this).parents('center').length * 30);
+				$(this).css({'margin-left': 0, 'padding-left': 15, 'border-left': '1px solid #ddd'});
+				$(this).css('width', 604 - $(this).parents('.post').length * 16);
 				$(this).find('.reply').hide();
 			} else {
-				$(this).css({'margin-left': 15, 'padding-left': 15, 'border-left': '1px solid #ddd'});
-				$(this).find('.header').parent().css('width', 810 - ($(this).parents('.post').length - 2) * 30);
+				$(this).css({'margin-left': 0, 'padding-left': 20, 'border-left': '1px solid #ddd'});
+				$(this).css('width', 930 - ($(this).parents('.post').length) * 21);
 				$(this).find('.reply').hide();
 			}
 
@@ -1977,7 +1976,6 @@ var fetch_new_comments_in_topic = {
 			var newMessage = $('span#newMessage');
 
 			// Get new comments counter
-			//TODO: j0nNyKa has to modify the script, so we know the exact numbers of new msg
 			//var newmsg = parseInt(newMessage.text().match(/\d+/g));
 
 			// newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false
@@ -2017,7 +2015,6 @@ var fetch_new_comments_in_topic = {
 			return false;
 		}
 
-		//TODO: j0nNyKa has to modify the script, so we know the exact numbers of new msg
 		// Get new comments counter
 		//var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
 		var newmsg = 1;

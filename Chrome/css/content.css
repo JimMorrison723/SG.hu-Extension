@@ -29,7 +29,7 @@
 
 #ext_show_filtered_faves_arrow {
 	width: 0px;
-    height: 0px; 	
+ /*   height: 0px;*/
 	display: block;
 }	
 
@@ -190,8 +190,8 @@
 
 #ext_overlay_search {
 	display: none;
-	width: 300px;
-	height: 40px;
+	width: 440px;
+	height: 22px;
 	padding: 10px !important;
 	position: fixed;
 	bottom: 119px;
@@ -205,8 +205,14 @@
 	z-index: 90;
 }
 
-#ext_overlay_search input:nth-child(1) {
-	width: 225px;
+#ext_overlay_search button {
+	background: transparent url(https://sg.hu/assets/img/images.png) -99px 0px no-repeat;
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 17px;
+	height: 18px;
+	border: 0 none;
 }
 
 #ext_overlay_search_arrow {
@@ -306,12 +312,6 @@
  	border-top-right-radius: 2px;
  	cursor: pointer;
 }
-
-#ext_show_filtered_faves_arrow {
-	width: 0px;
-    height: 0px; 	
-	display: block;
-}	
 
 #ext_nav_faves_wrapper #ext_show_filtered_faves_arrow.show {
 	margin: 5px 6px 5px 7px;
@@ -787,7 +787,6 @@ textarea[name="message"] {
 }
 
 .night_bottom, .night_bottom li {
-	background: url() !important;
 	background-color:rgb(20, 20, 20) !important;
 	color:#676767 !important;
 }
