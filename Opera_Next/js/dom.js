@@ -1,17 +1,17 @@
 $(document).ready(function() {
-	
-	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
+
+	if(document.location.href.match(/forum\/$/)) {
 
 		// Welcome block
-		$('.b-h-o-head:eq(0)').addClass('ext_welcome');
+		$('.user-hello').addClass('ext_welcome');
 
 		// Faves
-		$('.b-h-o-head:eq(2)').addClass('ext_faves');
-	
+		$('#sidebar-user-favorites').addClass('ext_faves');
+
 		// Left sidebar
-		$('table:eq(3) td:eq(0)').attr('id', 'ext_left_sidebar');
-	
-		// Right sidebar
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').attr('id', 'ext_right_sidebar');
+		$('#sidebar-forum').addClass('ext_left_sidebar');
+
+		// Right/center sidebar
+		$('#forum-wrap').addClass('ext_right_sidebar');
 	}
 });
