@@ -2093,15 +2093,16 @@ var custom_blocks = {
 
 		// Check localStorage for config
 		if (typeof dataStore['blocks_config'] == 'undefined' || dataStore['blocks_config'] == '') {
+			console.log('building...');
 			custom_blocks.buildConfig();
 		}
 
 		// Execute config
 		custom_blocks.executeConfig();
 
-
 		// Set overlays
 		if (dataStore['hide_blocks_buttons'] == 'false' || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
+			console.log('overlays...');
 			custom_blocks.setOverlay();
 		}
 
@@ -2118,10 +2119,10 @@ var custom_blocks = {
 		var counter = 1;
 
 		// Left side blocks
-		$('#ext_left_sidebar .b-h-o-head, #ext_right_sidebar .b-h-b-head').parent().each(function () {
+		$('.ext_left_sidebar > section, .ext_right_sidebar > div , .ext_right_sidebar > section').each(function () {
 
 			// Set the ID
-			$(this).attr('class', 'ext_block').attr('id', 'block-' + counter);
+			$(this).addClass('ext_block block-' + counter);
 
 			// Increase the counter
 			counter++;
@@ -2141,14 +2142,12 @@ var custom_blocks = {
 				id: $(this).attr('id'),
 				visibility: true,
 				contentHide: false,
-				side: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
+				side: $(this).parent('#sidebar-forum').length > 0 ? 'left' : 'right',
 				index: index
 			};
-
 			config.push(tmp);
 
 		});
-
 
 		// Store in localStorage
 		port.postMessage({name: "setBlocksConfig", message: JSON.stringify(config)});
@@ -2199,9 +2198,9 @@ var custom_blocks = {
 			var tmp = {
 
 				id: $(this).attr('id'),
-				visibility: custom_blocks.getConfigValByKey($(this).attr('id'), 'visibility'),
-				contentHide: custom_blocks.getConfigValByKey($(this).attr('id'), 'contentHide'),
-				side: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
+				visibility: custom_blocks.getConfigValByKey($(this).attr('class'), 'visibility'),
+				contentHide: custom_blocks.getConfigValByKey($(this).attr('class'), 'contentHide'),
+				side: $(this).parent('#sidebar-forum').length > 0 ? 'left' : 'right',
 				index: index
 			};
 
@@ -2209,19 +2208,19 @@ var custom_blocks = {
 
 		});
 
-
 		// Store in localStorage
 		port.postMessage({name: "setBlocksConfig", message: JSON.stringify(_config)});
 	},
 
 	executeConfig: function () {
 
+		console.log('execute....');
 		var ext_left_sidebar = $('#ext_left_sidebar');
 		var ext_right_sidebar = $('#ext_right_sidebar');
 
 		var config = JSON.parse(dataStore['blocks_config']);
 		config = config.reverse();
-
+		console.log(config);
 		for (var c = 0; c < config.length; c++) {
 
 			// Visibility
@@ -2237,26 +2236,26 @@ var custom_blocks = {
 			// Side and pos
 			if (config[c]['side'] == 'left') {
 
-				$('#' + config[c]['id']).prependTo('table:eq(3) td:eq(0)');
+				$('#' + config[c]['id']).prependTo('#sidebar-forum'); //table:eq(3) td:eq(0)
 
 			} else {
 
-				$('#' + config[c]['id']).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+				$('#' + config[c]['id']).prependTo('#forum-wrap'); //table:eq(3) td:eq(2) table:first tr > td:eq(2)
 			}
 		}
 
 		// Maintain style settings
-		ext_left_sidebar.find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
-		ext_left_sidebar.find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-		ext_left_sidebar.find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
-
-		// Maintain style settings
-		ext_right_sidebar.find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
-		ext_right_sidebar.find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		ext_right_sidebar.find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+		// ext_left_sidebar.find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+		// ext_left_sidebar.find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		// ext_left_sidebar.find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		//
+		// // Maintain style settings
+		// ext_right_sidebar.find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+		// ext_right_sidebar.find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+		// ext_right_sidebar.find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
 
 		// Fix welcome block for private messages
-		$('.ext_welcome:first').next().find('br').css('display', 'inline');
+		// $('.ext_welcome:first').next().find('br').css('display', 'inline');
 
 	},
 
@@ -2270,14 +2269,14 @@ var custom_blocks = {
 			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/minimalize.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
 				e.preventDefault();
-				custom_blocks.contentHide($(this).closest('div').attr('id'), true);
+				custom_blocks.contentHide($(this).closest('section').attr('id'), true);
 			});
 
 			// Hide
 			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/close.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
 				e.preventDefault();
-				custom_blocks.hide($(this).closest('div').attr('id'), true);
+				custom_blocks.hide($(this).closest('section').attr('id'), true);
 			});
 
 
@@ -2285,27 +2284,27 @@ var custom_blocks = {
 			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/down.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
-				custom_blocks.down($(this).closest('div').attr('id'), true);
+				custom_blocks.down($(this).closest('section').attr('id'), true);
 			});
 
 			// Up
 			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/up.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
-				custom_blocks.up($(this).closest('div').attr('id'), true);
+				custom_blocks.up($(this).closest('section').attr('id'), true);
 			});
 
 			// Right
 			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/right.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
-				custom_blocks.right($(this).closest('div').attr('id'), true);
+				custom_blocks.right($(this).closest('section').attr('id'), true);
 			});
 			// Left
 			//noinspection JSCheckFunctionSignatures
 			$('<img src="' + chrome.extension.getURL('/img/blocks/left.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
-				custom_blocks.left($(this).closest('div').attr('id'), true);
+				custom_blocks.left($(this).closest('section').attr('id'), true);
 			});
 
 		});
@@ -2362,9 +2361,9 @@ var custom_blocks = {
 			c_id.prependTo('#ext_left_sidebar');
 
 			// Maintain style settings
-			ext_left_sidebar.find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
-			ext_left_sidebar.find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-			ext_left_sidebar.find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+			// ext_left_sidebar.find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+			// ext_left_sidebar.find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+			// ext_left_sidebar.find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
 
 			// Store data in localStorage
 			custom_blocks.reindexOrderConfig();
@@ -2383,9 +2382,9 @@ var custom_blocks = {
 			c_id.prependTo('#ext_right_sidebar');
 
 			// Maintain style settings
-			ext_right_sidebar.find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
-			ext_right_sidebar.find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-			ext_right_sidebar.find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+			// ext_right_sidebar.find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+			// ext_right_sidebar.find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+			// ext_right_sidebar.find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
 
 			// Store data in localStorage
 			custom_blocks.reindexOrderConfig();

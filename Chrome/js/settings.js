@@ -66,7 +66,7 @@ var cp = {
 					html += '<p>A fórum főoldalon átalakított, átdizájnolt listákat láthatsz, mely jobban kiemeli többek között a kedvenceknél a fórumkategóriákat is.</p>';
 					html += '<div class="button" id="highlight_forum_categories"></div>';
 				html += '</div>';
-/*				html += '<div>';
+				html += '<div>';
 					html += '<h3>Blokkok átrendezése, rejtése</h3>';
 					html += '<p class="sub">';
 						html += '<label><input type="checkbox" id="hide_blocks_buttons"> Átrendező gombok elrejtése</label><br>';
@@ -74,7 +74,7 @@ var cp = {
 					html += '</p>';
 					html += '<p>A fórum főoldal oldalsávjain található blokkok tetszőleges átrendezése, rejtése.</p>';
 					html += '<div class="button" id="custom_blocks"></div>';
-				html += '</div>';*/
+				html += '</div>';
 				html += '<div>';
 					html += '<h3>Üzenetközpont (BÉTA)</h3>';
 					html += '<p>Saját üzenetek naplózása, azokra érkező válaszok nyomkövetése.</p>';
