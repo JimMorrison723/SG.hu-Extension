@@ -1967,10 +1967,9 @@ var fetch_new_comments_in_topic = {
 			}
 
 			// Get new comments counter
-			//var newmsg = parseInt(newMessage.text().match(/\d+/g));
+			var newmsg = parseInt(newMessage.text().match(/\d+/g));
 
-			// newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false
-			if (newMessage.length && fetch_new_comments_in_topic.locked === false) {
+			if (newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked === false) {
 
 				// Rewrite the notification url
 				fetch_new_comments_in_topic.rewrite();
@@ -2007,15 +2006,13 @@ var fetch_new_comments_in_topic = {
 		}
 
 		// Get new comments counter
-		//var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
-		// var newmsg = 1;
+		var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
 
 		// Update the newmsg
 		//var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
-		// var new_comments = 1;
 
 		// Update the last new msg number = newmsg
-		fetch_new_comments_in_topic.last_new_msg = 1;
+		fetch_new_comments_in_topic.last_new_msg = newmsg;
 
 		// Get the topik ID and URL
 		var id = $('#topicdata').data('tid');
@@ -2023,12 +2020,11 @@ var fetch_new_comments_in_topic = {
 		var hsz = $('.post:first').data('post-info').msg_unique + 1;
 		// var url = 'https://sg.hu/api/forum/message?topicId=' + id + '&unique=' + hsz;
 		var url = 'https://sg.hu/forum/uzenet/' + id + '/' + hsz;
-		console.log(url);
+
 		// Get topic contents
 		$.ajax({
 			url: url,
-			mimeType: 'text/html;charset=iso-8859-2',
-			contentType: "application/x-www-form-urlencoded;charset=ISO-8859-15",
+			contentType: 'text/html; charset=utf-8',
 			success: function (data) {
 
 				// Increase the counter
@@ -2046,11 +2042,7 @@ var fetch_new_comments_in_topic = {
 				// Fetch new comments
 				var comments = $(tmp).find('.post');
 				// Append new comments
-				// $(comments.get().reverse()).each(function () {
-				// 	$(this).insertAfter($('.std1:first').parent());
-				// });
-				//noinspection JSCheckFunctionSignatures
-				$(comments).insertBefore( $('#ext_unreaded_hr') );
+				$('#forum-posts-list').find('ul').prepend( comments );
 
 				// Remove locked status
 				fetch_new_comments_in_topic.locked = false;

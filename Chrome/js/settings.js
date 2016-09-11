@@ -220,28 +220,28 @@ var cp = {
 						html += 'Ha publikus számítógépeken is használod a bővítményt, ';
 						html += 'válassz egyedi jelszót, amit máshol nem használsz!';
 					html += '</p>';
-					html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/signup/" method="post">';
-						html += '<input type="text" name="nick" placeholder="Felhasználónév">';
-						html += '<input type="password" name="pass" placeholder="Jelszó">';
-						html += '<button type="submit">Regisztráció</button>';
-					html += '</form>';
+					// html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/signup/" method="post">';
+					// 	html += '<input type="text" name="nick" placeholder="Felhasználónév">';
+					// 	html += '<input type="password" name="pass" placeholder="Jelszó">';
+					// 	html += '<button type="submit">Regisztráció</button>';
+					// html += '</form>';
 				html += '</div>';
 				
 				html += '<div class="login">';
 					html += '<h3>Belépés</h3>';
-					html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/auth/" method="post">';
-						html += '<input type="text" name="nick" placeholder="Felhasználónév">';
-						html += '<input type="password" name="pass" placeholder="Jelszó">';
-						html += '<button type="submit">Belépés</button>';
-						
-						html += '<div class="status">';
-							if(dataStore['sync_auth_key'] != '') {
-							html += '<div class="loggedin">&#10003;</div>';
-							html += '<strong>Belépve mint: </strong>';
-							html += '<span>'+dataStore['sync_nick']+'</span>';
-							}
-						html += '</div>';
-					html += '</form>';
+					// html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/auth/" method="post">';
+					// 	html += '<input type="text" name="nick" placeholder="Felhasználónév">';
+					// 	html += '<input type="password" name="pass" placeholder="Jelszó">';
+					// 	html += '<button type="submit">Belépés</button>';
+					//
+					// 	html += '<div class="status">';
+					// 		if(dataStore['sync_auth_key'] != '') {
+					// 		html += '<div class="loggedin">&#10003;</div>';
+					// 		html += '<strong>Belépve mint: </strong>';
+					// 		html += '<span>'+dataStore['sync_nick']+'</span>';
+					// 		}
+					// 	html += '</div>';
+					// html += '</form>';
 				html += '</div>';
 				
 				html += '<div class="log">';
@@ -357,7 +357,7 @@ var cp = {
 		profiles_cp.init();
 
 		// Init sync settings
-		sync_cp.init();
+		//sync_cp.init();
 
 		// Init log
 		log.init();
@@ -555,7 +555,7 @@ var settings = {
 	
 			// Sync new settings
 			if(dataStore['sync_auth_key'] != '') {
-				sync_cp.save('Settings Panel');
+				//sync_cp.save('Settings Panel');
 			}
 			
 			// Check for interactive action
@@ -573,7 +573,7 @@ var settings = {
 
 			// Sync new settings
 			if(dataStore['sync_auth_key'] != '') {
-				sync_cp.save('Settings Panel');
+				//sync_cp.save('Settings Panel');
 			}
 
 			// Check for interactive action
@@ -593,7 +593,7 @@ var settings = {
 
 		// Sync new settings
 		if(dataStore['sync_auth_key'] != '') {
-			sync_cp.save('Settings Panel');
+			//sync_cp.save('Settings Panel');
 		}
 
 		// Update in localStorage
@@ -737,7 +737,7 @@ var profiles_cp = {
 		dataStore['profiles'] = JSON.stringify(data);
 		
 		// Save new settings in sync
-		sync_cp.save('Settings Panel');
+		//sync_cp.save('Settings Panel');
 
 		// Saved indicator
 		$('<p class="profile_status">&#10003;</p>').insertAfter( $('.settings_page .profile_save') );
@@ -750,62 +750,62 @@ var profiles_cp = {
 };
 
 var sync_cp = {
-	
+
 	init : function() {
-		
+
 		// Signup
 		$('.settings_page.sync .signup form').submit(function(e) {
-			
+
 			// Prevent borwsers default submisson
 			e.preventDefault();
-			
+
 			// POST the data
 			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				sync_cp.signup(data);
+				//sync_cp.signup(data);
 			});
-		
+
 		});
-		
+
 		// Login
 		$('.settings_page.sync .login form').submit(function(e) {
-		
+
 			// Prevent browsers default submission
 			e.preventDefault();
 
 			// POST the data
 			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				sync_cp.login(data);
+				//sync_cp.login(data);
 			});
 		});
-		
+
 		// Sync now button
 		$('.settings_page.sync .log button.sync').click(function(e) {
 
 			// Prevent browsers default submission
 			e.preventDefault();
-			
-			// Get settings 
-			sync_cp.get();
+
+			// Get settings
+			//sync_cp.get();
 		});
-		
+
 		// Ping for settings chances
-		setTimeout(function() {
-			sync_cp.ping();
-		}, 10000);
+		//setTimeout(function() {
+			//sync_cp.ping();
+		//}, 10000);
 	},
-	
+
 	signup : function(data) {
-		
+
 		// Show the message
 		alert(data.messages[0]);
-		
+
 		// On success
 		if(data.errorCount == 0) {
-			
+
 			// Get the values
 			var signup_nick = $('.settings_page.sync .signup input[name="nick"]');
 			var signup_pass = $('.settings_page.sync .signup input[name="pass"]');
-			
+
 			// Store login credentials in localStorage
 			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });
 			port.postMessage({ name : "setSetting", key : 'sync_nick', val : signup_nick.val() });
@@ -816,68 +816,68 @@ var sync_cp = {
 
 			// Empty status div
 			$('.settings_page.sync .login .status').html('');
-			
+
 			// HTML to insert
 			html  = '<div class="loggedin">&#10003;</div>';
 			html += '<strong>Belépve mint: </strong>';
 			html += '<span>'+signup_nick.val()+'</span>';
-			
+
 			// Insert new status
 			$('.settings_page.sync .login .status').html(html);
 
 			// Empty signup fields
 			signup_nick.val('');
 			signup_pass.val('');
-			
+
 			// Upload the config data after the signup process
 			sync_cp.save('Sync Signup');
 		}
 	},
-	
+
 	login : function(data) {
-				
+
 		// Show error message if any
 		if(data.errorCount > 0) {
-					
+
 			// Clear HTML from previous tries
 			$('.settings_page.sync .login .status').html('');
-					
+
 			// HTML to append
 			html = '<div class="loggedin error">X</div>';
 			html += '<strong>Hiba: </strong>';
 			html += '<span>'+data.messages[0]+'</span>';
-					
+
 			$(html).appendTo($('.settings_page.sync .login .status'));
-				
+
 		// Success
 		} else {
-			
+
 			// Get the nick
 			var login_nick = $('.settings_page.sync .login input[name="nick"]');
-			
+
 			// Clear HTML from previous tries
 			$('.settings_page.sync .login .status').html('');
-	
+
 			html = '<div class="loggedin">&#10003;</div>';
 			html += '<strong>Belépve mint: </strong>';
 			html += '<span>'+login_nick.val()+'</span>';
-			
+
 			$(html).appendTo($('.settings_page.sync .login .status'));
 
 			// Store login credentials in localStorage
 			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });
 			port.postMessage({ name : "setSetting", key : 'sync_nick', val : login_nick.val() });
-			
+
 			// Store login credentials in dataStore
 			dataStore['sync_nick'] = login_nick.val();
 			dataStore['sync_auth_key'] = data['auth_key'];
-			
+
 			// Download the config
 			sync_cp.get();
 		}
 	},
-	
-	
+
+
 	ping : function() {
 
 		// Exit when the user is not authenticated
@@ -887,19 +887,19 @@ var sync_cp = {
 
 		// Get current timestamp
 		var time = Math.round(new Date().getTime() / 1000)
-		
+
 		if(dataStore['sync_last_sync'] < time - 60*10) {
-		
+
 			// Log the request
 			log.add('Pinging sgsync.dev.kreatura.hu\r\n');
-	
+
 			$.getJSON('http://sgsync.dev.kreatura.hu/api_v2/ping/', { auth_key : dataStore['sync_auth_key'] }, function(data) {
-				
+
 				// Update the latest data from sync
 				if(data.date_m > dataStore['sync_last_sync']) {
 					sync_cp.get();
-				
-				// There is no updates, 
+
+				// There is no updates,
 				// Update the last checked date
 				} else {
 
@@ -912,8 +912,8 @@ var sync_cp = {
 			});
 		}
 	},
-	
-	
+
+
 	save : function(origin) {
 
 		// Log the request
@@ -921,25 +921,25 @@ var sync_cp = {
 
 		// Make the request
 		$.post( 'http://sgsync.dev.kreatura.hu/api_v2/set/', { auth_key : dataStore['sync_auth_key'], data : JSON.stringify(dataStore) }, function() {
-		
+
 			// Log the request
-			log.add('Client data was sent successfully\r\n');		
+			log.add('Client data was sent successfully\r\n');
 		});
 	},
-	
-	
+
+
 	get : function() {
 
 		// Log the request
 		log.add('Initiating sync (DOWN) to get changes');
 
 		$.getJSON('http://sgsync.dev.kreatura.hu/api_v2/get/', { auth_key : dataStore['sync_auth_key'] }, function(data) {
-		
+
 			if(data.errorCount > 0) {
-			
+
 				// Log the request
 				log.add('Sync failed, authentication error\r\n');
-				
+
 				// Show the error message
 			    alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
 			    return;
@@ -953,10 +953,10 @@ var sync_cp = {
 
 			// Update the last sync time
 			port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
-			
+
 			// Update data in dataStore object
 			config = JSON.parse(data['settings']);
-			
+
 			// Update settings in localStorage
 			for (var key in config) {
 
@@ -964,7 +964,7 @@ var sync_cp = {
 				if(key.match('sync') || key.match('debugger')) {
 					continue;
 				}
-				
+
 				// Store in localStorage
 				port.postMessage({ name : "setSetting", key : key, val : config[key] });
 
@@ -980,7 +980,7 @@ var sync_cp = {
 			settings.restore();
 			blocklist_cp.list();
 			profiles_cp.rebuildProfiles();
-			
+
 			// Update last sync date
 			var month = date('M', time);
 
@@ -998,11 +998,11 @@ var sync_cp = {
 				['Oct', 'október'],
 				['Nov', 'november'],
 				['Dec', 'december'],
-			
+
 			], function(index, item) {
 				month = month.replace(item[0], item[1]);
-			});						
-			
+			});
+
 			// Update last sync date
 			$('.settings_page.sync .log .last_sync').html(''+month+' '+date('d. -  H:i', time)+'');
 
@@ -1010,10 +1010,10 @@ var sync_cp = {
 			html = '<div class="status">';
 			html += '<div class="loggedin">&#10003;</div>';
 			html += '</div>';
-			
+
 			// Insert HTML
 			$(html).insertAfter( $('.settings_page.sync .log button') );
-			
+
 			// Remove the idicator in 2 sec
 			setTimeout(function() {
 				$('.settings_page.sync .log .status').remove();
