@@ -1,1 +1,9 @@
 .idea
+node_modules
+
+dist/Chrome
+dist/Firefox
+dist/Opera
+
+dist/chrome.zip
+dist/firefox.zip
