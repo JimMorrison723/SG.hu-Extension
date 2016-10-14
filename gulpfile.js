@@ -9,7 +9,6 @@ var del = require('del');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var replace = require('gulp-replace');
-var argv = require('yargs').argv;
 var pjson = require('./package.json');
 const zip = require('gulp-zip');
 
@@ -37,7 +36,7 @@ gulp.task('preBuild', ['hello', 'clean:dist:common', 'moveThenConcat'], function
     return gulp.start('clean:dist:lib');
 });
 
-gulp.task('build', function (callback) {
+gulp.task('buildFull', function (callback) {
     return runSequence('preBuild', ['chrome', 'opera', 'firefox'], 'clean:dist', callback);
 });
 
@@ -47,9 +46,6 @@ gulp.task('moveThenConcat', ['concat'] ,function () {
 });
 
 gulp.task('concat', ['move'] ,function () {
-    gulp.src(['./dist/common/js/libs/jquery.js', './dist/common/js/libs/json.js', './dist/common/js/libs/date.js', './dist/common/js/libs/cleditor.js'])
-        .pipe(concat('libs.js'))
-        .pipe(gulp.dest('./dist/common/js/'));
     return gulp.src('./dist/common/css/*.css')
         .pipe(concat('all.css'))
         .pipe(gulp.dest('./dist/common/css/'));
@@ -57,7 +53,9 @@ gulp.task('concat', ['move'] ,function () {
 
 gulp.task('move', function () {
     return gulp.src(filesToMove, {base: './src/'})
-
+        .pipe(gulpIf('js/libs/*.js', uglify({
+            preserveComments: 'license'
+        })))
         .pipe(gulpIf('*.js', replace(/\$build:version/g, pjson.version)))
         .pipe(gulpIf('*.json', replace(/\$build:version/g, pjson.version)))
         .pipe(gulp.dest('dist/common'));
@@ -73,7 +71,7 @@ gulp.task('watch', function(){
 /* BUILD FOR BROWSERS */
 
 gulp.task('chrome', function () {
-    del.sync('dist/Chrome/');
+    // del.sync('dist/Chrome/');
     gulp.src(commonFilesToMove, {base: './dist/common/'})
         .pipe(gulp.dest('dist/Chrome'));
 
@@ -83,7 +81,7 @@ gulp.task('chrome', function () {
 });
 
 gulp.task('opera', function () {
-    del.sync('dist/Opera/');
+    // del.sync('dist/Opera/');
     gulp.src(commonFilesToMove, {base: './dist/common/'})
         .pipe(gulp.dest('dist/Opera'));
 
@@ -93,7 +91,7 @@ gulp.task('opera', function () {
 });
 
 gulp.task('firefox', function () {
-    del.sync('dist/Firefox/');
+    // del.sync('dist/Firefox/');
     gulp.src(commonFilesToMove, {base: './dist/common/'})
         .pipe(gulpIf('*.js', replace(/chrome\.extension/g, 'chrome.runtime')))
         .pipe(gulp.dest('dist/Firefox'));
@@ -126,12 +124,11 @@ gulp.task('clean:dist:common', function () {
 });
 
 gulp.task('clean:dist:lib', function () {
-    del.sync(['dist/common/css/cleditor.css','dist/common/css/content.css','dist/common/css/settings.css']);
-    return del.sync('dist/common/js/libs/');
+    return del.sync(['dist/common/css/cleditor.css','dist/common/css/content.css','dist/common/css/settings.css']);
 });
 
 gulp.task('hello', function () {
     console.log('Building source to /dist/common folder...');
     // /"version": "(.*)"/
-    return console.log(pjson.version);
+    return console.log("Version: " + pjson.version);
 });

@@ -1,8 +1,8 @@
 {
+  "title": "SG.hu Tuning",
   "name": "sghu-extension",
-  "version": "3.2.9.1",
+  "version": "3.3",
   "description": "Az sg.hu nem hivatalos bővítménye.",
-  "main": "manifest.json",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

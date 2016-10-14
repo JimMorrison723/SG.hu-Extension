@@ -36,8 +36,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.2.9.1</p>';
-				html += '<p>Kiadás dátuma: 2016. 09. 04.</p>';
+				html += '<p>Verzió: 3.3</p>';
+				html += '<p>Kiadás dátuma: 2016. 10. 14.</p>';
 				html += '<p>Fejlesztő: JimMorrison723 <a href="http://jimmorrison723.hu" target="_blank">http://jimmorrison723.hu</a>, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -266,7 +266,7 @@ var cp = {
 							['Sep', 'szeptember'],
 							['Oct', 'október'],
 							['Nov', 'november'],
-							['Dec', 'december'],
+							['Dec', 'december']
 			
 						], function(index, item) {
 							month = month.replace(item[0], item[1]);
@@ -293,7 +293,7 @@ var cp = {
 				}
 				
 				html += '</textarea>';
-				html += '<button>Clear</button>';
+				html += '<button>Törlés</button>';
 			html += '</div>';
 
 		html += '</div>';
@@ -303,10 +303,10 @@ var cp = {
 		$(html).appendTo('body');
 		
 		// Set header list backgrounds
-		$('#ext_settings_header li').css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/icons.png')+')' });
+		$('#ext_settings_header').find('li').css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/icons.png')+')' });
 		
 		// Create tabs event
-		$('#ext_settings_header li').click(function() {
+		$('#ext_settings_header').find('li').click(function() {
 			
 			cp.tab( $(this).index() );
 		});
@@ -429,10 +429,10 @@ var cp = {
 		});
 		
 		// Remove all selected background in the header
-		$('#ext_settings_header li').removeClass('on');
+		$('#ext_settings_header').find('li').removeClass('on');
 		
 		// Add selected background to the selectad tab button
-		$('#ext_settings_header li').eq(index).addClass('on');
+		$('#ext_settings_header').find('li').eq(index).addClass('on');
 	},
 	
 	button : function(ele) {
@@ -461,7 +461,7 @@ var blocklist_cp =  {
 		blocklist_cp.list();
 		
 		// Create remove events
-		$('#ext_blocklist a').live('click', function(e) {
+		$('#ext_blocklist').find('a').on('click', function(e) {
 			e.preventDefault();
 			blocklist_cp.remove(this);
 		})
@@ -502,7 +502,7 @@ var blocklist_cp =  {
 		port.postMessage({ name : "removeUserFromBlocklist", message : user });
 		
 		// Add default message to the list if it is now empty
-		if($('#ext_blocklist li').length == 0) {
+		if($('#ext_blocklist').find('li').length == 0) {
 			$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
 		}
 		
@@ -613,12 +613,12 @@ var profiles_cp = {
 		});
 		
 		// Color select
-		$('.settings_page .profiles li ul li').live('click', function() {
+		$('.settings_page .profiles li ul li').on('click', function() {
 			profiles_cp.changeColor(this);
 		});
 
 		// Remove a group
-		$('.settings_page .profiles li .remove').live('click', function() {
+		$('.settings_page .profiles li .remove').on('click', function() {
 			profiles_cp.removeGroup(this);
 		});
 		
@@ -707,7 +707,7 @@ var profiles_cp = {
 	save : function() {
 		
 		// Var to store data
-		var data = new Array();
+		var data = [];
 		
 		// Iterate over the groups
 		$('.settings_page .profiles > li:not(.sample)').each(function(index) {
@@ -886,7 +886,7 @@ var sync_cp = {
 		}
 
 		// Get current timestamp
-		var time = Math.round(new Date().getTime() / 1000)
+		var time = Math.round(new Date().getTime() / 1000);
 
 		if(dataStore['sync_last_sync'] < time - 60*10) {
 
@@ -997,7 +997,7 @@ var sync_cp = {
 				['Sep', 'szeptember'],
 				['Oct', 'október'],
 				['Nov', 'november'],
-				['Dec', 'december'],
+				['Dec', 'december']
 
 			], function(index, item) {
 				month = month.replace(item[0], item[1]);
@@ -1088,9 +1088,8 @@ var log = {
 		port.postMessage({ name : "setSetting", key : 'debugger_messages', val : JSON.stringify(messages) });
 
 		// Update the GUI
-		var html = $('.settings_page.debugger textarea').html();
-			
-		$('.settings_page.debugger textarea').html( html + message + "\r\n" );
+		var textarea = $('.settings_page.debugger textarea').html();
+		textarea.html( textarea + message + "\r\n" );
 	},
 	
 	clear : function() {

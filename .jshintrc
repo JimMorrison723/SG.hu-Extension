@@ -22,6 +22,8 @@
 	"white": true,
 	"predef":
 	[
-		"jQuery"
+		"jQuery",
+		"chrome",
+		"$"
 	]
 }

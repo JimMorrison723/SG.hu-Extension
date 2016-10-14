@@ -1,6 +1,6 @@
 // Predefined vars
 //noinspection JSDuplicatedDeclaration
-var userName, isLoggedIn, dataStore;
+var userName, dataStore;
 
 //noinspection JSUnresolvedFunction
 var port = chrome.extension.connect();
@@ -19,15 +19,6 @@ function convertBool(string) {
 	}
 }
 
-function setPredefinedVars() {
-
-	var loggedIn = isLoggedIn();
-
-	if (loggedIn) {
-		userName = getUserName();
-	}
-}
-
 //noinspection JSDuplicatedDeclaration
 function isLoggedIn() {
 
@@ -43,7 +34,6 @@ function isLoggedIn() {
 	} else if (document.location.href.match(/forum\/tema/)) {
 		return $('#comments-login').length;
 	}
-
 }
 
 function getUserName() {
@@ -59,6 +49,15 @@ function getUserName() {
 		// Topic page
 	} else if (document.location.href.match(/forum\/tema/)) {
 		return $('#comments-login').find('span').text();
+	}
+}
+
+function setPredefinedVars() {
+
+	var loggedIn = isLoggedIn();
+
+	if (loggedIn) {
+		userName = getUserName();
 	}
 }
 
@@ -103,7 +102,7 @@ var jump_unreaded_messages = {
 				//$(this).attr('href', $(this).attr('href') + '#last-read');
 
 				// Remove newmsg var from link
-			} else if ($(this).attr('href').indexOf('&order') != -1) {
+			} else if ($(this).attr('href').indexOf('&order') !== -1) {
 
 				var start = $(this).attr('href').indexOf('&order');
 
@@ -116,7 +115,7 @@ var jump_unreaded_messages = {
 
 		$('#favorites-list').find('a').each(function () {
 
-			if ($(this).attr('href').indexOf('&order') != -1) {
+			if ($(this).attr('href').indexOf('&order') !== -1) {
 
 				var start = $(this).attr('href').indexOf('&order');
 
@@ -130,7 +129,7 @@ var jump_unreaded_messages = {
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
 		// Return if there is not comment counter set
-		if (typeof newMsg == "undefined" || newMsg === '' || newMsg === 0) {
+		if (typeof newMsg === "undefined" || newMsg === '' || newMsg === 0) {
 			return false;
 		}
 
@@ -242,7 +241,7 @@ var fav_show_only_unreaded = {
 		var unreaded_length = fav_list.find('a[class^="category-"][class*="fav-not-new-msg"]').length;
 
 		//Fix
-		if (typeof unreaded_length == 'undefined') {
+		if (typeof unreaded_length === 'undefined') {
 			unreaded_length = 0;
 		}
 
@@ -302,7 +301,7 @@ var fav_show_only_unreaded = {
 		});
 
 		// Create an error message if theres no topik with unreaded messages
-		if (Alllength == unreaded_length && ext_filtered_error.length === 0) {
+		if (Alllength === unreaded_length && ext_filtered_error.length === 0) {
 			ext_faves.after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 
@@ -376,7 +375,7 @@ var blocklist = {
 	hidemessages: function () {
 
 		// Return false if theres no blocklist entry
-		if (typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] === '') {
+		if (typeof dataStore['block_list'] === "undefined" || dataStore['block_list'] === '') {
 			return false;
 		}
 
@@ -390,17 +389,17 @@ var blocklist = {
 
 			} else {
 
-				if ($(this).find('a img').length == 1) {
+				if ($(this).find('a img').length === 1) {
 					nick = $(this).find('a img').attr('alt');
 				} else {
-					nick = $(this).find('a')[0].innerHTML;
+					nick = $(this).find('a')[0];
 				}
 
 				nick = nick.replace(/ - VIP/, "");
 			}
 
 			for (var i = 0; i < deletelist.length; i++) {
-				if (nick.toLowerCase() == deletelist[i].toLowerCase()) {
+				if (nick.toLowerCase() === deletelist[i].toLowerCase()) {
 					$(this).closest('li.forum-post').hide();
 				}
 			}
@@ -452,11 +451,11 @@ var blocklist = {
 				nick = $(this).find('a:first').html();
 			} else {
 
-				nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
+				nick = ($(this).find("a img").length === 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0];
 				nick = nick.replace(/ - VIP/, "");
 			}
 
-			if (nick.toLowerCase() == user.toLowerCase()) {
+			if (nick.toLowerCase() === user.toLowerCase()) {
 
 				// Show temporary the comment height
 				$(this).closest('li.forum-post').css({display: 'block', height: 'auto'});
@@ -587,7 +586,7 @@ var autoload_next_page = {
 		$.get(url, function (data) {
 
 			// Create the 'next page' indicator
-			if (dataStore['threaded_comments'] != 'true') {
+			if (dataStore['threaded_comments'] !== 'true') {
 				if (document.location.href.match(/cikkek/)) {
 					$('<div class="ext_autopager_idicator">' + (autoload_next_page.currPage + 1) + '. oldal</div>').insertAfter('.std2:last');
 				} else {
@@ -630,12 +629,12 @@ var autoload_next_page = {
 			add_to_list.init();
 
 			// threaded comments
-			if (dataStore['threaded_comments'] == 'true') {
+			if (dataStore['threaded_comments'] === 'true') {
 				threaded_comments.sort();
 			}
 
 			// highlight_comments_for_me
-			if (dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+			if (dataStore['highlight_comments_for_me'] === 'true' && isLoggedIn()) {
 				highlight_comments_for_me.activated();
 			}
 
@@ -644,16 +643,16 @@ var autoload_next_page = {
 				profiles.init();
 			}
 
-			if (dataStore['columnify_comments'] == 'true') {
+			if (dataStore['columnify_comments'] === 'true') {
 				columnify_comments.activated();
 			}
 
-			if (dataStore['quick_user_info'] == 'true') {
+			if (dataStore['quick_user_info'] === 'true') {
 				quick_user_info.activated();
 			}
 
 			//Night mode
-			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+			if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
 				lights.forum_switchOn();
 			}
 		});
@@ -722,7 +721,7 @@ var show_navigation_buttons = {
 			var status, title = '';
 			var whitelist = dataStore['topic_whitelist'].split(',');
 
-			if (whitelist.indexOf(id) == -1) {
+			if (whitelist.indexOf(id) === -1) {
 				status = '+';
 				title = 'Téma hozzáadása a fehérlistához';
 			} else {
@@ -762,7 +761,7 @@ var show_navigation_buttons = {
 
 			// Create faves button event
 			ext_nav_faves.click(function () {
-				if ($('#ext_nav_faves_wrapper').css('display') == 'none') {
+				if ($('#ext_nav_faves_wrapper').css('display') === 'none') {
 					show_navigation_buttons.showFaves();
 				} else {
 					show_navigation_buttons.removeOverlay();
@@ -771,7 +770,7 @@ var show_navigation_buttons = {
 		}
 
 		//Night mode
-		if (dataStore['show_navigation_buttons_night'] == 'true') {
+		if (dataStore['show_navigation_buttons_night'] === 'true') {
 
 			lights.init();
 
@@ -821,32 +820,32 @@ var show_navigation_buttons = {
 		// Iterate over the buttons
 		for (var c = 0; c < buttons.length; c++) {
 
-			if (dataStore['navigation_buttons_position'] == 'lefttop') {
+			if (dataStore['navigation_buttons_position'] === 'lefttop') {
 
 				$('#' + buttons[c]).css({left: 10, right: 'auto', top: 30 + (36 * c), bottom: 'auto'});
 			}
 
-			if (dataStore['navigation_buttons_position'] == 'leftcenter') {
+			if (dataStore['navigation_buttons_position'] === 'leftcenter') {
 
 				$('#' + buttons[c]).css({left: 10, right: 'auto', top: top + (36 * c), bottom: 'auto'});
 			}
 
-			if (dataStore['navigation_buttons_position'] == 'leftbottom') {
+			if (dataStore['navigation_buttons_position'] === 'leftbottom') {
 
 				$('#' + buttons[c]).css({left: 10, right: 'auto', bottom: 30 + (36 * c), top: 'auto'});
 			}
 
-			if (dataStore['navigation_buttons_position'] == 'righttop') {
+			if (dataStore['navigation_buttons_position'] === 'righttop') {
 
 				$('#' + buttons[c]).css({right: 10, left: 'auto', top: 50 + (36 * c), bottom: 'auto'});
 			}
 
-			if (dataStore['navigation_buttons_position'] == 'rightcenter') {
+			if (dataStore['navigation_buttons_position'] === 'rightcenter') {
 
 				$('#' + buttons[c]).css({right: 10, left: 'auto', top: top + (36 * c), bottom: 'auto'});
 			}
 
-			if (dataStore['navigation_buttons_position'] == 'rightbottom') {
+			if (dataStore['navigation_buttons_position'] === 'rightbottom') {
 
 				$('#' + buttons[c]).css({right: 10, left: 'auto', bottom: 30 + (36 * c), top: 'auto'});
 			}
@@ -901,7 +900,7 @@ var show_navigation_buttons = {
 		ext_nav_faves_wrapper.find('.ext_nav_fave_list').load(url + ' nav#favorites-list', function () {
 
 			// Write data into wrapper
-			if (dataStore['jump_unreaded_messages'] == 'true') {
+			if (dataStore['jump_unreaded_messages'] === 'true') {
 				jump_unreaded_messages.activated();
 			}
 
@@ -909,7 +908,7 @@ var show_navigation_buttons = {
 			fav_show_only_unreaded.activated();
 
 			// Faves: short comment marker
-			if (dataStore['short_comment_marker'] == 'true') {
+			if (dataStore['short_comment_marker'] === 'true') {
 				short_comment_marker.activated();
 			}
 
@@ -936,7 +935,7 @@ var show_navigation_buttons = {
 		 // Write data into wrapper
 		 $('#ext_nav_faves_wrapper .ext_nav_fave_list').html(data);
 
-		 if(dataStore['jump_unreaded_messages'] == 'true') {
+		 if(dataStore['jump_unreaded_messages'] === 'true') {
 		 jump_unreaded_messages.activated();
 		 }
 
@@ -1020,42 +1019,42 @@ var show_navigation_buttons = {
 	findPosition: function (ele, target) {
 
 		var top, bottom;
-		if (dataStore['navigation_buttons_position'] == 'lefttop') {
+		if (dataStore['navigation_buttons_position'] === 'lefttop') {
 
 			top = parseInt($(target).css('top').replace('px', '')) - 15;
 
 			$(ele).css({left: 50, right: 'auto', top: top, bottom: 'auto'});
 		}
 
-		if (dataStore['navigation_buttons_position'] == 'leftcenter') {
+		if (dataStore['navigation_buttons_position'] === 'leftcenter') {
 
 			top = parseInt($(target).css('top').replace('px', '')) + $(target).height() / 2 - $(ele).outerHeight() / 2;
 
 			$(ele).css({left: 50, right: 'auto', top: top, bottom: 'auto'});
 		}
 
-		if (dataStore['navigation_buttons_position'] == 'leftbottom') {
+		if (dataStore['navigation_buttons_position'] === 'leftbottom') {
 
 			bottom = parseInt($(target).css('bottom').replace('px', '')) - 15;
 
 			$(ele).css({left: 50, right: 'auto', top: 'auto', bottom: bottom});
 		}
 
-		if (dataStore['navigation_buttons_position'] == 'righttop') {
+		if (dataStore['navigation_buttons_position'] === 'righttop') {
 
 			top = parseInt($(target).css('top').replace('px', '')) - 15;
 
 			$(ele).css({left: 'auto', right: 50, top: top, bottom: 'auto'});
 		}
 
-		if (dataStore['navigation_buttons_position'] == 'rightcenter') {
+		if (dataStore['navigation_buttons_position'] === 'rightcenter') {
 
 			top = parseInt($(target).css('top').replace('px', '')) + $(target).height() / 2 - $(ele).outerHeight() / 2;
 
 			$(ele).css({left: 'auto', right: 50, top: top, bottom: 'auto'});
 		}
 
-		if (dataStore['navigation_buttons_position'] == 'rightbottom') {
+		if (dataStore['navigation_buttons_position'] === 'rightbottom') {
 
 			bottom = parseInt($(target).css('bottom').replace('px', '')) - 15;
 
@@ -1096,7 +1095,7 @@ var lights = {
 
 		var state = dataStore['navigation_button_night_state'];
 
-		if (state == "true") {
+		if (state === "true") {
 			state = "On";
 			lights.topic_switchOn();
 		}
@@ -1202,7 +1201,7 @@ var update_fave_list = {
 		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_refresh_faves" style="display: inline-block;"></div>]</span>'); // ha lesz blokkok átrendezése, akkor #ext_left_sidebar után már nem kell inline style
 
 		// Move the button away if unreaded faves is on
-		if (dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn()) {
+		if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
 			refresh_faves.css('right', 18);
 		}
 
@@ -1244,27 +1243,27 @@ var update_fave_list = {
 			/*$('.ext_faves:first').next().html(data);*/
 
 			// Faves: show only with unreaded messages
-			if (dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn()) {
+			if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
 				fav_show_only_unreaded.activated();
 			}
 
 			// Faves: short comment marker
-			if (dataStore['short_comment_marker'] == 'true' && isLoggedIn()) {
+			if (dataStore['short_comment_marker'] === 'true' && isLoggedIn()) {
 				short_comment_marker.activated();
 			}
 
 			// Custom list styles
-			if (dataStore['highlight_forum_categories'] == 'true') {
+			if (dataStore['highlight_forum_categories'] === 'true') {
 				highlight_forum_categories.activated();
 			}
 
 			// Jump the last unreaded message
-			if (dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn()) {
+			if (dataStore['jump_unreaded_messages'] === 'true' && isLoggedIn()) {
 				jump_unreaded_messages.activated();
 			}
 
 			//Night mode
-			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+			if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
 				lights.forum_switchOn();
 			}
 		});
@@ -1282,7 +1281,7 @@ var make_read_all_faves = {
 
 		var read_faves = $('#ext_read_faves');
 		// Move the button away if unreaded faves is on
-		if (dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn()) {
+		if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
 			read_faves.css('right', 36);
 		}
 
@@ -1346,7 +1345,7 @@ var make_read_all_faves = {
 					$(ele).find('span.new').remove();
 					$(ele).find('.ext_short_comment_marker').remove();
 
-					if (dataStore['fav_show_only_unreaded'] == 'true' && fav_show_only_unreaded.opened == false) {
+					if (dataStore['fav_show_only_unreaded'] === 'true' && fav_show_only_unreaded.opened === false) {
 						$(ele).parent().addClass('ext_hidden_fave');
 					}
 
@@ -1356,7 +1355,7 @@ var make_read_all_faves = {
 
 			var interval = setInterval(function () {
 
-				if (count == counter) {
+				if (count === counter) {
 
 					// Set 'completed' icon / black circle
 					$('#ext_read_faves').html('&#9679;');
@@ -1367,12 +1366,12 @@ var make_read_all_faves = {
 					}, 2000);
 
 					// Faves: show only with unreaded messages
-					/*if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+					/*if(dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn() ) {
 					 fav_show_only_unreaded.activated();
 					 }*/
 
 					// Reset faves newmsg vars
-					if (dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn()) {
+					if (dataStore['jump_unreaded_messages'] === 'true' && isLoggedIn()) {
 						jump_unreaded_messages.activated();
 					}
 
@@ -1403,7 +1402,7 @@ function replyTo() {
 function ext_valaszmsg(target, id, no, callerid) {
 
 	var targetSelector = $('#' + target);
-	if (targetSelector.css('display') != 'block') {
+	if (targetSelector.css('display') !== 'block') {
 
 		var url;
 		if (document.location.href.match(/cikkek/)) {
@@ -1424,27 +1423,27 @@ function ext_valaszmsg(target, id, no, callerid) {
 				targetSelector.find('.b-h-o-head .msg-dateicon a').css('color', '#444');
 			}
 
-			/*	if(dataStore['disable_point_system'] == 'true') {
+			/*	if(dataStore['disable_point_system'] === 'true') {
 			 disable_point_system.activated();
 			 }*/
 
 			// Set-up block buttons
 			add_to_list.init();
 
-			if (dataStore['profiles'] != '') {
+			if (dataStore['profiles'] !== '') {
 				profiles.init();
 			}
 
-			if (dataStore['columnify_comments'] == 'true') {
+			if (dataStore['columnify_comments'] === 'true') {
 
 				columnify_comments.activated();
 			}
 
-			if (dataStore['quick_user_info'] == 'true') {
+			if (dataStore['quick_user_info'] === 'true') {
 				quick_user_info.activated();
 			}
 
-			if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+			if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
 				lights.topic_switchOn();
 			}
 
@@ -1533,7 +1532,7 @@ var overlay_reply_to = {
 		// Create textarea clone
 
 		// WYSIWYG editor
-		/*if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] === 'true') {
 
 		 if(document.location.href.match(/cikkek/)) {
 
@@ -1702,22 +1701,22 @@ var overlay_reply_to = {
 		textarea_clone.find('textarea').focus();
 
 		// Set the iframe focus
-		/*if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] === 'true') {
 		 textarea_clone.find('iframe')[0].focus();
 		 }*/
 
 		// Block default tab action in non-WYSIWYG editor
 		body.keydown(function (event) {
-			if (event.keyCode == '9') {
+			if (event.keyCode === '9') {
 				event.preventDefault();
 				textarea_clone.find('a:last').focus();
 			}
 		});
 
 		// Block default tab action in a WYSIWYG editor
-		/*if(dataStore['wysiwyg_editor'] == 'true') {
+		/*if(dataStore['wysiwyg_editor'] === 'true') {
 		 $(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
-		 if (event.keyCode == '9') {
+		 if (event.keyCode === '9') {
 		 event.preventDefault();
 		 textarea_clone.find('a:last').focus();
 		 }
@@ -1742,7 +1741,7 @@ var overlay_reply_to = {
 		var close_btm = $('<img src="' + chrome.extension.getURL('img/content/overlay_close.png') + '" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 
 		// Change close button position if WYSIWYG editor is disabled
-		/*		if(dataStore['wysiwyg_editor'] != true) {
+		/*		if(dataStore['wysiwyg_editor'] !== true) {
 		 close_btm.css({ 'right' : 4, 'top' : 9 });
 		 }*/
 
@@ -1786,11 +1785,11 @@ var highlight_comments_for_me = {
 		var end_pos = comment.text().indexOf('\'', start_pos);
 		var TesTcomment = comment.text().substring(start_pos, end_pos);
 
-		if (TesTcomment == userName) {
+		if (TesTcomment === userName) {
 			var comments = comment.closest('li');
 		}
 
-		if (comments != undefined) {
+		if (comments !== undefined) {
 
 			// Iterate over them
 			comments.each(function () {
@@ -1824,7 +1823,7 @@ var threaded_comments = {
 		var newMsg = document.location.href.split('&newmsg=')[1];
 
 		// Mark new messages if any
-		if (typeof newMsg != "undefined" && newMsg != '') {
+		if (typeof newMsg !== "undefined" && newMsg !== '') {
 			$('.header:lt(' + newMsg + ')').find('a:last').after($('<span class="thread_sep"> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>'));
 		}
 
@@ -2001,7 +2000,7 @@ var fetch_new_comments_in_topic = {
 		var page = parseInt($('nav.pagination a:first').text());
 
 		// Do nothing if we not in the first page
-		if (page != 1) {
+		if (page !== 1) {
 			return false;
 		}
 
@@ -2031,7 +2030,7 @@ var fetch_new_comments_in_topic = {
 				fetch_new_comments_in_topic.counter++;
 
 				// Append horizonal line
-				if (fetch_new_comments_in_topic.counter == 1) {
+				if (fetch_new_comments_in_topic.counter === 1) {
 					//noinspection JSCheckFunctionSignatures
 					$('<hr>').insertBefore( $('.post:first') ).attr('id', 'ext_unreaded_hr');
 				}
@@ -2053,22 +2052,22 @@ var fetch_new_comments_in_topic = {
 				add_to_list.init();
 
 				// highlight_comments_for_me
-				if (dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+				if (dataStore['highlight_comments_for_me'] === 'true' && isLoggedIn()) {
 					highlight_comments_for_me.activated();
 				}
 
 				// User profiles
-				if (dataStore['profiles'] != '') {
+				if (dataStore['profiles'] !== '') {
 					profiles.init();
 				}
 
 				//Quick user info button
-				if (dataStore['quick_user_info'] == 'true') {
+				if (dataStore['quick_user_info'] === 'true') {
 					quick_user_info.activated();
 				}
 
 				//
-				if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+				if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
 					lights.topic_switchOn();
 				}
 			}
@@ -2084,8 +2083,7 @@ var custom_blocks = {
 		custom_blocks.setIDs();
 
 		// Check localStorage for config
-		if (typeof dataStore['blocks_config'] == 'undefined' || dataStore['blocks_config'] == '') {
-			console.log('building...');
+		if (typeof dataStore['blocks_config'] === 'undefined' || dataStore['blocks_config'] === '') {
 			custom_blocks.buildConfig();
 		}
 
@@ -2093,8 +2091,7 @@ var custom_blocks = {
 		custom_blocks.executeConfig();
 
 		// Set overlays
-		if (dataStore['hide_blocks_buttons'] == 'false' || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
-			console.log('overlays...');
+		if (dataStore['hide_blocks_buttons'] === 'false' || typeof dataStore['hide_blocks_buttons'] === 'undefined') {
 			custom_blocks.setOverlay();
 		}
 
@@ -2154,7 +2151,7 @@ var custom_blocks = {
 
 		for (var c = 0; c < config.length; c++) {
 
-			if (config[c]['id'] == id) {
+			if (config[c]['id'] === id) {
 				config[c][key] = value;
 			}
 		}
@@ -2172,7 +2169,7 @@ var custom_blocks = {
 
 		for (var c = 0; c < config.length; c++) {
 
-			if (config[c]['id'] == id) {
+			if (config[c]['id'] === id) {
 				return config[c][key];
 			}
 		}
@@ -2206,27 +2203,25 @@ var custom_blocks = {
 
 	executeConfig: function () {
 
-		console.log('execute....');
 		var ext_left_sidebar = $('#ext_left_sidebar');
 		var ext_right_sidebar = $('#ext_right_sidebar');
 
 		var config = JSON.parse(dataStore['blocks_config']);
 		config = config.reverse();
-		console.log(config);
 		for (var c = 0; c < config.length; c++) {
 
 			// Visibility
-			if (config[c]['visibility'] == false) {
+			if (config[c]['visibility'] === false) {
 				custom_blocks.hide(config[c]['id'], false);
 			}
 
 			// ContentHide
-			if (config[c]['contentHide'] == true) {
+			if (config[c]['contentHide'] === true) {
 				custom_blocks.contentHide(config[c]['id'], false);
 			}
 
 			// Side and pos
-			if (config[c]['side'] == 'left') {
+			if (config[c]['side'] === 'left') {
 
 				$('#' + config[c]['id']).prependTo('#sidebar-forum'); //table:eq(3) td:eq(0)
 
@@ -2304,7 +2299,7 @@ var custom_blocks = {
 
 	hide: function (id, clicked) {
 
-		if (clicked == true) {
+		if (clicked === true) {
 			// Change the config
 			custom_blocks.setConfigByKey(id, 'visibility', false);
 
@@ -2319,12 +2314,12 @@ var custom_blocks = {
 
 		var c_id = $('#' + id).children('div:eq(1)');
 
-		if (clicked == false) {
+		if (clicked === false) {
 			c_id.hide();
 			return true;
 		}
 
-		if (c_id.css('display') == 'none') {
+		if (c_id.css('display') === 'none') {
 
 			// Change the config
 			custom_blocks.setConfigByKey(id, 'contentHide', false);
@@ -2347,7 +2342,7 @@ var custom_blocks = {
 		var c_id = $('#' + id);
 
 		// Check current side settings
-		if (c_id.find('.b-h-o-head').length == 0) {
+		if (c_id.find('.b-h-o-head').length === 0) {
 
 			// Move the block
 			c_id.prependTo('#ext_left_sidebar');
@@ -2368,7 +2363,7 @@ var custom_blocks = {
 		var c_id = $('#' + id);
 
 		// Check current side settings
-		if (c_id.find('.b-h-b-head').length == 0) {
+		if (c_id.find('.b-h-b-head').length === 0) {
 
 			// Move the block
 			c_id.prependTo('#ext_right_sidebar');
@@ -2393,14 +2388,14 @@ var custom_blocks = {
 		// Current position
 		if (c_id.closest('#ext_left_sidebar').length > 0) {
 
-			if (index == 0) {
+			if (index === 0) {
 				return false;
 			}
 
 		} else {
 
 			var first = $('#ext_left_sidebar').find('.ext_block').length;
-			if (index == first) {
+			if (index === first) {
 				return false;
 			}
 		}
@@ -2424,7 +2419,7 @@ var custom_blocks = {
 
 			var last = $('#ext_left_sidebar').find('.ext_block').length - 1;
 
-			if (last == index) {
+			if (last === index) {
 				return false;
 			}
 		}
@@ -2486,7 +2481,7 @@ var wysiwyg_editor = {
 
 			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: https://www.youtube.com/watch?v=sUntx0pe_qI)", "https://www.youtube.com/watch?v=sUntx0pe_qI");
 
-			if (thisURL && (((thisURL.length > 25 && thisURL.substring(0, 20) == "http://www.youtu.be/") || (thisURL.length > 25 && thisURL.substring(0, 16) == "http://youtu.be/") || thisURL.length > 25 && thisURL.substring(0, 25) == "http://www.youtube.com/v/") || (thisURL.length > 31 && thisURL.substring(0, 31) == "http://www.youtube.com/watch?v="))) {
+			if (thisURL && (((thisURL.length > 25 && thisURL.substring(0, 20) === "http://www.youtu.be/") || (thisURL.length > 25 && thisURL.substring(0, 16) === "http://youtu.be/") || thisURL.length > 25 && thisURL.substring(0, 25) === "http://www.youtube.com/v/") || (thisURL.length > 31 && thisURL.substring(0, 31) === "http://www.youtube.com/watch?v="))) {
 
 				var maxurlhossz = thisURL.search("&");
 
@@ -2496,13 +2491,13 @@ var wysiwyg_editor = {
 
 				var kezdhossz = 31;
 
-				if (thisURL.substring(0, 25) == "http://www.youtube.com/v/") {
+				if (thisURL.substring(0, 25) === "http://www.youtube.com/v/") {
 					kezdhossz = 25;
 
-				} else if (thisURL.substring(0, 16) == "http://youtu.be/") {
+				} else if (thisURL.substring(0, 16) === "http://youtu.be/") {
 					kezdhossz = 16;
 
-				} else if (thisURL.substring(0, 20) == "http://www.youtu.be/") {
+				} else if (thisURL.substring(0, 20) === "http://www.youtu.be/") {
 					kezdhossz = 20;
 				}
 
@@ -2869,7 +2864,7 @@ var message_center = {
 			});
 
 			for (var c = 0; c < messages.length; c++) {
-				if (messages[c]['comment_id'] == id) {
+				if (messages[c]['comment_id'] === id) {
 
 					// Update message content
 					messages[c]['message'] = message;
@@ -2887,7 +2882,7 @@ var message_center = {
 		}
 
 		// Check for update marker
-		if (getCookie('getCommentID') == '1') {
+		if (getCookie('getCommentID') === '1') {
 
 			// Get messages for MC
 			messages = JSON.parse(dataStore['mc_messages']);
@@ -2968,7 +2963,7 @@ var message_center = {
 
 
 				// If theres no previous messages
-				if (dataStore['mc_messages'] == '') {
+				if (dataStore['mc_messages'] === '') {
 					messages = [];
 					messages.push(tmp);
 
@@ -3010,7 +3005,7 @@ var message_center = {
 	search: function () {
 
 		// Check if theres any previous posts
-		if (dataStore['mc_messages'] == '') {
+		if (dataStore['mc_messages'] === '') {
 			return false;
 		}
 
@@ -3054,7 +3049,7 @@ var message_center = {
 						var TmpAnswers = $(tmp.find('.header a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
 
 						// Iterate over the answers
-						if (TmpAnswers.length == 0) {
+						if (TmpAnswers.length === 0) {
 
 							// Get current time
 							time = Math.round(new Date().getTime() / 1000);
@@ -3074,7 +3069,7 @@ var message_center = {
 
 						for (var c = 0; c < TmpAnswers.length; c++) {
 
-							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find('.topichead table tr:eq(0) td:eq(0) a img').attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
+							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length === 1) ? $(TmpAnswers[c]).find('.topichead table tr:eq(0) td:eq(0) a img').attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0];
 							nick = nick.replace(/ - VIP/, "");
 
 							var message = $(TmpAnswers[c]).find('.maskwindow').html();
@@ -3091,7 +3086,7 @@ var message_center = {
 						}
 
 						// Count new messages
-						if (messages[key]['answers'].length != TmpAnswers.length) {
+						if (messages[key]['answers'].length !== TmpAnswers.length) {
 							counter = 1;
 						}
 
@@ -3120,7 +3115,7 @@ var message_center = {
 		}
 
 		// Sync new messages if any
-		if (newmessages > 0 && dataStore['sync_auth_key'] != '') {
+		if (newmessages > 0 && dataStore['sync_auth_key'] !== '') {
 			sync_cp.save('Message Center');
 		}
 	},
@@ -3128,7 +3123,7 @@ var message_center = {
 	buildOwnCommentsTab: function () {
 
 		// Check if theres any previous posts
-		if (dataStore['mc_messages'] == '') {
+		if (dataStore['mc_messages'] === '') {
 			return false;
 		}
 
@@ -3188,7 +3183,7 @@ var message_center = {
 	buildAnswersTab: function () {
 
 		// Check if theres any previous posts
-		if (dataStore['mc_messages'] == '') {
+		if (dataStore['mc_messages'] === '') {
 			return false;
 		}
 
@@ -3206,7 +3201,7 @@ var message_center = {
 			var html = '';
 
 			// Continue when no answers
-			if (messages[c]['answers'].length == 0) {
+			if (messages[c]['answers'].length === 0) {
 				continue;
 			}
 
@@ -3263,7 +3258,7 @@ var message_center = {
 			// Insert html
 			$(html).appendTo('.ext_mc_pages:eq(2) div.contents');
 
-			if (html != '') {
+			if (html !== '') {
 				$('.ext_mc_pages:eq(2)').find('h3').remove();
 			}
 		}
@@ -3275,7 +3270,7 @@ var message_center = {
 function setCookie(c_name, value, exdays) {
 	var exdate = new Date();
 	exdate.setDate(exdate.getDate() + exdays);
-	var c_value = encodeURI(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+	var c_value = encodeURI(value) + ((exdays === null) ? "" : "; expires=" + exdate.toUTCString());
 	document.cookie = c_name + "=" + c_value;
 }
 
@@ -3285,7 +3280,7 @@ function getCookie(c_name) {
 		x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
 		y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
 		x = x.replace(/^\s+|\s+$/g, "");
-		if (x == c_name) {
+		if (x === c_name) {
 			return decodeURI(y);
 		}
 	}
@@ -3306,7 +3301,7 @@ var topic_whitelist = {
 		var id = $('nav#breadcrumb select option:selected').val();
 
 		// Add topic to whitelist
-		if ($(ele).html() == '+') {
+		if ($(ele).html() === '+') {
 
 			// Change the status icon
 			$(ele).html('-');
@@ -3428,7 +3423,7 @@ var profiles = {
 
 			} else {
 
-				nick = ($(this).find("a img").length == 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0].innerHTML;
+				nick = ($(this).find("a img").length === 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0];
 				nick = nick.replace(/ - VIP/, "");
 			}
 
@@ -3444,7 +3439,7 @@ var profiles = {
 			// Search for nickname match
 			for (var c = 0; c < profiles.length; c++) {
 				for (var u = 0; u < profiles[c]['users'].length; u++) {
-					if (jQuery.trim(profiles[c]['users'][u]) == nick) {
+					if (jQuery.trim(profiles[c]['users'][u]) === nick) {
 
 						// WE GOT A MATCH
 
@@ -3529,7 +3524,7 @@ var add_to_list = {
 		// Create dropdown event
 		$('.ext_dropdown').off().on('click', function () {
 
-			if ($(this).find('ul').css('display') == 'none') {
+			if ($(this).find('ul').css('display') === 'none') {
 				$(this).find('ul').css('top', $(this).closest('#forum-posts-list ul li header').height()).slideDown();
 			} else {
 				$(this).find('ul').slideUp();
@@ -3564,7 +3559,7 @@ var add_to_list = {
 		// Add blocklist option
 		$('<li class="ident ext_addtoblocklist">Tiltólista</li>').appendTo('.ext_addtolist_list');
 
-		if (dataStore['profiles'] == '') {
+		if (dataStore['profiles'] === '') {
 			return;
 		}
 
@@ -3597,7 +3592,7 @@ var add_to_list = {
 		}
 
 		// Check user
-		if (list[group]['users'].indexOf(nick) == -1) {
+		if (list[group]['users'].indexOf(nick) === -1) {
 			list[group]['users'].push(nick);
 		} else {
 			list[group]['users'].splice(list[group]['users'].indexOf(nick), 1);
@@ -3623,11 +3618,11 @@ var add_to_list = {
 
 			} else {
 				/* BUG avatar nélküli felhasználóknál nem működik.     $(this).find("header a")[0]  undefined */
-				nick_2 = ($(this).find("header a img").length == 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0].innerHTML;
+				nick_2 = ($(this).find("header a img").length === 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0];
 				nick_2 = nick_2.replace(/ - VIP/, "");
 			}
 
-			if (nick == nick_2) {
+			if (nick === nick_2) {
 				$(this).removeClass('checked');
 			}
 		});
@@ -3728,7 +3723,7 @@ var quick_insertion = {
 
 		var ta;
 		var ta2;
-		/*		if(dataStore['wysiwyg_editor'] == 'true') {
+		/*		if(dataStore['wysiwyg_editor'] === 'true') {
 		 ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea*/
 		 ta2 = $('.cleditorMain:first textarea[name="message"]');
 		 /*}
@@ -3759,20 +3754,20 @@ var quick_insertion = {
 					var a = document.createElement('a'); // Create a dummy <a> element
 					a.href = data;                       // Assign link, let the browser parse it
 					var url_pathname = a.pathname.substring(1, data.length);
-					if (url_pathname.length == 0) {
+					if (url_pathname.length=0) {
 						url_pathname = data;
 					}
 					bhtml = '[url=' + data + ']' + url_pathname + '[/url]';
 					//ihtml = '<a href="' + data + '">' + url_pathname + '</a>';
 				}
 
-				if (bhtml != undefined) {
+				if (bhtml !== undefined) {
 					var ta = $('textarea[name="message"]:first');
 					var tarea = ta.val() + bhtml;
 					//var imod = $('.cleditorMain:first iframe').contents().find('body').html() + ihtml;
 
 					// Otherwise when wysiwyg editor will appear even if it's disabled
-					/*					if(dataStore['wysiwyg_editor'] == 'true') {
+					/*					if(dataStore['wysiwyg_editor'] === 'true') {
 					 $('textarea[name="message"]:first').val(tarea);
 					 $('textarea[name="message"]:first').cleditor()[0].focus();
 					 $('.cleditorMain:first iframe').contents().find('body').html(imod);
@@ -3836,12 +3831,12 @@ var inline_image_viewer = {
 
 function extInit() {
 
-	if (document.location.href == 'https://sg.hu/felhasznalo/beallitasok') {
+	if (document.location.href === 'https://sg.hu/felhasznalo/beallitasok') {
 		update_settings.activated();
 	}
 
 	// SG index.php
-	if (document.location.href == 'https://www.sg.hu/' || document.location.href.match(/index.php/)) {
+	if (document.location.href === 'https://www.sg.hu/' || document.location.href.match(/index.php/)) {
 
 		// Settings
 		cp.init(3);
@@ -3849,7 +3844,6 @@ function extInit() {
 
 		// Articles
 	} else if (document.location.href.match(/cikkek/)) {
-		var start = new Date().getTime();
 		// Settings
 		cp.init(2);
 
@@ -3862,12 +3856,12 @@ function extInit() {
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
 		// Message Center
-		if (dataStore['message_center'] == 'true' && isLoggedIn()) {
+		if (dataStore['message_center'] === 'true' && isLoggedIn()) {
 			message_center.article();
 		}
 
 		// Threaded_comments
-		if (dataStore['threaded_comments'] == 'true') {
+		if (dataStore['threaded_comments'] === 'true') {
 			threaded_comments.activated();
 		}
 
@@ -3875,17 +3869,17 @@ function extInit() {
 		add_to_list.init();
 
 		// Block users/messages
-		if (dataStore['block_list'] != '') {
+		if (dataStore['block_list'] !== '') {
 			blocklist.hidemessages();
 		}
 
 		// Load next page when scrolling down
-		if (dataStore['autoload_next_page'] == 'true') {
+		if (dataStore['autoload_next_page'] === 'true') {
 			autoload_next_page.activated();
 		}
 
 		// Show navigation buttons
-		if (dataStore['show_navigation_buttons'] == 'true') {
+		if (dataStore['show_navigation_buttons'] === 'true') {
 			show_navigation_buttons.activated();
 		}
 
@@ -3893,37 +3887,37 @@ function extInit() {
 		replyTo();
 
 		// Overlay reply-to
-		if (dataStore['overlay_reply_to'] == 'true') {
+		if (dataStore['overlay_reply_to'] === 'true') {
 			overlay_reply_to.activated();
 		}
 
 		// highlight_comments_for_me
-		if (dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+		if (dataStore['highlight_comments_for_me'] === 'true' && isLoggedIn()) {
 			highlight_comments_for_me.activated();
 		}
 
 		/*		// WYSIWYG Editor
-		 if(dataStore['wysiwyg_editor'] == 'true') {
+		 if(dataStore['wysiwyg_editor'] === 'true') {
 		 wysiwyg_editor.activated();
 		 }*/
 
-		if (dataStore['disable_point_system'] == 'true') {
+		if (dataStore['disable_point_system'] === 'true') {
 			disable_point_system.activated();
 		}
 
 		// Auto resizing textarea
 		textarea_auto_resize.init();
 
-		if (dataStore['profiles'] != '') {
+		if (dataStore['profiles'] !== '') {
 			profiles.init();
 		}
 
-		if (dataStore['columnify_comments'] == 'true') {
+		if (dataStore['columnify_comments'] === 'true') {
 			columnify_comments.activated();
 		}
 
 		//Pasted text will be a hyperlink, picture, video automatically
-		/*		if(dataStore['wysiwyg_editor'] == 'true' && dataStore['quick_insertion'] == 'true') {
+		/*		if(dataStore['wysiwyg_editor'] === 'true' && dataStore['quick_insertion'] === 'true') {
 		 quick_insertion.activated();
 		 }*/
 
@@ -3931,10 +3925,8 @@ function extInit() {
 		if (dataStore['inline_image_viewer'] == 'true') {
 			inline_image_viewer.activated();
 		}
-		console.log(new Date().getTime() - start);
 		// FORUM
 	} else if (document.location.href.match(/forum\/$/)) {
-		var start = new Date().getTime();
 		// Settings
 		cp.init(1);
 
@@ -3942,33 +3934,33 @@ function extInit() {
 		setPredefinedVars();
 
 		// Remove chat window
-		if (dataStore['chat_hide'] == 'true') {
+		if (dataStore['chat_hide'] === 'true') {
 			chat_hide.activated();
 		}
 
 		// Custom blocks
-		if (dataStore['custom_blocks'] == 'true') {
+		if (dataStore['custom_blocks'] === 'true') {
 			custom_blocks.activated();
 		}
 
 		// Jump the last unreaded message
-		if (dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn()) {
+		if (dataStore['jump_unreaded_messages'] === 'true' && isLoggedIn()) {
 			jump_unreaded_messages.activated();
 		}
 
 		// Faves: show only with unreaded messages
-		if (dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn()) {
+		if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
 			fav_show_only_unreaded.init();
 			fav_show_only_unreaded.activated();
 		}
 
 		// Faves: short comment marker
-		if (dataStore['short_comment_marker'] == 'true' && isLoggedIn()) {
+		if (dataStore['short_comment_marker'] === 'true' && isLoggedIn()) {
 			short_comment_marker.activated();
 		}
 
 		// Custom list styles
-		if (dataStore['highlight_forum_categories'] == 'true') {
+		if (dataStore['highlight_forum_categories'] === 'true') {
 			highlight_forum_categories.activated();
 		}
 
@@ -3983,20 +3975,17 @@ function extInit() {
 		}
 
 		// Message center
-		if (dataStore['message_center'] == 'true' && isLoggedIn()) {
+		if (dataStore['message_center'] === 'true' && isLoggedIn()) {
 			message_center.init();
 		}
 
 		//Night mode
-		if (dataStore['show_navigation_buttons_night'] == 'true' && dataStore['navigation_button_night_state'] == 'true') {
+		if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
 			lights.forum_switchOn();
 		}
-
-		console.log(new Date().getTime() - start);
 	}
 	// TOPIK
 	else if (document.location.href.match(/forum\/tema/)) {
-		var start = new Date().getTime();
 		// Settings
 		cp.init(2);
 
@@ -4006,23 +3995,23 @@ function extInit() {
 		// Determining current status
 		var whitelist = dataStore['topic_whitelist'].split(',');
 
-		if (whitelist.indexOf(id) == -1) {
+		if (whitelist.indexOf(id) === -1) {
 
 			// setPredefinedVars
 			setPredefinedVars();
 
 			// Monitor the new comments
-			if (dataStore['fetch_new_comments'] == 'true') {
+			if (dataStore['fetch_new_comments'] === 'true') {
 				fetch_new_comments_in_topic.init();
 			}
 
 			// Message Center
-			if (dataStore['message_center'] == 'true' && isLoggedIn()) {
+			if (dataStore['message_center'] === 'true' && isLoggedIn()) {
 				message_center.topic();
 			}
 
 			//gradual_comments
-			if (dataStore['threaded_comments'] == 'true') {
+			if (dataStore['threaded_comments'] === 'true') {
 				threaded_comments.activated();
 			}
 
@@ -4035,17 +4024,17 @@ function extInit() {
 			add_to_list.init();
 
 			// Block users/messages
-			if (dataStore['block_list'] != '') {
+			if (dataStore['block_list'] !== '') {
 				blocklist.hidemessages();
 			}
 
 			// Load next page when scrolling down
-			if (dataStore['autoload_next_page'] == 'true') {
+			if (dataStore['autoload_next_page'] === 'true') {
 				autoload_next_page.activated();
 			}
 
 			// Scroll to page top button
-			if (dataStore['show_navigation_buttons'] == 'true') {
+			if (dataStore['show_navigation_buttons'] === 'true') {
 				show_navigation_buttons.activated();
 			}
 
@@ -4054,43 +4043,43 @@ function extInit() {
 			replyTo();
 
 			// Overlay reply-to
-			if (dataStore['overlay_reply_to'] == 'true') {
+			if (dataStore['overlay_reply_to'] === 'true') {
 				overlay_reply_to.activated();
 			}
 
 			// highlight_comments_for_me
-			if (dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+			if (dataStore['highlight_comments_for_me'] === 'true' && isLoggedIn()) {
 				highlight_comments_for_me.activated();
 			}
 
 			// WYSIWYG Editor
-			/*			if(dataStore['wysiwyg_editor'] == 'true') {
+			/*			if(dataStore['wysiwyg_editor'] === 'true') {
 			 wysiwyg_editor.activated();
 			 }*/
 
 			// Auto resizing textarea
 			textarea_auto_resize.init();
 
-			if (dataStore['profiles'] != '') {
+			if (dataStore['profiles'] !== '') {
 				profiles.init();
 			}
 
-			if (dataStore['columnify_comments'] == 'true') {
+			if (dataStore['columnify_comments'] === 'true') {
 				columnify_comments.activated();
 			}
 
 			//Quick user info button
-			if (dataStore['quick_user_info'] == 'true') {
+			if (dataStore['quick_user_info'] === 'true') {
 				quick_user_info.activated();
 			}
 
 			//Pasted text will be a hyperlink, picture, video automatically
-			if (dataStore['quick_insertion'] == 'true') {
+			if (dataStore['quick_insertion'] === 'true') {
 				quick_insertion.activated();
 			}
 
 			// image, video urls in msg box can be previewed inline
-			if (dataStore['inline_image_viewer'] == 'true') {
+			if (dataStore['inline_image_viewer'] === 'true') {
 				inline_image_viewer.activated();
 			}
 
@@ -4103,9 +4092,8 @@ function extInit() {
 	}
 
 	// GLOBAL SCRIPTS
-	console.log(new Date().getTime() - start);
 	// remove adverts
-	if (dataStore['remove_ads'] == 'true') {
+	if (dataStore['remove_ads'] === 'true') {
 		remove_adds.activated();
 	}
 }
@@ -4120,7 +4108,7 @@ if (window.top === window) {
 //noinspection JSCheckFunctionSignatures
 port.onMessage.addListener(function (event) {
 
-	if (event.name == 'setSettings') {
+	if (event.name === 'setSettings') {
 
 		// Save localStorage data
 		dataStore = event.message;
@@ -4130,7 +4118,7 @@ port.onMessage.addListener(function (event) {
 			extInit();
 		});
 
-	} else if (event.name == 'updateDataStore') {
+	} else if (event.name === 'updateDataStore') {
 
 		// Update dataStore with the new data
 		dataStore = event.message;

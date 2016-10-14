@@ -51,13 +51,13 @@
 
 					// Send back the settings object
 					if(event.name === 'getSettings') {
-						
+
 						port.postMessage({ name : "setSettings", message : localStorage });
-				
+
 					// Sets the blocks config
 					} else if(event.name === 'setBlocksConfig') {
 						localStorage['blocks_config'] = event.message;
-				
+
 					// Add user to blocklist
 					} else if(event.name === 'addToBlocklist') {
 
@@ -65,81 +65,79 @@
 						if(typeof localStorage['block_list'] === "undefined") {
 							localStorage['block_list'] = '';
 						}
-		
+
 						// If the blocklist is empty
 						if(localStorage['block_list'] === '') {
 							localStorage['block_list'] = event.message;
 							port.postMessage({ name : "updateDataStore", message : localStorage });
-		
+
 						// If the blocklist is not empty
 						} else {
-							var blocklist = [];
-								blockList = localStorage['block_list'].split(',');
-								if(blockList.indexOf(event.message) == -1) { 
-									blockList.push(event.message); 
+							var	blockList = localStorage['block_list'].split(',');
+								if(blockList.indexOf(event.message) === -1) {
+									blockList.push(event.message);
 									localStorage['block_list'] = blockList.join(',');
 									port.postMessage({ name : "updateDataStore", message : localStorage });
 								}
 						}
 					// Reset blocks config
-					} else if(event.name == 'resetBlocksConfig') {
+					} else if(event.name === 'resetBlocksConfig') {
 						localStorage['blocks_config'] = '';
-				
-					// Remove user form blocklist
-					} else if(event.name == 'removeUserFromBlocklist') {
 
-		
+					// Remove user form blocklist
+					} else if(event.name === 'removeUserFromBlocklist') {
+
+
 						// Get username
 						var user = event.message;
-	
+
 						// Get the blocklist array
 						var list = localStorage['block_list'].split(',');
-		
+
 						// Get the removed user index
 						var index = list.indexOf(user);
-		
+
 						// Remove user from array
 						list.splice(index, 1);
-					
+
 						// Save changes in localStorage
 						localStorage['block_list'] = list.join(',');
-						
+
 						// Update dataStore
 						port.postMessage({ name : "updateDataStore", message : localStorage });
-				
+
 					// Save posted settings
-					} else if(event.name == 'setSetting') {
+					} else if(event.name === 'setSetting') {
 
 						// Setting name
 						var key = event.key;
-					
+
 						// Setting value
 						var val = event.val;
-					
+
 						localStorage[key] = val;
 
 					// Store selected tab in message center
-					} else if(event.name == 'setMCSelectedTab') {
+					} else if(event.name === 'setMCSelectedTab') {
 						localStorage['mc_selected_tab'] = event.message;
 
 					// Store own messages for message center
-					} else if(event.name == 'setMCMessages') {
+					} else if(event.name === 'setMCMessages') {
 						localStorage['mc_messages'] = event.message;
 
 					// Add topic to whitelist
-					} else if(event.name == 'addTopicToWhitelist') {
-	
+					} else if(event.name === 'addTopicToWhitelist') {
+
 						// If the whitelist is empty
-						if(localStorage['topic_whitelist'] == '') {
+						if(localStorage['topic_whitelist'] === '') {
 							localStorage['topic_whitelist'] = event.message;
-		
+
 						// If the blocklist is not empty
 						} else {
-	
-							var whitelist = new Array();
-								whitelist = localStorage['topic_whitelist'].split(',');
 
-								if(whitelist.indexOf(event.message) == -1) { 
+							var whitelist = localStorage['topic_whitelist'].split(',');
+
+								if(whitelist.indexOf(event.message) === -1) {
 									whitelist.push(event.message);
 									localStorage['topic_whitelist'] = whitelist.join(',');
 								}
@@ -147,25 +145,25 @@
 
 
 					// Remove topic from whitelist
-					} else if(event.name == 'removeTopicFromWhitelist') {
+					} else if(event.name === 'removeTopicFromWhitelist') {
 
 						// Get username
 						var id = event.message;
-	
+
 						// Get the blocklist array
 						var list = localStorage['topic_whitelist'].split(',');
-		
+
 						// Get the removed user index
 						var index = list.indexOf(id);
-		
+
 						// Remove user from array
 						list.splice(index, 1);
-					
+
 						// Save changes in localStorage
 						localStorage['topic_whitelist'] = list.join(',');
-				
+
 					// Update faves filter last state
-					} else if(event.name == 'updateFavesFilterLastState') {
+					} else if(event.name === 'updateFavesFilterLastState') {
 
 						localStorage['fav_show_only_unreaded_opened'] = event.message;
 					}
