@@ -5,8 +5,11 @@ Az SG tuning célja, hogy funkcióival kényelmesebbé varázsolja az sg.hu-n t�
 ## Letöltés
 
 **Chrome:** [Chrome internetes áruház](https://chrome.google.com/webstore/detail/sg-fórum-tuning/hlppljcclmahjmaegnhcaefknenohnck)
+
 **Opera:** [Opera-kiegészítők](https://addons.opera.com/hu/extensions/details/sg-forum-tuning/)
-**Firefox:** hamarosan...
+
+**Firefox:** [Firefox kiegészítők](https://addons.mozilla.org/hu/firefox/addon/sg_forum_tuning/)
+
 **Maxthon:** Maxthon mappában lévő .mxaddon-t letöltitek, behúzzátok maxthonba, majd megnyitás gombra nyomtok és telepítitek a kiegészítőt. [link](https://raw.githubusercontent.com/JimMorrison723/SG.hu-Extension/master/Maxthon/Sg-tuning.mxaddon)
 		
 		

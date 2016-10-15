@@ -207,10 +207,10 @@ var fav_show_only_unreaded = {
 
 	init: function () {
 
-		if (dataStore['fav_show_only_unreaded_remember'] == 'true') {
+		if (dataStore['fav_show_only_unreaded_remember'] === 'true') {
 			fav_show_only_unreaded.opened = false;
 		}
-		if (convertBool(dataStore['fav_show_only_unreaded_opened']) == 'true') {
+		if (convertBool(dataStore['fav_show_only_unreaded_opened']) === 'true') {
 			$('#favorites-open-close-button').find('#icon').html('-');
 		}
 	},
@@ -660,7 +660,6 @@ var autoload_next_page = {
 
 };
 
-
 var show_navigation_buttons = {
 
 	activated: function () {
@@ -1088,7 +1087,6 @@ var show_navigation_buttons = {
 	}
 };
 
-
 var lights = {
 
 	init: function () {
@@ -1271,7 +1269,6 @@ var update_fave_list = {
 	}
 };
 
-
 var make_read_all_faves = {
 
 	activated: function () {
@@ -1406,9 +1403,11 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 		var url;
 		if (document.location.href.match(/cikkek/)) {
-			url = '/listazas_egy.php3?callerid=1&id=' + id + '&no=' + no;
+			// callerid = 1
+			url = '/listazas_egy.php3?callerid=' + callerid + '&id=' + id + '&no=' + no;
 		} else {
-			url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
+			// callerid = 2
+			url = '/listazas_egy.php3?callerid=' + callerid + '&id=' + id + '&no=' + no;
 		}
 
 		$.get(url, function (data) {
@@ -1707,7 +1706,7 @@ var overlay_reply_to = {
 
 		// Block default tab action in non-WYSIWYG editor
 		body.keydown(function (event) {
-			if (event.keyCode === '9') {
+			if (event.keyCode === 9) {
 				event.preventDefault();
 				textarea_clone.find('a:last').focus();
 			}
@@ -1773,7 +1772,7 @@ var highlight_comments_for_me = {
 	activated: function () {
 
 		// Return false when no username set
-		if (userName === '') {
+		if (!userName) {
 			return false;
 		}
 
@@ -1784,9 +1783,10 @@ var highlight_comments_for_me = {
 		var start_pos = comment.text().indexOf('\'') + 1;
 		var end_pos = comment.text().indexOf('\'', start_pos);
 		var TesTcomment = comment.text().substring(start_pos, end_pos);
+		var comments;
 
 		if (TesTcomment === userName) {
-			var comments = comment.closest('li');
+			comments = comment.closest('li');
 		}
 
 		if (comments !== undefined) {
@@ -1931,7 +1931,6 @@ var threaded_comments = {
 	}
 };
 
-
 var fetch_new_comments_in_topic = {
 
 	counter: 0,
@@ -1943,8 +1942,7 @@ var fetch_new_comments_in_topic = {
 
 		// // Set new messages number to zero
 		// newMessage.html('0 új hozzászólás érkezett!');
-		//TODO: fix this
-		// Monitor new comments nofification 
+		// Monitor new comments nofification
 		setInterval(function () {
 
 			var newMessage = $('span#newMessage');
@@ -2005,13 +2003,13 @@ var fetch_new_comments_in_topic = {
 		}
 
 		// Get new comments counter
-		var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
+		//var newmsg = parseInt($('span#newMessage').text().match(/\d+/g));
 
 		// Update the newmsg
 		//var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
 
 		// Update the last new msg number = newmsg
-		fetch_new_comments_in_topic.last_new_msg = newmsg;
+		fetch_new_comments_in_topic.last_new_msg = parseInt($('span#newMessage').text().match(/\d+/g));
 
 		// Get the topik ID and URL
 		var id = $('#topicdata').data('tid');
@@ -2203,8 +2201,8 @@ var custom_blocks = {
 
 	executeConfig: function () {
 
-		var ext_left_sidebar = $('#ext_left_sidebar');
-		var ext_right_sidebar = $('#ext_right_sidebar');
+		// var ext_left_sidebar = $('#ext_left_sidebar');
+		// var ext_right_sidebar = $('#ext_right_sidebar');
 
 		var config = JSON.parse(dataStore['blocks_config']);
 		config = config.reverse();
@@ -2338,7 +2336,7 @@ var custom_blocks = {
 	},
 
 	left: function (id) {
-		var ext_left_sidebar = $('#ext_left_sidebar');
+		// var ext_left_sidebar = $('#ext_left_sidebar');
 		var c_id = $('#' + id);
 
 		// Check current side settings
@@ -2359,7 +2357,7 @@ var custom_blocks = {
 
 	right: function (id) {
 
-		var ext_right_sidebar = $('#ext_right_sidebar');
+		// var ext_right_sidebar = $('#ext_right_sidebar');
 		var c_id = $('#' + id);
 
 		// Check current side settings
@@ -2961,6 +2959,7 @@ var message_center = {
 					answers: []
 				};
 
+				var messages;
 
 				// If theres no previous messages
 				if (dataStore['mc_messages'] === '') {
@@ -2971,7 +2970,7 @@ var message_center = {
 				} else {
 
 					// Get the previous messages from localStorage
-					var messages = JSON.parse(dataStore['mc_messages']);
+					messages = JSON.parse(dataStore['mc_messages']);
 
 					// Unshift the new message
 					messages.unshift(tmp);
@@ -3725,8 +3724,8 @@ var quick_insertion = {
 		var ta2;
 		/*		if(dataStore['wysiwyg_editor'] === 'true') {
 		 ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea*/
-		 ta2 = $('.cleditorMain:first textarea[name="message"]');
-		 /*}
+		ta2 = $('.cleditorMain:first textarea[name="message"]');
+		/*}
 		 else {*/
 		ta = $('form[name="newmessage"] textarea');
 		/*}*/
@@ -3734,6 +3733,7 @@ var quick_insertion = {
 		// Paste event on WYSIWYG view and source view
 		$(ta).add(ta2).on('paste', function (e) {
 
+			//noinspection JSUnresolvedVariable
 			var data = e.originalEvent.clipboardData.getData('Text');
 			if (data.length > 10) {
 
@@ -3754,7 +3754,7 @@ var quick_insertion = {
 					var a = document.createElement('a'); // Create a dummy <a> element
 					a.href = data;                       // Assign link, let the browser parse it
 					var url_pathname = a.pathname.substring(1, data.length);
-					if (url_pathname.length=0) {
+					if (url_pathname.length === 0) {
 						url_pathname = data;
 					}
 					bhtml = '[url=' + data + ']' + url_pathname + '[/url]';
@@ -3841,7 +3841,6 @@ function extInit() {
 		// Settings
 		cp.init(3);
 
-
 		// Articles
 	} else if (document.location.href.match(/cikkek/)) {
 		// Settings
@@ -3922,7 +3921,7 @@ function extInit() {
 		 }*/
 
 		// image, video urls in msg box can be previewed inline
-		if (dataStore['inline_image_viewer'] == 'true') {
+		if (dataStore['inline_image_viewer'] === 'true') {
 			inline_image_viewer.activated();
 		}
 		// FORUM
@@ -4088,7 +4087,6 @@ function extInit() {
 		} else {
 			show_navigation_buttons.activated();
 		}
-
 	}
 
 	// GLOBAL SCRIPTS
@@ -4097,7 +4095,6 @@ function extInit() {
 		remove_adds.activated();
 	}
 }
-
 
 // Filter out iframes
 // Request settings object
@@ -4124,7 +4121,7 @@ port.onMessage.addListener(function (event) {
 		dataStore = event.message;
 
 		// Save changes to sync
-		if (dataStore['sync_status'] == 'true') {
+		if (dataStore['sync_status'] === 'true') {
 			sync_cp.save();
 		}
 	}

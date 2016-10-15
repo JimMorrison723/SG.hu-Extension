@@ -36,7 +36,7 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 3.3</p>';
+				html += '<p>Verzió: 3.3.1</p>';
 				html += '<p>Kiadás dátuma: 2016. 10. 14.</p>';
 				html += '<p>Fejlesztő: JimMorrison723 <a href="http://jimmorrison723.hu" target="_blank">http://jimmorrison723.hu</a>, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
@@ -243,14 +243,14 @@ var cp = {
 					// 	html += '</div>';
 					// html += '</form>';
 				html += '</div>';
-				
+
 				html += '<div class="log">';
 					html += '<h3>Statisztika és lehetőségek</h3>';
 					html += '<strong>Utolsó szinkronizálás: </strong>';
-					if(dataStore['sync_last_sync'] == 0) { 
+					if(dataStore['sync_last_sync'] == 0) {
 					html += '<span class="last_sync">Soha</span>';
 					} else {
-	
+
 						var month = date('M', dataStore['sync_last_sync']);
 
 						// Convert mounts names
@@ -267,11 +267,11 @@ var cp = {
 							['Oct', 'október'],
 							['Nov', 'november'],
 							['Dec', 'december']
-			
+
 						], function(index, item) {
 							month = month.replace(item[0], item[1]);
-						});						
-					
+						});
+
 					html += '<span class="last_sync">'+month+' '+date('d. -  H:i', dataStore['sync_last_sync'])+'</span>';
 					}
 					html += '<button class="sync">Szinkronizálás most</button>';
@@ -281,61 +281,64 @@ var cp = {
 			html += '<div class="settings_page debugger">';
 				html += '<h3>Debugger</h3>';
 				html += '<textarea readonly="readonly">';
-				
+
 				if(dataStore['debugger_messages'] != '') {
 
 					// Parse debugger messages
-					var messages = JSON.parse(dataStore['debugger_messages']);	
-		
-					for(c = 0; c < messages.length; c++) {
+					var messages = JSON.parse(dataStore['debugger_messages']);
+
+					for(var c = 0; c < messages.length; c++) {
 						html += ""+messages[c]+"\r\n";
 					}
 				}
-				
+
 				html += '</textarea>';
 				html += '<button>Törlés</button>';
 			html += '</div>';
 
 		html += '</div>';
 
-		
+
 		// Append settings pane html to body
 		$(html).appendTo('body');
-		
+
+		var ext_header = $('#ext_settings_header');
+		var settings_button = $('.settings_page .button');
+
 		// Set header list backgrounds
-		$('#ext_settings_header').find('li').css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/icons.png')+')' });
-		
+		ext_header.find('li').css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/icons.png')+')' });
+
 		// Create tabs event
-		$('#ext_settings_header').find('li').click(function() {
-			
+		ext_header.find('li').click(function() {
+
 			cp.tab( $(this).index() );
 		});
-		
+
 		// Add buttons background image
-		$('.settings_page .button').css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/button.png')+')' });
-		
+		settings_button.css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/button.png')+')' });
+
 		// Get the requested page number
-		var page  = typeof page == "undefined" ? 0 : page;
-		
+		var sPage = typeof page == "undefined" ? 0 : page;
+
 		// Select the right page
-		cp.tab(page);
-		
+		cp.tab(sPage);
+
 		// Set-up blocklist
 		blocklist_cp.init();
-		
+
 		// Close when clicking away
 		$('#ext_settings_hide_overlay').click(function() {
 			cp.hide();
 		});
-		
+
 		// Restore settings
 		settings.restore();
-		
+
 		// Settings change event, saving
-		$('.settings_page .button').click(function() {
+		settings_button.click(function() {
 			cp.button(this);
 		});
-		
+
 		// Set checkboxes
 		$('.settings_page input:checkbox').click(function() {
 			settings.save(this);
@@ -346,8 +349,8 @@ var cp = {
 		$('.settings_page select').change(function() {
 			settings.select(this);
 		});
-		
-		
+
+
 		// Reset blocks config
 		$('#reset_blocks_config').click(function() {
 			port.postMessage({ name : "setSetting", key : 'blocks_config', val : '' });
@@ -362,77 +365,86 @@ var cp = {
 		// Init log
 		log.init();
 	},
-	
+
 	show : function() {
-		
+
+		var ext_h_overlay = $('#ext_settings_hide_overlay');
+		var ext_s_wrapper = $('#ext_settings_wrapper');
+
 		// Set the overlay
-		$('#ext_settings_hide_overlay').css({ display : 'block', opacity : 0 });
-		$('#ext_settings_hide_overlay').animate({ opacity : 0.6 }, 200);
-		
+		ext_h_overlay.css({ display : 'block', opacity : 0 });
+		ext_h_overlay.animate({ opacity : 0.6 }, 200);
+
 		// Get the viewport and panel dimensions
 		var viewWidth	= $(window).width();
-		var paneWidth	= $('#ext_settings_wrapper').width();
-		var paneHeight	= $('#ext_settings_wrapper').height();
+		var paneWidth	= ext_s_wrapper.width();
+		var paneHeight	= ext_s_wrapper.height();
 		var leftProp	= viewWidth / 2 - paneWidth / 2;
 
 		// Apply calculated CSS settings to the panel
-		$('#ext_settings_wrapper').css({ left : leftProp, top : '-'+(paneHeight+10)+'px' });
-		
+		ext_s_wrapper.css({ left : leftProp, top : '-'+(paneHeight+10)+'px' });
+
 		// Reveal the panel
-		$('#ext_settings_wrapper').delay(250).animate({ top : 10 }, 250);
-		
+		ext_s_wrapper.delay(250).animate({ top : 10 }, 250);
+
 		// Add 'opened' class
-		$('#ext_settings_wrapper').addClass('opened');
-		
+		ext_s_wrapper.addClass('opened');
+
 	},
-	
+
 	hide : function() {
-		
+
+		var ext_s_wrapper = $('#ext_settings_wrapper');
+
 		// Get the settings pane height
-		var paneHeight = $('#ext_settings_wrapper').height();
-		
+		var paneHeight = ext_s_wrapper.height();
+
 		// Hide the pane
-		$('#ext_settings_wrapper').animate({ top : '-'+(paneHeight+10)+'px'}, 200, function() {
-			
-			// Hide the settings pane 
+		ext_s_wrapper.animate({ top : '-'+(paneHeight+10)+'px'}, 200, function() {
+
+			// Hide the settings pane
 			$(this).css('top', -9000);
-			
+
 			// Restore the overlay
 			$('#ext_settings_hide_overlay').animate({ opacity : 0 }, 100, function() {
 				$(this).css('display', 'none');
 			});
-			
+
 			// Remove 'opened' class
 			$('#ext_settings_wrapper').removeClass('opened');
 		});
 	},
-	
+
 	tab : function(index) {
-		
+
+		var ext_s_wrapper = $('#ext_settings_wrapper');
+		var settings_page = $('.settings_page');
+		var ext_settings_header = $('#ext_settings_header');
+
 		// Set the current height to prevent resize
-		$('#ext_settings_wrapper').css({ height : $('#ext_settings_wrapper').height() });
-       
+		ext_s_wrapper.css({ height : ext_s_wrapper.height() });
+
 		// Hide all tab pages
-		$('.settings_page').css('display', 'none');
-       
+		settings_page.css('display', 'none');
+
 		// Show the selected tab page
-		$('.settings_page').eq(index).fadeIn(250);
-       
+		settings_page.eq(index).fadeIn(250);
+
 		// Get new height of settings pane
-		var newPaneHeight = $('#ext_settings_header').height() + $('.settings_page').eq(index).outerHeight();
+		var newPaneHeight = ext_settings_header.height() + settings_page.eq(index).outerHeight();
 
 		// Animate the resize
-		$('#ext_settings_wrapper').stop().animate({ height : newPaneHeight }, 150, function() {
-		
+		ext_s_wrapper.stop().animate({ height : newPaneHeight }, 150, function() {
+
 			// Set auto height
-			$('#ext_settings_wrapper').css({ height : 'auto' });
+			ext_s_wrapper.css({ height : 'auto' });
 		});
-		
+
 		// Remove all selected background in the header
-		$('#ext_settings_header').find('li').removeClass('on');
-		
+		ext_settings_header.find('li').removeClass('on');
+
 		// Add selected background to the selectad tab button
-		$('#ext_settings_header').find('li').eq(index).addClass('on');
+		ext_settings_header.find('li').eq(index).addClass('on');
 	},
 	
 	button : function(ele) {
@@ -454,82 +466,78 @@ var cp = {
 
 
 var blocklist_cp =  {
-	
+
 	init : function() {
-		
+
 		// Create user list
 		blocklist_cp.list();
-		
+
 		// Create remove events
 		$('#ext_blocklist').find('a').on('click', function(e) {
 			e.preventDefault();
 			blocklist_cp.remove(this);
-		})
+		});
 	},
-	
+
 	list: function() {
-		// If theres is no entry in dataStore
-		if(typeof dataStore['block_list'] == "undefined") {
+		// If theres is no entry in dataStore or If the list is empty
+		if(typeof dataStore['block_list'] === "undefined" || !dataStore['block_list']) {
 			return false;
 		}
-	
-		// If the list is empty
-		if(dataStore['block_list'] == '') {
-			return false;
-		}
-	
+
+		var blocklist = $('#ext_blocklist');
 		// Everything is OK, remove the default message
-		$('#ext_blocklist').html('');
-	
+		blocklist.html('');
+
 		// Fetch the userlist into an array
 		var users = dataStore['block_list'].split(',').sort();
-	
+
 		// Iterate over, add users to the list
-		for(c = 0; c < users.length; c++) {
-			$('#ext_blocklist').append('<li><span>'+users[c]+'</span> <a href="#">töröl</a></li>');
+		for(var c = 0; c < users.length; c++) {
+			blocklist.append('<li><span>'+users[c]+'</span> <a href="#">töröl</a></li>');
 		}
 	},
-	
+
 	remove : function(el) {
-		
+
 		// Get username
 		var user = $(el).prev().html();
-				
+
 		// Remove user from the list
 		$(el).closest('li').remove();
-		
+
 		// Remove user from preferences
 		port.postMessage({ name : "removeUserFromBlocklist", message : user });
-		
+
 		// Add default message to the list if it is now empty
-		if($('#ext_blocklist').find('li').length == 0) {
+		if($('#ext_blocklist').find('li').length === 0) {
 			$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
 		}
-		
+
 		// Restore user comments
 		blocklist.unblock(user);
 	}
 };
 
 var settings = {
-	
+
 	restore : function() {
 
 		// Restore settings for buttons
 		$('.settings_page .button').each(function() {
 
-			if(dataStore[ $(this).attr('id') ] == 'true') {
+			if(dataStore[ $(this).attr('id') ] === 'true') {
 				$(this).attr('class', 'button on');
-			
+
 			} else {
 				$(this).attr('class', 'button off');
 			}
 		});
-		
+
 		// Restore settings for checkboxes
 		$('input:checkbox').each(function() {
-			
-			if(dataStore[ $(this).attr('id') ] == 'true') {
+
+			if(dataStore[ $(this).attr('id') ] === 'true') {
 				$(this).attr('checked', true);
 			} else {
 				$(this).attr('checked', false);
@@ -538,31 +546,31 @@ var settings = {
 
 		// Restore settings for select boxes
 		$('.settings_page select').each(function() {
-			
+
 			$(this).find('option[value="'+dataStore[ $(this).attr('id') ]+'"]').attr('selected', true);
 		});
 	},
-	
+
 	save : function(ele) {
 
-		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked' || $(ele).attr('checked') == true) {
-			
+		if( $(ele).hasClass('on') || $(ele).attr('checked') === 'checked' || $(ele).attr('checked') === true) {
+
 			// Save new settings ...
 			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'true' });
 
 			// Set new value to dataStore var
 			dataStore[$(ele).attr('id')] = 'true';
-	
+
 			// Sync new settings
-			if(dataStore['sync_auth_key'] != '') {
+			if(dataStore['sync_auth_key'] !== '') {
 				//sync_cp.save('Settings Panel');
 			}
-			
+
 			// Check for interactive action
-			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
+			if( typeof window[$(ele).attr('id')].activated !== 'undefined') {
 				window[$(ele).attr('id')].activated();
 			}
-		
+
 		} else {
 
 			// Save new settings ...
@@ -572,27 +580,27 @@ var settings = {
 			dataStore[$(ele).attr('id')] = 'false';
 
 			// Sync new settings
-			if(dataStore['sync_auth_key'] != '') {
+			if(dataStore['sync_auth_key'] !== '') {
 				//sync_cp.save('Settings Panel');
 			}
 
 			// Check for interactive action
-			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
+			if( typeof window[$(ele).attr('id')].disabled !== 'undefined') {
 				window[$(ele).attr('id')].disabled();
 			}
 		}
 	},
-	
+
 	select : function(ele) {
-		
+
 		// Get the settings value
 		var val = $(ele).find('option:selected').val();
-		
+
 		// Update in dataStore
 		dataStore[ $(ele).attr('id') ] = val;
 
 		// Sync new settings
-		if(dataStore['sync_auth_key'] != '') {
+		if(dataStore['sync_auth_key'] !== '') {
 			//sync_cp.save('Settings Panel');
 		}
 
@@ -601,17 +609,16 @@ var settings = {
 	}
 };
 
-
 var profiles_cp = {
 
 	init : function() {
-		
+
 		// Add new profile group
 		$('.settings_page a.new_profile').click(function(e) {
 			e.preventDefault();
 			profiles_cp.addGroup();
 		});
-		
+
 		// Color select
 		$('.settings_page .profiles li ul li').on('click', function() {
 			profiles_cp.changeColor(this);
@@ -621,127 +628,121 @@ var profiles_cp = {
 		$('.settings_page .profiles li .remove').on('click', function() {
 			profiles_cp.removeGroup(this);
 		});
-		
+
 		// Save the settings
 		$('.settings_page .profile_save').click(function(e) {
-			
+
 			// Prevent browsers default submission
 			e.preventDefault();
-			
+
 			// Save the settings
 			profiles_cp.save();
 		});
-		
+
 		// Rebuild profiles
 		profiles_cp.rebuildProfiles();
 	},
-	
+
 	rebuildProfiles : function() {
-		
-		if(dataStore['profiles'] == '') {
+
+		if(dataStore['profiles'] === '') {
 			return false;
 		}
-		
+
 		// Empty the list
 		$('.settings_page .profiles > li:not(.sample)').remove();
-		
+
 		var profiles = JSON.parse(dataStore['profiles']);
 
-		for(c = 0; c < profiles.length; c++) {
-		
+		for(var c = 0; c < profiles.length; c++) {
+
 			// Get the clone elementent
 			var clone = $('.settings_page .profiles li.sample').clone();
-		
+
 			// Get the target element
 			var target = $('.settings_page .profiles');
-			
+
 			// Append the new group
 			var content = $(clone).appendTo(target).removeClass('sample');
-			
+
 			// Re-set settings
 			content.find('.color').val( profiles[c]['color'] );
 			content.find('span.color').css('background-color', '#'+profiles[c]['color'][0]);
 			content.find('.title').val( profiles[c]['title'] );
 			content.find('.users').val( profiles[c]['users'] );
-			
+
 			// Re-set checkboxes
 			if(profiles[c]['background']) {
 				content.find('.background').attr('checked', true);
 			}
 		}
 	},
-	
+
 	addGroup : function() {
-		
+
 		// Get the clone elementent
 		var clone = $('.settings_page .profiles li.sample').clone();
-		
+
 		// Get the target element
 		var target = $('.settings_page .profiles');
-		
+
 		// Append the new group
 		$(clone).appendTo(target).removeClass('sample');
 	},
-	
+
 	removeGroup : function(ele) {
-		
+
 		if(confirm('Biztos törlöd ezt a csoportot?')) {
-		
+
 			// Remove the group from DOM
 			$(ele).closest('li').remove();
 		}
 	},
-	
+
 	changeColor : function(ele) {
-		
+
 		// Get selected color
 		var color = $(ele).find('span').html().split(',');
-		
+
 		// Set the color indicator
 		$(ele).parent().parent().find('span:first').css('background-color', '#'+color[0]);
-		
+
 		// Set the color input
 		$(ele).parent().parent().find('input.color').val(color.join(','));
 	},
-	
+
 	save : function() {
-		
+
 		// Var to store data
 		var data = [];
-		
+
 		// Iterate over the groups
 		$('.settings_page .profiles > li:not(.sample)').each(function(index) {
-			
+
 			// Create an new empty object for the group settings
 			data[index] = {};
-				
+
 			// Prefs
 			data[index]['color'] = $(this).find('.color').val().split(',');
 			data[index]['title'] = $(this).find('.title').val();
 			data[index]['users'] = $(this).find('.users').val().split(',');
-			
-			// Options
-			if( $(this).find('.background').attr('checked') == true || $(this).find('.background').attr('checked') == 'checked') {
-				data[index]['background'] = true;
-			} else {
-				data[index]['background'] = false;
-			}
-			
 
+			// Options
+			data[index]['background'] = !!($(this).find('.background').attr('checked') === true || $(this).find('.background').attr('checked') === 'checked');
 		});
-		
+
 		// Save settings in localStorage
 		port.postMessage({ name : "setSetting", key : 'profiles', val : JSON.stringify(data) });
-		
+
 		// Save new settings in dataStore
 		dataStore['profiles'] = JSON.stringify(data);
-		
+
 		// Save new settings in sync
 		//sync_cp.save('Settings Panel');
 
 		// Saved indicator
 		$('<p class="profile_status">&#10003;</p>').insertAfter( $('.settings_page .profile_save') );
-			
+
 		// Remove the idicator in 2 sec
 		setTimeout(function() {
 			$('.settings_page .profile_status').remove();
@@ -761,7 +762,7 @@ var sync_cp = {
 
 			// POST the data
 			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				//sync_cp.signup(data);
+				sync_cp.signup(data);
 			});
 
 		});
@@ -774,7 +775,7 @@ var sync_cp = {
 
 			// POST the data
 			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				//sync_cp.login(data);
+				sync_cp.login(data);
 			});
 		});
 
@@ -790,7 +791,7 @@ var sync_cp = {
 
 		// Ping for settings chances
 		//setTimeout(function() {
-			//sync_cp.ping();
+		//sync_cp.ping();
 		//}, 10000);
 	},
 
@@ -800,11 +801,12 @@ var sync_cp = {
 		alert(data.messages[0]);
 
 		// On success
-		if(data.errorCount == 0) {
+		if(data.errorCount === 0) {
 
 			// Get the values
 			var signup_nick = $('.settings_page.sync .signup input[name="nick"]');
 			var signup_pass = $('.settings_page.sync .signup input[name="pass"]');
+			var settings_status = $('.settings_page.sync .login .status');
 
 			// Store login credentials in localStorage
 			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });
@@ -815,15 +817,15 @@ var sync_cp = {
 			dataStore['sync_nick'] = signup_nick.val();
 
 			// Empty status div
-			$('.settings_page.sync .login .status').html('');
+			settings_status.html('');
 
 			// HTML to insert
-			html  = '<div class="loggedin">&#10003;</div>';
+			var html  = '<div class="loggedin">&#10003;</div>';
 			html += '<strong>Belépve mint: </strong>';
 			html += '<span>'+signup_nick.val()+'</span>';
 
 			// Insert new status
-			$('.settings_page.sync .login .status').html(html);
+			settings_status.html(html);
 
 			// Empty signup fields
 			signup_nick.val('');
@@ -836,33 +838,36 @@ var sync_cp = {
 
 	login : function(data) {
 
+		var html;
+		var settings_status = $('.settings_page.sync .login .status');
+
 		// Show error message if any
 		if(data.errorCount > 0) {
 
 			// Clear HTML from previous tries
-			$('.settings_page.sync .login .status').html('');
+			settings_status.html('');
 
 			// HTML to append
 			html = '<div class="loggedin error">X</div>';
 			html += '<strong>Hiba: </strong>';
 			html += '<span>'+data.messages[0]+'</span>';
 
-			$(html).appendTo($('.settings_page.sync .login .status'));
+			$(html).appendTo( settings_status );
 
-		// Success
+			// Success
 		} else {
 
 			// Get the nick
 			var login_nick = $('.settings_page.sync .login input[name="nick"]');
 
 			// Clear HTML from previous tries
-			$('.settings_page.sync .login .status').html('');
+			settings_status.html('');
 
 			html = '<div class="loggedin">&#10003;</div>';
 			html += '<strong>Belépve mint: </strong>';
 			html += '<span>'+login_nick.val()+'</span>';
 
-			$(html).appendTo($('.settings_page.sync .login .status'));
+			$(html).appendTo( settings_status );
 
 			// Store login credentials in localStorage
 			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });
@@ -881,7 +886,7 @@ var sync_cp = {
 	ping : function() {
 
 		// Exit when the user is not authenticated
-		if(dataStore['sync_auth_key'] == '') {
+		if(dataStore['sync_auth_key'] === '') {
 			return;
 		}
 
@@ -899,12 +904,12 @@ var sync_cp = {
 				if(data.date_m > dataStore['sync_last_sync']) {
 					sync_cp.get();
 
-				// There is no updates,
-				// Update the last checked date
+					// There is no updates,
+					// Update the last checked date
 				} else {
 
 					// Get current timestamp
-					var time = Math.round(new Date().getTime() / 1000)
+					var time = Math.round(new Date().getTime() / 1000);
 
 					// Update the last sync time
 					port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
@@ -941,35 +946,36 @@ var sync_cp = {
 				log.add('Sync failed, authentication error\r\n');
 
 				// Show the error message
-			    alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
-			    return;
+				alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
+				return;
 			}
 
 			// Log the request
 			log.add('Data received, processing...');
 
 			// Get current timestamp
-			var time = Math.round(new Date().getTime() / 1000)
+			var time = Math.round(new Date().getTime() / 1000);
 
 			// Update the last sync time
 			port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
 
 			// Update data in dataStore object
-			config = JSON.parse(data['settings']);
+			var config = JSON.parse(data['settings']);
 
 			// Update settings in localStorage
 			for (var key in config) {
+				if (config.hasOwnProperty(key)) {
+					// Exclude some settings
+					if(key.match(/sync/g) || key.match(/debugger/g)) {
+						continue;
+					}
 
-				// Exclude some settings
-				if(key.match('sync') || key.match('debugger')) {
-					continue;
+					// Store in localStorage
+					port.postMessage({ name : "setSetting", key : key, val : config[key] });
+
+					// Store in dataStore
+					dataStore[key] = config[key];
 				}
-
-				// Store in localStorage
-				port.postMessage({ name : "setSetting", key : key, val : config[key] });
-
-				// Store in dataStore
-				dataStore[key] = config[key];
 			}
 
 			// Log the request
@@ -1007,12 +1013,13 @@ var sync_cp = {
 			$('.settings_page.sync .log .last_sync').html(''+month+' '+date('d. -  H:i', time)+'');
 
 			// HTML for indicator
-			html = '<div class="status">';
+			var html = '<div class="status">';
 			html += '<div class="loggedin">&#10003;</div>';
 			html += '</div>';
 
 			// Insert HTML
-			$(html).insertAfter( $('.settings_page.sync .log button') );
+			var button = $('.settings_page.sync .log button');
+			$(html).insertAfter( button );
 
 			// Remove the idicator in 2 sec
 			setTimeout(function() {
@@ -1023,67 +1030,65 @@ var sync_cp = {
 };
 
 var log = {
-	
+
 	init : function() {
-		
+
 		// Clear event
 		$('.settings_page.debugger button').click(function() {
 			log.clear();
 		});
 	},
-	
+
 	add : function(message, origin) {
 
 		// Get current timestamp
-		var time = Math.round(new Date().getTime() / 1000)
+		var time = Math.round(new Date().getTime() / 1000);
+		var messages = [];
 
 		// Parse messages
-		if(dataStore['debugger_messages'] != '') {
-			var messages = JSON.parse(dataStore['debugger_messages']);
-		
-		} else {
-			var messages = [];
+		if(dataStore['debugger_messages'] !== '') {
+			messages = JSON.parse(dataStore['debugger_messages']);
 		}
-		
+
 		var month = date('M', time);
 
 		// Convert mounts names
 		$.each([
-		    ['Jan', 'január'],
-		    ['Feb', 'február'],
-		    ['Mar', 'március'],
-		    ['Apr', 'április'],
-		    ['May', 'május'],
-		    ['Jun', 'június'],
-		    ['Jul', 'július'],
-		    ['Aug', 'augusztus'],
-		    ['Sep', 'szeptember'],
-		    ['Oct', 'október'],
-		    ['Nov', 'november'],
-		    ['Dec', 'december'],
-		
+			['Jan', 'január'],
+			['Feb', 'február'],
+			['Mar', 'március'],
+			['Apr', 'április'],
+			['May', 'május'],
+			['Jun', 'június'],
+			['Jul', 'július'],
+			['Aug', 'augusztus'],
+			['Sep', 'szeptember'],
+			['Oct', 'október'],
+			['Nov', 'november'],
+			['Dec', 'december']
+
 		], function(index, item) {
-		    month = month.replace(item[0], item[1]);
+			month = month.replace(item[0], item[1]);
 		});
-		
+
 		// Append timestamp
 		message	= month + date('d. H:i - ', time) + message;
 
 		// Append origin
-		if(typeof origin != "undefined") {
+		if(typeof origin !== "undefined") {
 			message = message + ' | Origin: ' + origin;
 		}
 
 		// Add new messages
 		messages.push(message);
-		
+
 		if(messages.length > 100) {
 			messages.splice(0, 1);
 		}
-		
+
 		// Add to dataStore
 		dataStore['debugger_messages'] = JSON.stringify(messages);
-	
+
 		// Store new settings
 		port.postMessage({ name : "setSetting", key : 'debugger_messages', val : JSON.stringify(messages) });
 

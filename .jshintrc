@@ -4,7 +4,8 @@
 	"curly": false,
 	"eqeqeq": true,
 	"eqnull": true,
-	"latedef": true,
+	"devel": true,
+	"latedef": false,
 	"loopfunc": true,
 	"maxdepth": 5,
 	"maxparams": 5,
@@ -24,6 +25,12 @@
 	[
 		"jQuery",
 		"chrome",
+		"dataStore",
+		"date",
+		"port",
+		"cp",
+		"sync_cp",
+		"blocklist",
 		"$"
 	]
 }
