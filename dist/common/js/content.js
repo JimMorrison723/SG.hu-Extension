@@ -10,7 +10,7 @@ function convertBool(string) {
 	//noinspection JSUnresolvedFunction
 	switch (string.toLowerCase()) {
 		case "true":case "yes":case "1":
-		return true;
+			return true;
 		case "false":case "no":case "0":
 		case null:
 			return false;
@@ -381,7 +381,7 @@ var blocklist = {
 
 		var deletelist = dataStore['block_list'].split(',');
 
-		$('#forum-posts-list').find('ul li header').each(function () {
+		$('.forum-post').find('header').each(function () {
 			var nick;
 			if (document.location.href.match(/cikkek/)) {
 
@@ -392,7 +392,7 @@ var blocklist = {
 				if ($(this).find('a img').length === 1) {
 					nick = $(this).find('a img').attr('alt');
 				} else {
-					nick = $(this).find('a')[0];
+					nick = $(this).find('a#name').text();
 				}
 
 				nick = nick.replace(/ - VIP/, "");
@@ -422,7 +422,7 @@ var blocklist = {
 
 		if (confirm('Biztos tiltólistára teszed "' + nick + '" nevű felhasználót?')) {
 
-			$('#forum-posts-list').find('ul li header a[href="' + tmpUrl + '"]').each(function () {
+			$('.forum-post').find('header a[href="' + tmpUrl + '"]').each(function () {
 
 				// Remove the comment
 				$(this).closest('li.forum-post').animate({height: 0, opacity: 0}, 500, function () {
@@ -433,7 +433,7 @@ var blocklist = {
 			// Store new settings in localStorage
 			port.postMessage({name: "addToBlocklist", message: nick});
 
-			// Add name to blocklist 
+			// Add name to blocklist
 			$('<li><span>' + nick + '</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist');
 
 			// Remove empty blocklist message
@@ -443,7 +443,7 @@ var blocklist = {
 
 	unblock: function (user) {
 
-		$("#forum-posts-list").find("ul li header").each(function () {
+		$('.forum-post').find('header').each(function () {
 
 			var nick;
 			if (document.location.href.match(/cikkek/)) {
@@ -451,7 +451,12 @@ var blocklist = {
 				nick = $(this).find('a:first').html();
 			} else {
 
-				nick = ($(this).find("a img").length === 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0];
+				if ($(this).find('a img').length === 1) {
+					nick = $(this).find('a img').attr('alt');
+				} else {
+					nick = $(this).find('a#name').text();
+				}
+
 				nick = nick.replace(/ - VIP/, "");
 			}
 
@@ -469,7 +474,6 @@ var blocklist = {
 		});
 	}
 };
-
 
 var highlight_forum_categories = {
 
@@ -1814,7 +1818,6 @@ var highlight_comments_for_me = {
 	}
 };
 
-
 var threaded_comments = {
 
 	activated: function () {
@@ -2695,7 +2698,6 @@ var wysiwyg_editor = {
 
 };
 
-
 var message_center = {
 
 	init: function () {
@@ -3264,7 +3266,6 @@ var message_center = {
 	}
 
 };
-
 
 function setCookie(c_name, value, exdays) {
 	var exdate = new Date();

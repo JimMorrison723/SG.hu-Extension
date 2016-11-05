@@ -1,6 +1,6 @@
 {
    "name": "SG Fórum tuning",
-   "version": "3.3.1",
+   "version": "3.3.2",
    "manifest_version" : 2,
    "description": "Az sg.hu nem hivatalos $build:browser bővítménye.",
    "background": {
@@ -11,8 +11,8 @@
       "default_title": "SG Fórum tuning"
    },
    "content_scripts": [{
-      "matches" : [ "http://www.sg.hu/*", "http://sg.hu/*", "https://www.sg.hu/*", "https://sg.hu/*" ],
-      "js" : [ "js/libs/jquery.js", "js/libs/date.js", "js/libs/json.js", "js/libs/cleditor.js", "js/dom.js", "js/settings.js", "js/cleditor_bbcode.js", "js/content.js" ],
+      "matches" : [ "http://www.sg.hu/*", "http://sg.hu/*", "https://www.sg.hu/*", "https://sg.hu/*", "http://sgsync.dev.kreatura.hu/api_v2/*"],
+      "js" : [ "js/libs/jquery.js", "js/libs/date.js", "js/libs/cleditor.js", "js/dom.js", "js/settings.js", "js/cleditor_bbcode.js", "js/content.js" ],
       "css" : ["css/all.css"],
       "run_at" : "document_start",
       "all_frames": false
@@ -64,6 +64,9 @@
       "http://www.sg.hu/",
       "http://sg.hu/",
       "https://www.sg.hu/",
-      "https://sg.hu/"
+      "https://sg.hu/",
+      "http://sgsync.dev.kreatura.hu/api_v2/ping/",
+      "http://sgsync.dev.kreatura.hu/api_v2/set/",
+      "http://sgsync.dev.kreatura.hu/api_v2/get/"
    ]
 }

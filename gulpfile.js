@@ -53,9 +53,9 @@ gulp.task('concat', ['move'] ,function () {
 
 gulp.task('move', function () {
     return gulp.src(filesToMove, {base: './src/'})
-        .pipe(gulpIf('js/libs/*.js', uglify({
+        /*.pipe(gulpIf('js/libs/*.js', uglify({
             preserveComments: 'license'
-        })))
+        })))*/
         .pipe(gulpIf('*.js', replace(/\$build:version/g, pjson.version)))
         .pipe(gulpIf('*.json', replace(/\$build:version/g, pjson.version)))
         .pipe(gulp.dest('dist/common'));
