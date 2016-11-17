@@ -17,7 +17,7 @@
 
     // Define the defaults used for all new cleditor instances
     defaultOptions: {
-      width:        600, // width not including margins, borders or padding
+      width:        926, // width not including margins, borders or padding
       height:       200, // height not including margins, borders or padding
       controls:     // controls to add to the toolbar
                     "undo redo | bold italic underline | font size " +

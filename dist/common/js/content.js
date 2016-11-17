@@ -10,7 +10,7 @@ function convertBool(string) {
 	//noinspection JSUnresolvedFunction
 	switch (string.toLowerCase()) {
 		case "true":case "yes":case "1":
-			return true;
+		return true;
 		case "false":case "no":case "0":
 		case null:
 			return false;
@@ -2448,7 +2448,7 @@ var wysiwyg_editor = {
 
 		var cleditor_iframe = $('.cleditorMain:first iframe');
 		var textarea_message = $('textarea[name="message"]:first');
-		var buttons = $('form[name="newmessage"]');
+		var buttons = $('#forum-codes');
 
 		// Rearrange buttons
 		if (document.location.href.match(/cikkek/)) {
@@ -2461,74 +2461,33 @@ var wysiwyg_editor = {
 
 		} else {
 
+			$('#comments-login').remove();
+
 			// CLEditor init
 			$('textarea[name="message"]').cleditor();
 		}
 
-		$('form[name="newmessage"] a:eq(11)');
+		//$('form[name="newmessage"] a:eq(11)');
 
 		buttons.css('position', 'relative');
-		buttons.find('button:eq(1)').css({'position': 'absolute', 'left': 20});
-		buttons.find('button:eq(2)').css({'position': 'absolute', 'left': 110}); // 380
-		buttons.find('button:eq(3)').css('visibility', 'hidden');
-		buttons.find('button:eq(5)').css('visibility', 'hidden');
-		buttons.find('button:eq(6)').css({'position': 'absolute', 'left': 200});
-		buttons.find('button:eq(7)').css({'position': 'absolute', 'left': 290});
-		buttons.find('button:eq(8)').css({'position': 'absolute', 'right': 22});
-
-		// Insert video
-		buttons.find('button:eq(6)').click(function (e) {
-			e.preventDefault();
-
-			var thisURL = prompt("Add meg a beszúrandó video URL-jét!  (pl.: https://www.youtube.com/watch?v=sUntx0pe_qI)", "https://www.youtube.com/watch?v=sUntx0pe_qI");
-
-			if (thisURL && (((thisURL.length > 25 && thisURL.substring(0, 20) === "http://www.youtu.be/") || (thisURL.length > 25 && thisURL.substring(0, 16) === "http://youtu.be/") || thisURL.length > 25 && thisURL.substring(0, 25) === "http://www.youtube.com/v/") || (thisURL.length > 31 && thisURL.substring(0, 31) === "http://www.youtube.com/watch?v="))) {
-
-				var maxurlhossz = thisURL.search("&");
-
-				if (maxurlhossz === -1) {
-					maxurlhossz = 2000;
-				}
-
-				var kezdhossz = 31;
-
-				if (thisURL.substring(0, 25) === "http://www.youtube.com/v/") {
-					kezdhossz = 25;
-
-				} else if (thisURL.substring(0, 16) === "http://youtu.be/") {
-					kezdhossz = 16;
-
-				} else if (thisURL.substring(0, 20) === "http://www.youtu.be/") {
-					kezdhossz = 20;
-				}
-
-				var videocode = "[flash]https://www.youtube.com/v/" + thisURL.substring(kezdhossz, maxurlhossz) + "&fs=1&rel=0&color1=0x4E7AAB&color2=0x4E7AAB[/flash]";
-
-				var imod = cleditor_iframe.contents().find('body').html() + videocode;
-				cleditor_iframe.contents().find('body').html(imod);
-
-				// Without this, sometimes it doesn't insert the video link into the WYSIWYG editor
-				var tarea = textarea_message.val() + videocode;
-				textarea_message.val(tarea);
-			}
-
-		});
+		/*buttons.find('button:eq(1)').css({'position': 'absolute', 'left': 20});
+		 buttons.find('button:eq(2)').css({'position': 'absolute', 'left': 110}); // 380
+		 buttons.find('button:eq(3)').css('visibility', 'hidden');
+		 buttons.find('button:eq(5)').css('visibility', 'hidden');
+		 buttons.find('button:eq(6)').css({'position': 'absolute', 'left': 200});
+		 buttons.find('button:eq(7)').css({'position': 'absolute', 'left': 290});
+		 buttons.find('button:eq(8)').css({'position': 'absolute', 'right': 22});*/
 
 		// Create smiles container
 		$('<div id="ext_smiles"></div>').appendTo('form[name="newmessage"]');
 
 		// Add click event to show or hide smile list
-		buttons.find('button:eq(0)').toggle(
-			function (e) {
-				e.preventDefault();
-				$('#ext_smiles').slideDown();
-			},
+		var smiley = buttons.find('button:eq(0)');
 
-			function (e) {
-				e.preventDefault();
-				$('#ext_smiles').slideUp();
-			}
-		);
+		smiley.attr('data-codes','ext_smiley');
+		smiley.on('click', function() {
+			$('#ext_smiles').slideToggle(400);
+		});
 
 		var html = '';
 
@@ -3896,10 +3855,10 @@ function extInit() {
 			highlight_comments_for_me.activated();
 		}
 
-		/*		// WYSIWYG Editor
-		 if(dataStore['wysiwyg_editor'] === 'true') {
-		 wysiwyg_editor.activated();
-		 }*/
+		// WYSIWYG Editor
+		if(dataStore['wysiwyg_editor'] === 'true') {
+			wysiwyg_editor.activated();
+		}
 
 		if (dataStore['disable_point_system'] === 'true') {
 			disable_point_system.activated();
@@ -3917,9 +3876,9 @@ function extInit() {
 		}
 
 		//Pasted text will be a hyperlink, picture, video automatically
-		/*		if(dataStore['wysiwyg_editor'] === 'true' && dataStore['quick_insertion'] === 'true') {
-		 quick_insertion.activated();
-		 }*/
+		if(dataStore['wysiwyg_editor'] === 'true' && dataStore['quick_insertion'] === 'true') {
+			quick_insertion.activated();
+		}
 
 		// image, video urls in msg box can be previewed inline
 		if (dataStore['inline_image_viewer'] === 'true') {
@@ -4053,9 +4012,9 @@ function extInit() {
 			}
 
 			// WYSIWYG Editor
-			/*			if(dataStore['wysiwyg_editor'] === 'true') {
-			 wysiwyg_editor.activated();
-			 }*/
+			if(dataStore['wysiwyg_editor'] === 'true') {
+				wysiwyg_editor.activated();
+			}
 
 			// Auto resizing textarea
 			textarea_auto_resize.init();

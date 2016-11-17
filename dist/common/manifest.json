@@ -1,6 +1,6 @@
 {
    "name": "SG Fórum tuning",
-   "version": "3.3.2",
+   "version": "3.3.3",
    "manifest_version" : 2,
    "description": "Az sg.hu nem hivatalos $build:browser bővítménye.",
    "background": {
