@@ -140,7 +140,7 @@ var jump_unreaded_messages = {
 
 		// Target comment element
 		if ($('.ext_new_comment').length > 0) {
-			// target = $('.ext_new_comment:first').closest('li.forum-post');
+			target = $('.ext_new_comment:first').closest('li.forum-post');
 
 		} else if (last_read.length > 0) {
 			target = last_read.prev();

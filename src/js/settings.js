@@ -242,7 +242,7 @@ var cp = {
 				html += '<div class="log">';
 					html += '<h3>Statisztika és lehetőségek</h3>';
 					html += '<strong>Utolsó szinkronizálás: </strong>';
-					if(dataStore['sync_last_sync'] == 0) {
+					if(dataStore['sync_last_sync'] === 0) {
 					html += '<span class="last_sync">Soha</span>';
 					} else {
 
@@ -277,7 +277,7 @@ var cp = {
 				html += '<h3>Debugger</h3>';
 				html += '<textarea readonly="readonly">';
 
-				if(dataStore['debugger_messages'] != '') {
+				if(dataStore['debugger_messages'] !== '') {
 
 					// Parse debugger messages
 					var messages = JSON.parse(dataStore['debugger_messages']);
@@ -313,7 +313,7 @@ var cp = {
 		settings_button.css({ 'background-image' : 'url('+chrome.extension.getURL('/img/settings/button.png')+')' });
 
 		// Get the requested page number
-		var sPage = typeof page == "undefined" ? 0 : page;
+		var sPage = typeof page === "undefined" ? 0 : page;
 
 		// Select the right page
 		cp.tab(sPage);
