@@ -20,7 +20,7 @@ Az SG tuning célja, hogy funkcióival kényelmesebbé varázsolja az sg.hu-n t�
 - Csak olvasatlan üzenettel rendelkező kedvencek mutatása [Ötlet: Malakai]
 - Rövid kommentjelzők
 - Egyéni tiltólista [Ötlet: cSuwwi]
-- Egyeid megjelenés pár helyen
+- Egyedi megjelenés pár helyen
 - Az oldal aljára érve automatikusan előtölti a következő oldal kommentjeit
 - Navigációs gombok a topikokban
 - Animált válaszerre üzenet lenyitás
@@ -41,7 +41,6 @@ Az SG tuning célja, hogy funkcióival kényelmesebbé varázsolja az sg.hu-n t�
 - Beállítások szinkronizálása
 - Topikon belül lekérhető a felhasználó adatlapja
 - Gyors beszúrás: Vágólapról bemásolt linkeket/képeket autómatikusan BBCODE-ok közé illeszti
-- Dedikált spoiler gomb
 
 ## Fejlesztés
 
