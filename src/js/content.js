@@ -2467,16 +2467,7 @@ var wysiwyg_editor = {
 			$('textarea[name="message"]').cleditor();
 		}
 
-		//$('form[name="newmessage"] a:eq(11)');
-
 		buttons.css('position', 'relative');
-		/*buttons.find('button:eq(1)').css({'position': 'absolute', 'left': 20});
-		 buttons.find('button:eq(2)').css({'position': 'absolute', 'left': 110}); // 380
-		 buttons.find('button:eq(3)').css('visibility', 'hidden');
-		 buttons.find('button:eq(5)').css('visibility', 'hidden');
-		 buttons.find('button:eq(6)').css({'position': 'absolute', 'left': 200});
-		 buttons.find('button:eq(7)').css({'position': 'absolute', 'left': 290});
-		 buttons.find('button:eq(8)').css({'position': 'absolute', 'right': 22});*/
 
 		// Create smiles container
 		$('<div id="ext_smiles"></div>').appendTo('form[name="newmessage"]');
@@ -2484,9 +2475,10 @@ var wysiwyg_editor = {
 		// Add click event to show or hide smile list
 		var smiley = buttons.find('button:eq(0)');
 
+		// Override smiley button action
 		smiley.attr('data-codes','ext_smiley');
 		smiley.on('click', function() {
-			$('#ext_smiles').slideToggle(400);
+			$('#ext_smiles').slideToggle(300);
 		});
 
 		var html = '';
@@ -2551,7 +2543,6 @@ var wysiwyg_editor = {
 		html += '<img src="/kep/faces/schmoll2.gif" alt=""> ';
 		html += '<img src="/kep/faces/nezze.gif" alt=""> ';
 		html += '<img src="/kep/faces/kuss.gif" alt=""> ';
-
 
 		html += '</div>';
 
@@ -2627,12 +2618,11 @@ var wysiwyg_editor = {
 		html += '<img src="/kep/faces/integet2.gif" alt=""> ';
 		html += '<img src="/kep/faces/wilting.gif" border="0"> ';
 
-
 		html += '</div>';
 
 		html += '<div style="clear:both;"></div>';
 
-		$(html).appendTo('#ext_smiles');
+		$('#ext_smiles').html(html);
 
 		// Add click event to the smiles
 		$('#ext_smiles').find('img').click(function (e) {
@@ -2650,9 +2640,8 @@ var wysiwyg_editor = {
 			textarea_message.val(tarea);
 			textarea_message.cleditor()[0].focus();
 			cleditor_iframe.contents().find('body').html(imod);
-			textarea_message.cleditor()[0].focus();
+			textarea_message.cleditor()[0].focus().updateFrame(cleditor_iframe,true);
 		});
-
 	}
 
 };
