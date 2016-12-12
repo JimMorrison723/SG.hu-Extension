@@ -3371,7 +3371,7 @@ var profiles = {
 
 			} else {
 
-				nick = ($(this).find("a img").length === 1) ? $(this).find("a img").attr("alt") : $(this).find("a")[0];
+				nick = ($(this).find("a img").length === 1) ? $(this).find("a img").attr("alt") : $(this).find("a#name").text();
 				nick = nick.replace(/ - VIP/, "");
 			}
 

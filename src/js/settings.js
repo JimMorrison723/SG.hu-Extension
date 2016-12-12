@@ -609,23 +609,23 @@ var profiles_cp = {
 	init : function() {
 
 		// Add new profile group
-		$('.settings_page a.new_profile').click(function(e) {
+		$('.settings_page a.new_profile').on('click', function(e) {
 			e.preventDefault();
 			profiles_cp.addGroup();
 		});
 
 		// Color select
-		$('.settings_page .profiles li ul li').on('click', function() {
+		$('.settings_page .profiles').on('click', 'li ul li', function() {
 			profiles_cp.changeColor(this);
 		});
 
 		// Remove a group
-		$('.settings_page .profiles li .remove').on('click', function() {
+		$('.settings_page ul.profiles').on('click', 'p.remove', function() {
 			profiles_cp.removeGroup(this);
 		});
 
 		// Save the settings
-		$('.settings_page .profile_save').click(function(e) {
+		$('.settings_page .profile_save').on('click', function(e) {
 
 			// Prevent browsers default submission
 			e.preventDefault();
