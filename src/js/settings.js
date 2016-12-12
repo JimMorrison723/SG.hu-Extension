@@ -468,7 +468,7 @@ var blocklist_cp =  {
 		blocklist_cp.list();
 
 		// Create remove events
-		$('#ext_blocklist').find('a').on('click', function(e) {
+		$('#ext_blocklist').on('click', 'a', function(e) {
 			e.preventDefault();
 			blocklist_cp.remove(this);
 		});
@@ -723,7 +723,7 @@ var profiles_cp = {
 			data[index]['users'] = $(this).find('.users').val().split(',');
 
 			// Options
-			data[index]['background'] = !!($(this).find('.background').attr('checked') === true || $(this).find('.background').attr('checked') === 'checked');
+			data[index]['background'] = $(this).find('.background').prop('checked');
 		});
 
 		// Save settings in localStorage
