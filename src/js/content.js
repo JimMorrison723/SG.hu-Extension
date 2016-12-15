@@ -2975,93 +2975,93 @@ var message_center = {
 				continue;
 			}
 
-			function doAjax(messages, key) {
-
-				// Var to count new messages
-				var counter = 0;
-
-				$.ajax({
-
-					url: 'utolso80.php?id=' + messages[key]['topic_id'],
-					mimeType: 'text/html;charset=iso-8859-2',
-					async: false,
-
-					success: function (data) {
-
-						// Parse html response
-						var tmp = $(data);
-
-						var answers = [];
-						var time;
-
-						// Search posts that is an answer to us
-						var TmpAnswers = $(tmp.find('.header a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
-
-						// Iterate over the answers
-						if (TmpAnswers.length === 0) {
-
-							// Get current time
-							time = Math.round(new Date().getTime() / 1000);
-
-							// Set new checked date
-							messages[key]['checked'] = time;
-
-							// Store in localStorage
-							port.postMessage({name: "setMCMessages", message: JSON.stringify(messages)});
-
-							// Store in dataStore
-							dataStore['mc_messages'] = JSON.stringify(messages);
-
-							return false;
-
-						}
-
-						for (var c = 0; c < TmpAnswers.length; c++) {
-
-							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length === 1) ? $(TmpAnswers[c]).find('.topichead table tr:eq(0) td:eq(0) a img').attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0];
-							nick = nick.replace(/ - VIP/, "");
-
-							var message = $(TmpAnswers[c]).find('.maskwindow').html();
-
-							var id = $(TmpAnswers[c]).find('.topichead a:last').html().match(/\d+/g)[0];
-
-							var AD = {
-								id: id,
-								author: nick,
-								message: message
-							};
-
-							answers.push(AD);
-						}
-
-						// Count new messages
-						if (messages[key]['answers'].length !== TmpAnswers.length) {
-							counter = 1;
-						}
-
-						// Get current time
-						time = Math.round(new Date().getTime() / 1000);
-
-						// Set new checked date
-						messages[key]['checked'] = time;
-
-						// Set the answers
-						messages[key]['answers'] = answers;
-
-						// Store in localStorage
-						port.postMessage({name: "setMCMessages", message: JSON.stringify(messages)});
-
-						// Store in dataStore
-						dataStore['mc_messages'] = JSON.stringify(messages);
-					}
-				});
-
-				return counter;
-			}
-
 			// Make the requests
-			newmessages += doAjax(messages, key);
+			newmessages += message_center.doAjax(messages, key);
 		}
+	},
+
+	doAjax: function (messages, key) {
+
+		// Var to count new messages
+		var counter = 0;
+
+		$.ajax({
+
+			url: 'utolso80.php?id=' + messages[key]['topic_id'],
+			mimeType: 'text/html;charset=iso-8859-2',
+			async: false,
+
+			success: function (data) {
+
+				// Parse html response
+				var tmp = $(data);
+
+				var answers = [];
+				var time;
+
+				// Search posts that is an answer to us
+				var TmpAnswers = $(tmp.find('.header a:contains("#' + messages[key]['comment_id'] + '")').closest('center').get().reverse());
+
+				// Iterate over the answers
+				if (TmpAnswers.length === 0) {
+
+					// Get current time
+					time = Math.round(new Date().getTime() / 1000);
+
+					// Set new checked date
+					messages[key]['checked'] = time;
+
+					// Store in localStorage
+					port.postMessage({name: "setMCMessages", message: JSON.stringify(messages)});
+
+					// Store in dataStore
+					dataStore['mc_messages'] = JSON.stringify(messages);
+
+					return false;
+
+				}
+
+				for (var c = 0; c < TmpAnswers.length; c++) {
+
+					var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length === 1) ? $(TmpAnswers[c]).find('.topichead table tr:eq(0) td:eq(0) a img').attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0];
+					nick = nick.replace(/ - VIP/, "");
+
+					var message = $(TmpAnswers[c]).find('.maskwindow').html();
+
+					var id = $(TmpAnswers[c]).find('.topichead a:last').html().match(/\d+/g)[0];
+
+					var AD = {
+						id: id,
+						author: nick,
+						message: message
+					};
+
+					answers.push(AD);
+				}
+
+				// Count new messages
+				if (messages[key]['answers'].length !== TmpAnswers.length) {
+					counter = 1;
+				}
+
+				// Get current time
+				time = Math.round(new Date().getTime() / 1000);
+
+				// Set new checked date
+				messages[key]['checked'] = time;
+
+				// Set the answers
+				messages[key]['answers'] = answers;
+
+				// Store in localStorage
+				port.postMessage({name: "setMCMessages", message: JSON.stringify(messages)});
+
+				// Store in dataStore
+				dataStore['mc_messages'] = JSON.stringify(messages);
+			}
+		});
+
+		return counter;
 	},
 
 	buildOwnCommentsTab: function () {
