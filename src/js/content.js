@@ -3062,11 +3062,6 @@ var message_center = {
 			// Make the requests
 			newmessages += doAjax(messages, key);
 		}
-
-		// Sync new messages if any
-		if (newmessages > 0 && dataStore['sync_auth_key'] !== '') {
-			sync_cp.save('Message Center');
-		}
 	},
 
 	buildOwnCommentsTab: function () {
@@ -3577,9 +3572,6 @@ var add_to_list = {
 
 		// Update content GUI
 		profiles.init();
-
-		// Initiate sync
-		sync_cp.save('Profiles Content Script');
 	}
 };
 
@@ -4068,10 +4060,5 @@ port.onMessage.addListener(function (event) {
 
 		// Update dataStore with the new data
 		dataStore = event.message;
-
-		// Save changes to sync
-		if (dataStore['sync_status'] === 'true') {
-			sync_cp.save();
-		}
 	}
 });
