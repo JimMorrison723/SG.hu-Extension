@@ -37,7 +37,7 @@ var cp = {
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum tuning</h3>';
 				html += '<p>Verzió: $build:version</p>';
-				html += '<p>Kiadás dátuma: 2016. 11. 17.</p>';
+				html += '<p>Kiadás dátuma: 2016. 12. 15.</p>';
 				html += '<p>Fejlesztő: JimMorrison723 <a href="http://jimmorrison723.hu" target="_blank">http://jimmorrison723.hu</a>, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -548,7 +548,7 @@ var settings = {
 
 	save : function(ele) {
 
-		if( $(ele).hasClass('on') || $(ele).attr('checked') === 'checked' || $(ele).attr('checked') === true) {
+		if( $(ele).hasClass('on') || $(ele).prop('checked') === true || $(ele).is(':checked')) {
 
 			// Save new settings ...
 			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'true' });

@@ -66,17 +66,15 @@ var chat_hide = {
 	activated: function () {
 
 		$('#forum-chat').hide();
-		$('#forum-wrap')
-			.find('.blue-border-top').hide()
-			.find('.forums-block:first').css({'margin-top': '0px'});
+		$('#forum-wrap').find('.blue-border-top').hide();
+		$('#forum-wrap').find('.forums-block:first').css({'margin-top': '0px'});
 	},
 
 	disabled: function () {
 
 		$('#forum-chat').show();
-		$('#forum-wrap')
-			.find('.blue-border-top').show()
-			.find('.forums-block:first').css({'margin-top': '35px'});
+		$('#forum-wrap').find('.blue-border-top').show();
+		$('#forum-wrap').find('.forums-block:first').css({'margin-top': '35px'});
 	}
 };
 
@@ -1194,7 +1192,6 @@ var lights = {
 var update_fave_list = {
 
 	activated: function () {
-		var refresh_faves = $('#ext_refresh_faves');
 
 		// Disable site's built-in auto-update by remove "fkedvenc" ID
 		$('#fkedvenc').removeAttr('id');
@@ -1202,16 +1199,19 @@ var update_fave_list = {
 		// Create refhref button
 		$('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_refresh_faves" style="display: inline-block;"></div>]</span>'); // ha lesz blokkok átrendezése, akkor #ext_left_sidebar után már nem kell inline style
 
+		var refresh_faves = $('#ext_refresh_faves');
+
 		// Move the button away if unreaded faves is on
 		if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
 			refresh_faves.css('right', 18);
 		}
 
 		// Set refresh image
-		$('<img src="' + chrome.extension.getURL('/img/content/refresh.png') + '" style="background-color: rgba(128, 128, 128, 0.17);">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
+		$('<img src="' + chrome.extension.getURL('/img/content/refresh.png') + '">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
 
 		// Add click event
-		refresh_faves.click(function () {
+		refresh_faves.on('click', 'img', function () {
+			console.log('refresh');
 			update_fave_list.refresh();
 		});
 
@@ -1287,7 +1287,7 @@ var make_read_all_faves = {
 		}
 
 		// Append the image
-		/*$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo('#ext_read_faves');*/
+		/*$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo(read_faves);*/
 		$('<div id="icon">&#9675;</div>').appendTo('#ext_read_faves');
 
 		// Add click event
@@ -1301,7 +1301,7 @@ var make_read_all_faves = {
 		if (confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
 
 			// Set 'in progress' icon
-			//$('#ext_read_faves img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
+			//$('#ext_read_faves').find('img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
 			$('#ext_read_faves').find('#icon').html('&#9684;');
 
 			var count = 0;
@@ -1367,9 +1367,9 @@ var make_read_all_faves = {
 					}, 2000);
 
 					// Faves: show only with unreaded messages
-					/*if(dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn() ) {
-					 fav_show_only_unreaded.activated();
-					 }*/
+					if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
+						fav_show_only_unreaded.activated();
+					}
 
 					// Reset faves newmsg vars
 					if (dataStore['jump_unreaded_messages'] === 'true' && isLoggedIn()) {
@@ -1426,9 +1426,9 @@ function ext_valaszmsg(target, id, no, callerid) {
 				targetSelector.find('.b-h-o-head .msg-dateicon a').css('color', '#444');
 			}
 
-			/*	if(dataStore['disable_point_system'] === 'true') {
-			 disable_point_system.activated();
-			 }*/
+			if (dataStore['disable_point_system'] === 'true') {
+				disable_point_system.activated();
+			}
 
 			// Set-up block buttons
 			add_to_list.init();
@@ -1438,7 +1438,6 @@ function ext_valaszmsg(target, id, no, callerid) {
 			}
 
 			if (dataStore['columnify_comments'] === 'true') {
-
 				columnify_comments.activated();
 			}
 
@@ -2640,6 +2639,7 @@ var wysiwyg_editor = {
 			textarea_message.val(tarea);
 			textarea_message.cleditor()[0].focus();
 			cleditor_iframe.contents().find('body').html(imod);
+			//noinspection JSUnresolvedFunction
 			textarea_message.cleditor()[0].focus().updateFrame(cleditor_iframe,true);
 		});
 	}
@@ -3785,7 +3785,7 @@ function extInit() {
 	}
 
 	// SG index.php
-	if (document.location.href === 'https://www.sg.hu/' || document.location.href.match(/index.php/)) {
+	if (document.location.href === 'https://sg.hu/' || document.location.href.match(/index.php/)) {
 
 		// Settings
 		cp.init(3);
