@@ -318,9 +318,6 @@ var fav_show_only_unreaded = {
 
 	disabled: function () {
 
-		// Remove hidden class - No need in new design
-		//$('.ext_hidden_fave').removeClass('ext_hidden_fave');
-
 		// Remove toggle button
 		$('#ext_show_filtered_faves').remove();
 
@@ -2108,7 +2105,7 @@ var custom_blocks = {
 		var counter = 1;
 
 		// Left side blocks
-		$('.ext_left_sidebar > section, .ext_right_sidebar > div , .ext_right_sidebar > section').each(function () {
+		$('.ext_left_sidebar > section, #forum-chat, .forum-topics-block, .ext_right_sidebar > section').each(function () {
 
 			// Set the ID
 			$(this).addClass('ext_block block-' + counter);
