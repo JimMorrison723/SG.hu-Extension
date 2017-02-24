@@ -2429,12 +2429,14 @@ var custom_blocks = {
 	}
 };
 
-var remove_adds = {
+var remove_ads = {
 
 	activated: function () {
 
 		// Home facebook widget
 		$('#forum-fb-likebox').remove();
+		// Top ad bar
+		$('nav#menu-family').prev('div').remove();
 	}
 };
 
@@ -4030,7 +4032,7 @@ function extInit() {
 	// GLOBAL SCRIPTS
 	// remove adverts
 	if (dataStore['remove_ads'] === 'true') {
-		remove_adds.activated();
+		remove_ads.activated();
 	}
 }
 
