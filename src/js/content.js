@@ -510,6 +510,7 @@ var autoload_next_page = {
 			// Get the topic page to determinate max page number
 			$.ajax({
 				url: 'listazas.php3?id=' + topic_id,
+				dataType: 'html',
 				success: function (data) {
 
 					// Parse the response HTML
@@ -654,7 +655,7 @@ var autoload_next_page = {
 			if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
 				lights.forum_switchOn();
 			}
-		});
+		}, 'html');
 	}
 
 };
@@ -928,6 +929,7 @@ var show_navigation_buttons = {
 		/*$.ajax({
 		 url : 'ajax/kedvencdb.php',
 		 mimeType : 'text/html;charset=utf-8',
+		 dataType: 'html',
 		 success : function(data) {
 
 		 // Write data into wrapper
@@ -1348,7 +1350,7 @@ var make_read_all_faves = {
 					}
 
 					counter++;
-				});
+				}, 'html');
 			});
 
 			var interval = setInterval(function () {
@@ -2021,6 +2023,7 @@ var fetch_new_comments_in_topic = {
 		$.ajax({
 			url: url,
 			contentType: 'text/html; charset=utf-8',
+			dataType: 'html',
 			success: function (data) {
 
 				// Increase the counter
@@ -2989,6 +2992,7 @@ var message_center = {
 			url: 'utolso80.php?id=' + messages[key]['topic_id'],
 			mimeType: 'text/html;charset=iso-8859-2',
 			async: false,
+			dataType: 'html',
 
 			success: function (data) {
 
