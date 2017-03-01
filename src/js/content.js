@@ -509,7 +509,7 @@ var autoload_next_page = {
 
 			// Get the topic page to determinate max page number
 			$.ajax({
-				url: 'forum/tema/1487862150' + topic_id,
+				url: 'forum/tema/' + topic_id,
 				dataType: 'html',
 				success: function (data) {
 
@@ -614,11 +614,13 @@ var autoload_next_page = {
 
 				// Topics
 			} else {
-				//TODO: safe response
 				tmp = tmp.find('div#forum-posts-list');
-				tmp.insertAfter('.ext_autopager_idicator:last');
-				//tmp = safeResponse.cleanDomString(tmp[0].innerHTML);
-				//$( '.ext_autopager_idicator:last' ).appendTo(tmp);
+				tmp = safeResponse.cleanDomHtml(tmp[0]);
+
+				//TODO: fix meh workaround
+				var d = document.createElement('div');
+				d.innerHTML = tmp;
+				$(d).insertAfter('.ext_autopager_idicator:last');
 			}
 
 			autoload_next_page.progress = false;
@@ -1212,7 +1214,6 @@ var update_fave_list = {
 
 		// Add click event
 		refresh_faves.on('click', 'img', function () {
-			console.log('refresh');
 			update_fave_list.refresh();
 		});
 
@@ -1228,49 +1229,55 @@ var update_fave_list = {
 		// Set 'in progress' icon
 		refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png'));
 
-		/*$.ajax({
-		 url : 'ajax/kedvencdb.php',
-		 mimeType : 'text/html;charset=utf-8',
-		 success : function(data) {*/
-		$("nav#favorites-list").load("https://sg.hu/forum/ nav#favorites-list", function () {
+		$.ajax({
+			url: 'https://sg.hu/forum/',
+			mimeType: 'text/html;charset=utf-8',
+			dataType: 'html',
 
-			// Set 'completed' icon
-			refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_done.png'));
+			success: function (data2) {
 
-			// Set back the normal icon in 1 sec
-			setTimeout(function () {
-				refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh.png'));
-			}, 2000);
+				var data = $('nav#favorites-list', data2);
 
-			// Append new fave list
-			/*$('.ext_faves:first').next().html(data);*/
+				// Filter the response - for security reasons
+				data = safeResponse.cleanDomHtml(data[0]);
 
-			// Faves: show only with unreaded messages
-			if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
-				fav_show_only_unreaded.activated();
-			}
+				// Update fav list
+				$("nav#favorites-list").html(data);
 
-			// Faves: short comment marker
-			if (dataStore['short_comment_marker'] === 'true' && isLoggedIn()) {
-				short_comment_marker.activated();
-			}
+				// Set 'completed' icon
+				refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_done.png'));
 
-			// Custom list styles
-			if (dataStore['highlight_forum_categories'] === 'true') {
-				highlight_forum_categories.activated();
-			}
+				// Set back the normal icon in 1 sec
+				setTimeout(function () {
+					refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh.png'));
+				}, 1000);
 
-			// Jump the last unreaded message
-			if (dataStore['jump_unreaded_messages'] === 'true' && isLoggedIn()) {
-				jump_unreaded_messages.activated();
-			}
+				// Faves: show only with unreaded messages
+				if (dataStore['fav_show_only_unreaded'] === 'true' && isLoggedIn()) {
+					fav_show_only_unreaded.activated();
+				}
 
-			//Night mode
-			if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
-				lights.forum_switchOn();
+				// Faves: short comment marker
+				if (dataStore['short_comment_marker'] === 'true' && isLoggedIn()) {
+					short_comment_marker.activated();
+				}
+
+				// Custom list styles
+				if (dataStore['highlight_forum_categories'] === 'true') {
+					highlight_forum_categories.activated();
+				}
+
+				// Jump the last unreaded message
+				if (dataStore['jump_unreaded_messages'] === 'true' && isLoggedIn()) {
+					jump_unreaded_messages.activated();
+				}
+
+				//Night mode
+				if (dataStore['show_navigation_buttons_night'] === 'true' && dataStore['navigation_button_night_state'] === 'true') {
+					lights.forum_switchOn();
+				}
 			}
 		});
-		/*});*/
 	}
 };
 
@@ -1417,6 +1424,8 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 		$.get(url, function (data) {
 
+			data = safeResponse.cleanDomHtml(data);
+
 			// Show the comment
 			targetSelector.html(data).hide().slideDown();
 
@@ -1450,7 +1459,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 				lights.topic_switchOn();
 			}
 
-		});
+		}, 'html');
 	}
 	else {
 		targetSelector.slideUp();
@@ -2026,6 +2035,7 @@ var fetch_new_comments_in_topic = {
 			url: url,
 			contentType: 'text/html; charset=utf-8',
 			dataType: 'html',
+
 			success: function (data) {
 
 				// Increase the counter
@@ -2042,6 +2052,10 @@ var fetch_new_comments_in_topic = {
 
 				// Fetch new comments
 				var comments = $(tmp).find('.post');
+
+				// Filter the response - for security reasons
+				comments = safeResponse.cleanDomHtml(comments[0]);
+
 				// Append new comments
 				$('#forum-posts-list').find('ul').prepend( comments );
 
@@ -3036,6 +3050,8 @@ var message_center = {
 					nick = nick.replace(/ - VIP/, "");
 
 					var message = $(TmpAnswers[c]).find('.maskwindow').html();
+					// For "security" reasons, filter message
+					message = safeResponse.cleanDomHtml(message);
 
 					var id = $(TmpAnswers[c]).find('.topichead a:last').html().match(/\d+/g)[0];
 
@@ -3782,10 +3798,15 @@ var inline_image_viewer = {
 // https://github.com/operatester/safeResponse/blob/1.1/safeResponse.js
 var safeResponse = {
 
-	validAttrs : [ "class", "id", "href", "style" ],
+	validAttrs : [ "class", "id", "href", "style", "data-info", "data-post-info", "rel", "target", "src", "alt", "title",
+		"datetime", "direction", "data-id", "border"],
 
 	cleanDomString: function (html) {
-		return this.__cleanDomString(html);
+		return safeResponse.__cleanDomString(html);
+	},
+
+	cleanDomHtml: function (html) {
+		return safeResponse.__cleanDomHtml(html);
 	},
 
 	__removeInvalidAttributes: function(target) {
@@ -3794,13 +3815,15 @@ var safeResponse = {
 		for (var i = attrs.length - 1; i >= 0; i--) {
 			currentAttr = attrs[i].name;
 
-			if (attrs[i].specified && this.validAttrs.indexOf(currentAttr) === -1) {
+			if (attrs[i].specified && safeResponse.validAttrs.indexOf(currentAttr) === -1) {
 				target.removeAttribute(currentAttr);
+				console.log(currentAttr);
 			}
 
 			if (
 				currentAttr === "href" &&
-				/^(#|javascript[:])/gi.test(target.getAttribute("href"))
+				target.getAttribute("href").length > 1 &&
+				/^((javascript[:])|#(?!reply))/gi.test(target.getAttribute("href"))
 			) {
 				target.parentNode.removeChild(target);
 			}
@@ -3811,9 +3834,20 @@ var safeResponse = {
 		var parser = new DOMParser;
 		var tmpDom = parser.parseFromString(data, "text/html").body;
 
+		return safeResponse.clean(tmpDom);
+	},
+
+	__cleanDomHtml: function (data) {
+		var parser = new DOMParser;
+		var tmpDom = parser.parseFromString(data.outerHTML, "text/html").body;
+
+		return safeResponse.clean(tmpDom);
+	},
+
+	clean: function (tmpDom) {
 		var list, current;
 
-		list = tmpDom.querySelectorAll("script,img");
+		list = tmpDom.querySelectorAll("script");
 
 		for (var i = list.length - 1; i >= 0; i--) {
 			current = list[i];
@@ -3823,9 +3857,8 @@ var safeResponse = {
 		list = tmpDom.getElementsByTagName("*");
 
 		for (i = list.length - 1; i >= 0; i--) {
-			this.__removeInvalidAttributes(list[i]);
+			safeResponse.__removeInvalidAttributes(list[i]);
 		}
-
 		return tmpDom.innerHTML;
 	}
 };
