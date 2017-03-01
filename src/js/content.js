@@ -509,7 +509,7 @@ var autoload_next_page = {
 
 			// Get the topic page to determinate max page number
 			$.ajax({
-				url: 'listazas.php3?id=' + topic_id,
+				url: 'forum/tema/1487862150' + topic_id,
 				dataType: 'html',
 				success: function (data) {
 
@@ -599,7 +599,7 @@ var autoload_next_page = {
 
 			// Articles
 			if (document.location.href.match(/cikkek/)) {
-				tmp = tmp.find('.b-h-o-head a').closest('.b-h-o-head');
+				/*tmp = tmp.find('.b-h-o-head a').closest('.b-h-o-head');
 				tmp.each(function () {
 
 					// Maintain style settings
@@ -610,13 +610,15 @@ var autoload_next_page = {
 					// Insert
 					$(this).closest('center').insertBefore('.std2:last');
 					$(this).parent().css('width', 700);
-				});
+				});*/
 
 				// Topics
 			} else {
-
+				//TODO: safe response
 				tmp = tmp.find('div#forum-posts-list');
 				tmp.insertAfter('.ext_autopager_idicator:last');
+				//tmp = safeResponse.cleanDomString(tmp[0].innerHTML);
+				//$( '.ext_autopager_idicator:last' ).appendTo(tmp);
 			}
 
 			autoload_next_page.progress = false;
@@ -2440,6 +2442,10 @@ var remove_ads = {
 		$('#forum-fb-likebox').remove();
 		// Top ad bar
 		$('nav#menu-family').prev('div').remove();
+		// Sidebar ad
+		$('section#sidebar-user-favorites').next('div').remove();
+		// Bottom ad
+		$('div.forum-topics-block').next('div').remove();
 	}
 };
 
@@ -3770,6 +3776,57 @@ var inline_image_viewer = {
 				$(this).addClass('closed');
 			}
 		});
+	}
+};
+
+// https://github.com/operatester/safeResponse/blob/1.1/safeResponse.js
+var safeResponse = {
+
+	validAttrs : [ "class", "id", "href", "style" ],
+
+	cleanDomString: function (html) {
+		return this.__cleanDomString(html);
+	},
+
+	__removeInvalidAttributes: function(target) {
+		var attrs = target.attributes, currentAttr;
+
+		for (var i = attrs.length - 1; i >= 0; i--) {
+			currentAttr = attrs[i].name;
+
+			if (attrs[i].specified && this.validAttrs.indexOf(currentAttr) === -1) {
+				target.removeAttribute(currentAttr);
+			}
+
+			if (
+				currentAttr === "href" &&
+				/^(#|javascript[:])/gi.test(target.getAttribute("href"))
+			) {
+				target.parentNode.removeChild(target);
+			}
+		}
+	},
+
+	__cleanDomString: function (data) {
+		var parser = new DOMParser;
+		var tmpDom = parser.parseFromString(data, "text/html").body;
+
+		var list, current;
+
+		list = tmpDom.querySelectorAll("script,img");
+
+		for (var i = list.length - 1; i >= 0; i--) {
+			current = list[i];
+			current.parentNode.removeChild(current);
+		}
+
+		list = tmpDom.getElementsByTagName("*");
+
+		for (i = list.length - 1; i >= 0; i--) {
+			this.__removeInvalidAttributes(list[i]);
+		}
+
+		return tmpDom.innerHTML;
 	}
 };
 
