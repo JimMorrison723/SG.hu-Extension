@@ -505,7 +505,7 @@ var autoload_next_page = {
 			autoload_next_page.currPage = 1;
 
 			// Get topic ID
-			var topic_id = $('nav#breadcrumb select option:selected').val();
+			var topic_id = $('section#forum-posts').data('topic-id');
 
 			// Get the topic page to determinate max page number
 			$.ajax({
@@ -518,6 +518,7 @@ var autoload_next_page = {
 
 					// Fetch the max page number
 					autoload_next_page.maxPage = parseInt($(tmp).find('nav.pagination a:last').prev().html());
+					//TODO: this is NaN
 				}
 			});
 
@@ -570,7 +571,7 @@ var autoload_next_page = {
 			if (document.location.href.match(/cikkek/)) {
 
 				// Get topic ID
-				var topic_id = $('nav#breadcrumb select option:selected').val();
+				var topic_id = $('section#forum-posts').data('topic-id');
 
 				// Url to call	
 				url = 'forum/tema/' + topic_id;
@@ -596,21 +597,18 @@ var autoload_next_page = {
 
 			// Parse the response HTML
 			var tmp = $(data);
+			var d;
 
 			// Articles
 			if (document.location.href.match(/cikkek/)) {
-				/*tmp = tmp.find('.b-h-o-head a').closest('.b-h-o-head');
-				tmp.each(function () {
 
-					// Maintain style settings
-					$(this).addClass('topichead');
-					$(this).css('background', 'url(images/ful_o_bgbg.gif)');
-					$(this).find('.msg-dateicon a').css('color', '#444');
+				tmp = tmp.find('div#forum-posts-list');
+				tmp = safeResponse.cleanDomHtml(tmp[0]);
 
-					// Insert
-					$(this).closest('center').insertBefore('.std2:last');
-					$(this).parent().css('width', 700);
-				});*/
+				//TODO: fix meh workaround
+				d = document.createElement('div');
+				d.innerHTML = tmp;
+				$(d).insertAfter('.ext_autopager_idicator:last');
 
 				// Topics
 			} else {
@@ -618,7 +616,7 @@ var autoload_next_page = {
 				tmp = safeResponse.cleanDomHtml(tmp[0]);
 
 				//TODO: fix meh workaround
-				var d = document.createElement('div');
+				d = document.createElement('div');
 				d.innerHTML = tmp;
 				$(d).insertAfter('.ext_autopager_idicator:last');
 			}
@@ -3774,7 +3772,7 @@ var inline_image_viewer = {
 var safeResponse = {
 
 	validAttrs : [ "class", "id", "href", "style", "data-info", "data-post-info", "rel", "target", "src", "alt", "title",
-		"datetime", "direction", "data-id", "border"],
+		"datetime", "direction", "data-id", "border", "height", "width", "onload", "data-pagespeed-url-hash" ],
 
 	cleanDomString: function (html) {
 		return safeResponse.__cleanDomString(html);
@@ -3792,7 +3790,6 @@ var safeResponse = {
 
 			if (attrs[i].specified && safeResponse.validAttrs.indexOf(currentAttr) === -1) {
 				target.removeAttribute(currentAttr);
-				console.log(currentAttr);
 			}
 
 			if (
