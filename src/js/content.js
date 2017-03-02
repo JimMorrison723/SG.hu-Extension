@@ -900,72 +900,47 @@ var show_navigation_buttons = {
 		var ext_nav_faves = $('#ext_nav_faves');
 		var ext_nav_faves_arrow = $('#ext_nav_faves_arrow');
 
-		ext_nav_faves_wrapper.find('.ext_nav_fave_list').load(url + ' nav#favorites-list', function () {
+		$.ajax({
+			url: url,
+			mimeType: 'text/html;charset=utf-8',
+			dataType: 'html',
+			success: function (tmp) {
 
-			// Write data into wrapper
-			if (dataStore['jump_unreaded_messages'] === 'true') {
-				jump_unreaded_messages.activated();
+				var data = $('nav#favorites-list', tmp);
+
+				// Security reasons
+				data = safeResponse.cleanDomHtml(data[0]);
+
+				// Write data into wrapper
+				$('#ext_nav_faves_wrapper .ext_nav_fave_list').html(data);
+
+				if (dataStore['jump_unreaded_messages'] === 'true') {
+					jump_unreaded_messages.activated();
+				}
+
+				// Hide topics that doesnt have unreaded messages
+				fav_show_only_unreaded.activated();
+
+				// Faves: short comment marker
+				if (dataStore['short_comment_marker'] === 'true') {
+					short_comment_marker.activated();
+				}
+
+				// Set position
+				show_navigation_buttons.findArrowPosition(ext_nav_faves_arrow, ext_nav_faves);
+				show_navigation_buttons.findPosition(ext_nav_faves_wrapper, ext_nav_faves);
+
+				// Hide opened overlays
+				show_navigation_buttons.removeOverlay();
+
+				// Show the container
+				ext_nav_faves_wrapper.show();
+				ext_nav_faves_arrow.show();
+
+				// Create the hiding overlay
+				show_navigation_buttons.createOverlay();
 			}
-
-			// Hide topics that doesnt have unreaded messages
-			fav_show_only_unreaded.activated();
-
-			// Faves: short comment marker
-			if (dataStore['short_comment_marker'] === 'true') {
-				short_comment_marker.activated();
-			}
-
-			// Set position
-			show_navigation_buttons.findArrowPosition(ext_nav_faves_arrow, ext_nav_faves);
-			show_navigation_buttons.findPosition(ext_nav_faves_wrapper, ext_nav_faves);
-
-			// Hide opened overlays
-			show_navigation_buttons.removeOverlay();
-
-			// Show the container
-			ext_nav_faves_wrapper.show();
-			ext_nav_faves_arrow.show();
-
-			// Create the hiding overlay
-			show_navigation_buttons.createOverlay();
 		});
-
-		/*$.ajax({
-		 url : 'ajax/kedvencdb.php',
-		 mimeType : 'text/html;charset=utf-8',
-		 dataType: 'html',
-		 success : function(data) {
-
-		 // Write data into wrapper
-		 $('#ext_nav_faves_wrapper .ext_nav_fave_list').html(data);
-
-		 if(dataStore['jump_unreaded_messages'] === 'true') {
-		 jump_unreaded_messages.activated();
-		 }
-
-		 // Hide topics that doesnt have unreaded messages
-		 fav_show_only_unreaded.activated();
-
-		 // Faves: short comment marker
-		 if(dataStore['short_comment_marker'] == 'true' ) {
-		 short_comment_marker.activated();
-		 }
-
-		 // Set position
-		 show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
-		 show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
-
-		 // Hide opened overlays
-		 show_navigation_buttons.removeOverlay();
-
-		 // Show the container
-		 $('#ext_nav_faves_wrapper').show();
-		 $('#ext_nav_faves_arrow').show();
-
-		 // Create the hiding overlay
-		 show_navigation_buttons.createOverlay();
-		 }
-		 });*/
 	},
 
 	findArrowPosition: function (ele, target) {
