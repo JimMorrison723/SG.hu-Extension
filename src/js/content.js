@@ -3582,6 +3582,10 @@ var columnify_comments = {
 			// Get the message element
 			var target = $(this).find('section.body');
 
+			// if no target
+			if (target.html() === undefined)
+				return;
+
 			// Add multi column when the text is larder than 200px
 			if (target.html().length > 800) {
 				target.css({'-webkit-column-width': 296, '-webkit-column-gap': 20, 'text-align': 'justify'});
@@ -3855,11 +3859,6 @@ function extInit() {
 		// setPredefinedVars
 		setPredefinedVars();
 
-		// Maintain style settings
-		$('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
-		$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
-		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
-
 		// Message Center
 		if (dataStore['message_center'] === 'true' && isLoggedIn()) {
 			message_center.article();
@@ -3867,7 +3866,11 @@ function extInit() {
 
 		// Threaded_comments
 		if (dataStore['threaded_comments'] === 'true') {
-			threaded_comments.activated();
+			// only fire if page has loaded
+			$(function () {
+					threaded_comments.activated();
+				}
+			);
 		}
 
 		// Set-up block buttons
@@ -4017,7 +4020,11 @@ function extInit() {
 
 			//gradual_comments
 			if (dataStore['threaded_comments'] === 'true') {
-				threaded_comments.activated();
+				// only fire if page has loaded
+				$(function () {
+						threaded_comments.activated();
+					}
+				);
 			}
 
 			// Jump the last unreaded message
