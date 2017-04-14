@@ -409,7 +409,7 @@
 	width: 16px;
 	height: 16px;
 	position: absolute;
-	top: 14px;
+	top: -20px;
 	right: 6px;
 	cursor: pointer;
 	z-index: 100;

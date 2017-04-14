@@ -1488,6 +1488,9 @@ var overlay_reply_to = {
 			overlay_reply_to.opened = true;
 		}
 
+		var textarea_clone;
+		var body = $('body');
+
 		// Create the hidden layer
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 
@@ -1517,135 +1520,124 @@ var overlay_reply_to = {
 		// Create textarea clone
 
 		// WYSIWYG editor
-		/*if(dataStore['wysiwyg_editor'] === 'true') {
+		if (dataStore['wysiwyg_editor'] === 'true') {
 
-		 if(document.location.href.match(/cikkek/)) {
+			if (document.location.href.match(/cikkek/)) {
 
-		 var textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
-		 $('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
+				textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
+				$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
 
-		 // Add 'article' class to the clone
-		 textarea_clone.addClass('article');
+				// Add 'article' class to the clone
+				textarea_clone.addClass('article');
 
-		 // Remove username line
-		 textarea_clone.find('b').remove();
+				// Remove username line
+				textarea_clone.find('b').remove();
 
-		 // Maintain style settings
-		 textarea_clone.find('div:first').removeAttr('id');
+				// Maintain style settings
+				textarea_clone.find('div:first').removeAttr('id');
 
-		 // Remove div padding
-		 textarea_clone.find('form div div').css('padding', 0);
+				// Remove div padding
+				textarea_clone.find('form div div').css('padding', 0);
 
-		 } else {
-		 var textarea_clone = $('form[name="newmessage"]').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+			} else {
+				textarea_clone = $('form[name="newmessage"]').find('div.cleditorMain').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 
-		 // Add 'article' class to the clone
-		 textarea_clone.addClass('topic');
+				// Add 'article' class to the clone
+				textarea_clone.addClass('topic');
 
-		 // Remove username
-		 textarea_clone.find('.std1').remove();
+				// Remove div padding
+				textarea_clone.find('form div:eq(0)').css('padding', 0);
+			}
 
-		 // Remove div padding
-		 textarea_clone.find('form div:eq(0)').css('padding', 0);
-		 }
+			textarea_clone.find('.cleditorMain').remove();
+			textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
 
-		 textarea_clone.find('.cleditorMain').remove();
-		 textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
+			// Copy textarea original comment to the tmp element
+			textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
 
-		 // Copy textarea original comment to the tmp element
-		 textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
+			// Apply some styles
+			textarea_clone.css({'background': 'none', 'border': 'none'});
 
+			// Fix buttons
+			textarea_clone.find('a:eq(0)').css({position: 'absolute', top: 220, left: 0});
+			textarea_clone.find('a:eq(1)').css({position: 'absolute', top: 220, left: 90, visibility: 'visible'});
+			textarea_clone.find('a:eq(2)').css({display: 'none'});
+			textarea_clone.find('a:eq(3)').css({display: 'none'});
+			textarea_clone.find('a:eq(4)').css({position: 'absolute', top: 220, left: 180});
+			textarea_clone.find('a:eq(5)').css({position: 'absolute', top: 220, left: 270, right: 'auto'});
 
-		 // Apply some styles
-		 textarea_clone.css({'background' : 'none', 'border' : 'none' });
+			textarea_clone.find('a:eq(6)').css({position: 'absolute', top: 220, right: 0});
 
+			// Fix smile list
+			if (document.location.href.match(/cikkek/)) {
+				textarea_clone.find('#ext_smiles').css({'padding-left': 50, 'padding-right': 50, 'margin-top': 20});
+			} else {
+				textarea_clone.find('#ext_smiles').css({'padding-left': 100, 'padding-right': 100, 'margin-top': 15});
+			}
+			textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 
-		 // Fix buttons
-		 textarea_clone.find('a:eq(0)').css({ position : 'absolute', top : 220, left : 0 });
-		 textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90, visibility : 'visible' });
-		 textarea_clone.find('a:eq(2)').css({ display: 'none' });
-		 textarea_clone.find('a:eq(3)').css({ display: 'none' });
-		 textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
-		 textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270, right : 'auto' });
+			// CLEditor init
+			if (document.location.href.match(/cikkek/)) {
+				$(".ext_clone_textarea textarea").cleditor({width: 696, height: 200})[0].focus();
+				textarea_clone.find('.cleditorMain').css({position: 'relative', top: -10});
+			} else {
+				$(".ext_clone_textarea textarea").cleditor({width: 800})[0].focus();
+			}
 
-		 textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
-
-		 // Fix smile list
-		 if(document.location.href.match(/cikkek/)) {
-		 textarea_clone.find('#ext_smiles').css({ 'padding-left' : 50, 'padding-right' : 50, 'margin-top' : 20 });
-		 } else {
-		 textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
-		 }
-		 textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
-
-		 // CLEditor init
-		 if(document.location.href.match(/cikkek/)) {
-		 $(".ext_clone_textarea textarea").cleditor({ width : 696, height: 200 })[0].focus();
-		 textarea_clone.find('.cleditorMain').css({ position : 'relative', top : -10 });
-		 } else {
-		 $(".ext_clone_textarea textarea").cleditor({ width : 800 })[0].focus();
-		 }
-
-
-		 // Normal textarea
-		 } else {*/
-
-		var textarea_clone;
-		if (document.location.href.match(/cikkek/)) {
-
-			textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
-			$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
-
-
-			// Add 'article' class to the clone
-			textarea_clone.addClass('article');
-
-			// Remove username line
-			textarea_clone.find('b').remove();
-
-			// Maintain style settings
-			textarea_clone.find('div:first').removeAttr('id');
-
-			// Create a container element around the textarea for box-shadow
-			$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
-
-			// Put textarea the container
-			textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
-
+			// Normal textarea
 		} else {
 
-			textarea_clone = $('form[name="newmessage"] textarea').closest('form').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+			if (document.location.href.match(/cikkek/)) {
 
-			// Add 'topic' class to the clone
-			textarea_clone.addClass('topic');
+				textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
+				$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
 
-			// Remove username line
-			textarea_clone.find('#comments-login').remove();
+				// Add 'article' class to the clone
+				textarea_clone.addClass('article');
 
-			// Create a container element around the textarea for box-shadow
-			$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+				// Remove username line
+				textarea_clone.find('b').remove();
 
-			// Put textarea the container
-			textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
+				// Maintain style settings
+				textarea_clone.find('div:first').removeAttr('id');
+
+				// Create a container element around the textarea for box-shadow
+				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+
+				// Put textarea the container
+				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
+
+			} else {
+
+				textarea_clone = $('form[name="newmessage"] textarea').closest('form').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+
+				// Add 'topic' class to the clone
+				textarea_clone.addClass('topic');
+
+				// Remove username line
+				textarea_clone.find('#comments-login').remove();
+
+				// Create a container element around the textarea for box-shadow
+				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+
+				// Put textarea the container
+				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
+			}
+
+			// Copy textarea original comment to the tmp element
+			textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
+
+			// Fix buttons
+			textarea_clone.find('button:eq(1)').css({position: 'absolute', left: 0}); // -85
+			textarea_clone.find('button:eq(2)').css({position: 'absolute', left: 90});  // -175
+			textarea_clone.find('button:eq(3)').css({position: 'absolute', left: 180}); // -265
+			textarea_clone.find('button:eq(4)').css({position: 'absolute', left: 270}); // -375
+			textarea_clone.find('button:eq(5)').css({position: 'absolute', left: 380}); // -486
+			textarea_clone.find('button:eq(6)').css({position: 'absolute', left: 491}); // -608
+			textarea_clone.find('button:eq(7)').css({position: 'absolute', left: 613}); // -711,52
+
+			/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
 		}
-
-		var ext_clone_textarea = $('.ext_clone_textarea');
-		var body = $('body');
-
-		// Copy textarea original comment to the tmp element
-		textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
-
-		// Fix buttons
-		textarea_clone.find('button:eq(1)').css({position: 'absolute', left: 0}); // -85
-		textarea_clone.find('button:eq(2)').css({position: 'absolute', left: 90});  // -175
-		textarea_clone.find('button:eq(3)').css({position: 'absolute', left: 180}); // -265
-		textarea_clone.find('button:eq(4)').css({position: 'absolute', left: 270}); // -375
-		textarea_clone.find('button:eq(5)').css({position: 'absolute', left: 380}); // -486
-		textarea_clone.find('button:eq(6)').css({position: 'absolute', left: 491}); // -608
-		textarea_clone.find('button:eq(7)').css({position: 'absolute', left: 613}); // -711,52
-
-		/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
-		/*}*/
 
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
@@ -1665,18 +1657,12 @@ var overlay_reply_to = {
 		$('form[name=newmessage]:gt(0)').attr('name', 'tmp');
 
 		// Set msg no input
-		// Set msg no input
 		textarea_clone.find('input[name=no_ref]').attr('value', msgno);
 
 		// Autoscroll
-		//noinspection JSValidateTypes
-		var pageBottom = $(window).scrollTop() + $(window).height();
-		var textBottom = ext_clone_textarea.position().top + ext_clone_textarea.height();
-
-		if (textBottom > pageBottom) {
-			var scT = textBottom - $(window).height() + 50;
-			body.animate({scrollTop: scT}, 500);
-		}
+		$('html, body').animate({
+			scrollTop: comment.offset().top - $(window).height() / 3
+		}, 500);
 
 		// Set the right tabindex
 		textarea_clone.find('textarea').attr('tabindex', '1');
@@ -1686,9 +1672,9 @@ var overlay_reply_to = {
 		textarea_clone.find('textarea').focus();
 
 		// Set the iframe focus
-		/*if(dataStore['wysiwyg_editor'] === 'true') {
-		 textarea_clone.find('iframe')[0].focus();
-		 }*/
+		if (dataStore['wysiwyg_editor'] === 'true') {
+			textarea_clone.find('iframe')[0].focus();
+		}
 
 		// Block default tab action in non-WYSIWYG editor
 		body.keydown(function (event) {
@@ -1699,14 +1685,14 @@ var overlay_reply_to = {
 		});
 
 		// Block default tab action in a WYSIWYG editor
-		/*if(dataStore['wysiwyg_editor'] === 'true') {
-		 $(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
-		 if (event.keyCode === '9') {
-		 event.preventDefault();
-		 textarea_clone.find('a:last').focus();
-		 }
-		 });
-		 }*/
+		if (dataStore['wysiwyg_editor'] === 'true') {
+			$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function (event) {
+				if (event.keyCode === '9') {
+					event.preventDefault();
+					textarea_clone.find('a:last').focus();
+				}
+			});
+		}
 
 		// Thickbox
 		textarea_clone.find('a.thickbox').each(function () {
@@ -1721,14 +1707,13 @@ var overlay_reply_to = {
 			$(this).blur();
 		});
 
-
 		// Add close button
 		var close_btm = $('<img src="' + chrome.extension.getURL('img/content/overlay_close.png') + '" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 
 		// Change close button position if WYSIWYG editor is disabled
-		/*		if(dataStore['wysiwyg_editor'] !== true) {
-		 close_btm.css({ 'right' : 4, 'top' : 9 });
-		 }*/
+		if (dataStore['wysiwyg_editor'] !== true) {
+			close_btm.css({'right': 4, 'top': 9});
+		}
 
 		// Add Close event
 		$(close_btm).click(function () {
@@ -1753,7 +1738,6 @@ var overlay_reply_to = {
 };
 
 var highlight_comments_for_me = {
-
 
 	activated: function () {
 
@@ -2455,7 +2439,7 @@ var wysiwyg_editor = {
 
 		} else {
 
-			$('#comments-login').remove();
+			//$('#comments-login').remove();
 
 			// CLEditor init
 			$('textarea[name="message"]').cleditor();
@@ -3586,7 +3570,7 @@ var columnify_comments = {
 			if (target.html() === undefined)
 				return;
 
-			// Add multi column when the text is larder than 200px
+			// Add multi column when the text is larger than 200px
 			if (target.html().length > 800) {
 				target.css({'-webkit-column-width': 296, '-webkit-column-gap': 20, 'text-align': 'justify'});
 			}
