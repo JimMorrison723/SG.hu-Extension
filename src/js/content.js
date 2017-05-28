@@ -667,9 +667,9 @@ var show_navigation_buttons = {
 	activated: function () {
 
 		// Create the scrolltop button
-		$('<div id="ext_scrolltop">&#9650;</div>').prependTo('body');
+		$('<div id="ext_scrolltop" title="Ugrás az oldal tetejére">&#9650;</div>').prependTo('body');
 		// Created the back button
-		$('<div id="ext_back">&#9664;</div>').prependTo('body');
+		$('<div id="ext_back" title="Főoldal">&#9664;</div>').prependTo('body');
 
 		var ext_scrolltop = $('#ext_scrolltop');
 		var ext_back = $('#ext_back');
@@ -695,7 +695,7 @@ var show_navigation_buttons = {
 		if (!document.location.href.match(/cikkek/) && !document.location.href.match(/uzenetek/)) {
 
 			// Create search button
-			$('<div id="ext_search"></div>').prependTo('body');
+			$('<div id="ext_search" title="Keresés"></div>').prependTo('body');
 
 			// Place search overlay arrow
 			$('<div id="ext_overlay_search_arrow"></div>').appendTo('body');
@@ -747,7 +747,7 @@ var show_navigation_buttons = {
 		if (isLoggedIn() || document.location.href.match(/uzenetek/)) {
 
 			// Create faves button
-			$('<div id="ext_nav_faves"></div>').prependTo('body');
+			$('<div id="ext_nav_faves" title="Kedvencek"></div>').prependTo('body');
 
 			ext_nav_faves = $('#ext_nav_faves');
 
@@ -1081,7 +1081,7 @@ var lights = {
 		}
 
 		// Create the Bulp button
-		$('<div id="ext_nightmode"></div>').prependTo('body');
+		$('<div id="ext_nightmode" title="Éjszakai mód"></div>').prependTo('body');
 
 		var ext_nightmode = $('#ext_nightmode');
 
@@ -1155,7 +1155,7 @@ var lights = {
 		//Chat
 		/*setTimeout(function() {*/
 		$('span, a, h4').css({'color': 'rgb(119, 119, 119)'});
-		$('span .new').css({'color': 'darkred'});
+		$('span .new').css({'color': 'rgb(190, 11, 11)'});
 		$('#forum-chat-input').css({'background': 'black', 'color': 'rgb(155, 155, 155)'});
 		setTimeout(function () {
 			$('ul#forum-chat-list li:odd').css({'background-color': 'black'});
