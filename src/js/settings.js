@@ -36,7 +36,7 @@ var cp = {
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum tuning</h3>';
 				html += '<p>Verzió: $build:version</p>';
-				html += '<p>Kiadás dátuma: 2017. 04. 30.</p>';
+				html += '<p>Kiadás dátuma: 2017. 06. 02.</p>';
 				html += '<p>Fejlesztő: JimMorrison723 <a href="http://jimmorrison723.hu" target="_blank">http://jimmorrison723.hu</a>, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
@@ -74,11 +74,11 @@ var cp = {
 					html += '<p>A fórum főoldal oldalsávjain található blokkok tetszőleges átrendezése, rejtése.</p>';
 					html += '<div class="button" id="custom_blocks"></div>';
 				html += '</div>';
-				html += '<div>';
+				/*html += '<div>';
 					html += '<h3>Üzenetközpont (BÉTA)</h3>';
 					html += '<p>Saját üzenetek naplózása, azokra érkező válaszok nyomkövetése.</p>';
 					html += '<div class="button" id="message_center"></div>';
-				html += '</div>';
+				html += '</div>';*/
 			html += '</div>';
 
 			html += '<div class="settings_page">';

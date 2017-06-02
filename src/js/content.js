@@ -910,7 +910,7 @@ var show_navigation_buttons = {
 				data = safeResponse.cleanDomHtml(data[0]);
 
 				// Write data into wrapper
-				$('#ext_nav_faves_wrapper .ext_nav_fave_list').html(data);
+				$('#ext_nav_faves_wrapper').find('.ext_nav_fave_list').html(data);
 
 				if (dataStore['jump_unreaded_messages'] === 'true') {
 					jump_unreaded_messages.activated();
@@ -2600,10 +2600,12 @@ var wysiwyg_editor = {
 
 		html += '<div style="clear:both;"></div>';
 
-		$('#ext_smiles').html(html);
+		var smileys = $('#ext_smiles');
+
+		smileys.html(html);
 
 		// Add click event to the smiles
-		$('#ext_smiles').find('img').click(function (e) {
+		smileys.find('img').click(function (e) {
 
 			e.preventDefault();
 
@@ -3968,7 +3970,7 @@ function extInit() {
 
 		// Message center
 		if (dataStore['message_center'] === 'true' && isLoggedIn()) {
-			message_center.init();
+			//message_center.init();
 		}
 
 		//Night mode
