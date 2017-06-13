@@ -24,18 +24,22 @@
   },
   "devDependencies": {
     "del": "^2.2.2",
+    "eslint": "^4.0.0",
     "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
+    "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.2",
-    "gulp-if": "^2.0.1",
-    "gulp-jshint": "^2.0.1",
+    "gulp-if": "^2.0.2",
+    "gulp-jshint": "^2.0.4",
     "gulp-replace": "^0.5.4",
-    "gulp-uglify": "^2.0.0",
+    "gulp-uglify": "^2.1.2",
     "gulp-useref": "^3.1.2",
     "gulp-zip": "^3.2.0",
-    "jshint": "^2.9.3",
+    "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
     "run-sequence": "^1.2.2",
     "yargs": "^6.0.0"
+  },
+  "dependencies": {
+    "gulp-eslint": "^4.0.0"
   }
 }

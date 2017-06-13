@@ -3605,7 +3605,7 @@ var quick_user_info = {
 						//Place info image
 						$(this).addClass('quick_user_info').find('span.icons').after('<span class=""><img src="' + chrome.extension.getURL('/img/content/info.png') + '" class="ext_quick_user_info_btn"></span>');
 					}
-					$(this).append('<div class=\"infobox\"></div>');
+					$(this).append('<div class="infobox"></div>');
 
 					//Add EventListener
 					$('img.ext_quick_user_info_btn').click(function () {

@@ -10,6 +10,7 @@ var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var replace = require('gulp-replace');
 var pjson = require('./package.json');
+const eslint = require('gulp-eslint');
 const zip = require('gulp-zip');
 
 var commonFiles = [
@@ -112,6 +113,13 @@ gulp.task('jshint', function () {
 	return gulp.src('src/js/*.js')
 		.pipe(jshint('.jshintrc'))
 		.pipe(jshint.reporter(stylish));
+});
+
+gulp.task('eslint', function() {
+	return gulp.src(['src/js/*.js'])
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
 
 /* CLEAN AND ZIP */

@@ -51,7 +51,7 @@ chrome.extension.onConnect.addListener(function(port) {
 		// Send back the settings object
 		if(event.name === 'getSettings') {
 
-			port.postMessage({ name : "setSettings", message : localStorage });
+			port.postMessage({name : "setSettings", message : localStorage});
 
 		// Sets the blocks config
 		} else if(event.name === 'setBlocksConfig') {
@@ -68,7 +68,7 @@ chrome.extension.onConnect.addListener(function(port) {
 			// If the blocklist is empty
 			if(localStorage['block_list'] === '') {
 				localStorage['block_list'] = event.message;
-				port.postMessage({ name : "updateDataStore", message : localStorage });
+				port.postMessage({name : "updateDataStore", message : localStorage});
 
 			// If the blocklist is not empty
 			} else {
@@ -76,7 +76,7 @@ chrome.extension.onConnect.addListener(function(port) {
 					if(blockList.indexOf(event.message) === -1) {
 						blockList.push(event.message);
 						localStorage['block_list'] = blockList.join(',');
-						port.postMessage({ name : "updateDataStore", message : localStorage });
+						port.postMessage({name : "updateDataStore", message : localStorage});
 					}
 			}
 		// Reset blocks config
@@ -103,7 +103,7 @@ chrome.extension.onConnect.addListener(function(port) {
 			localStorage['block_list'] = list.join(',');
 
 			// Update dataStore
-			port.postMessage({ name : "updateDataStore", message : localStorage });
+			port.postMessage({name : "updateDataStore", message : localStorage});
 
 		// Save posted settings
 		} else if(event.name === 'setSetting') {
