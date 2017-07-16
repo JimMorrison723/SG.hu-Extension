@@ -636,7 +636,7 @@
     else if (popupName === "size")
       $.each(options.sizes.split(","), function (idx, size) {
         $(DIV_TAG).appendTo($popup)
-            .html('<font size="' + size + '">' + size + '</font>');
+            .html('<span class="bb-style-' + size + '">' + size + '</span>');
       });
 
     // Style
