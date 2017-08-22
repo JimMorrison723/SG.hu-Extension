@@ -3,6 +3,7 @@
  */
 // Predefined vars
 //noinspection JSDuplicatedDeclaration
+import { cpInit } from './settings.js';
 var userName, dataStore;
 
 //noinspection JSUnresolvedFunction
@@ -3533,12 +3534,12 @@ function extInit() {
 	if (document.location.href === 'https://sg.hu/' || document.location.href.match(/index.php/)) {
 
 		// Settings
-		cp.init(3);
+		cpInit(3);
 
 		// Articles
 	} else if (document.location.href.match(/cikkek/)) {
 		// Settings
-		cp.init(2);
+		cpInit(2);
 
 		// setPredefinedVars
 		setPredefinedVars();
@@ -3610,7 +3611,7 @@ function extInit() {
 		// FORUM
 	} else if (document.location.href.match(/forum\/$/)) {
 		// Settings
-		cp.init(1);
+		cpInit(1);
 
 		// setPredefinedVars
 		setPredefinedVars();
@@ -3669,7 +3670,7 @@ function extInit() {
 	// TOPIK
 	else if (document.location.href.match(/forum\/tema/)) {
 		// Settings
-		cp.init(2);
+		cpInit(2);
 
 		// Get topic ID for whitelist check
 		var id = $('nav#breadcrumb select option:selected').val();

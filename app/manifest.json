@@ -38,7 +38,7 @@
     }
   ],
   "web_accessible_resources": [
-    "img/*/*.png",
+    "images/*/*.png",
     "css/*.css",
     "js/*.js"
   ],
