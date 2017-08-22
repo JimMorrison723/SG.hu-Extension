@@ -3,7 +3,7 @@ var cp = {
 	init: function (page) {
 
 		// Create the settings button
-		$('<div id="ext_settings_button"><img src="' + chrome.extension.getURL('/img/settings/icon.png') + '" alt=""></div>').appendTo('body');
+		$('<div id="ext_settings_button"><img src="' + chrome.extension.getURL('/images/settings/icon.png') + '" alt=""></div>').appendTo('body');
 
 		// Create the hiding overlay
 		$('<div id="ext_settings_hide_overlay"></div>').appendTo('body');
@@ -233,7 +233,7 @@ var cp = {
 		var settings_button = $('.settings_page .button');
 
 		// Set header list backgrounds
-		ext_header.find('li').css({'background-image': 'url(' + chrome.extension.getURL('/img/settings/icons.png') + ')'});
+		ext_header.find('li').css({'background-image': 'url(' + chrome.extension.getURL('/images/settings/icons.png') + ')'});
 
 		// Create tabs event
 		ext_header.find('li').click(function () {
@@ -242,7 +242,7 @@ var cp = {
 		});
 
 		// Add buttons background image
-		settings_button.css({'background-image': 'url(' + chrome.extension.getURL('/img/settings/button.png') + ')'});
+		settings_button.css({'background-image': 'url(' + chrome.extension.getURL('/images/settings/button.png') + ')'});
 
 		// Get the requested page number
 		var sPage = typeof page === "undefined" ? 0 : page;

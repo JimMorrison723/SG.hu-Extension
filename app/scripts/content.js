@@ -703,7 +703,7 @@ var show_navigation_buttons = {
 			ext_search = $('#ext_search');
 
 			// Place search icon background
-			ext_search.css('background-image', 'url(' + chrome.extension.getURL('/img/content/search.png') + ')');
+			ext_search.css('background-image', 'url(' + chrome.extension.getURL('/images/content/search.png') + ')');
 
 			// Create the search event
 			ext_search.on('click', function () {
@@ -752,7 +752,7 @@ var show_navigation_buttons = {
 			ext_nav_faves = $('#ext_nav_faves');
 
 			// Place the faves icon
-			ext_nav_faves.css('background-image', 'url(' + chrome.extension.getURL('/img/content/star.png') + ')');
+			ext_nav_faves.css('background-image', 'url(' + chrome.extension.getURL('/images/content/star.png') + ')');
 
 			// Place faves opened cotainer
 			$('<p id="ext_nav_faves_arrow"></p>').prependTo('body');
@@ -1086,7 +1086,7 @@ var lights = {
 		var ext_nightmode = $('#ext_nightmode');
 
 		//Set the proper Bulp button
-		ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lamp' + state + '.png') + ')');
+		ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/images/content/lamp' + state + '.png') + ')');
 
 		// Add click event to Bulp button
 		ext_nightmode.click(function () {
@@ -1096,7 +1096,7 @@ var lights = {
 			if (state) {
 
 				//Night mode ON
-				ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOff.png') + ')');
+				ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/images/content/lampOff.png') + ')');
 
 				//Save in dataStore
 				dataStore['navigation_button_night_state'] = false;
@@ -1105,7 +1105,7 @@ var lights = {
 			} else {
 
 				//Night mode Off
-				ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/img/content/lampOn.png') + ')');
+				ext_nightmode.css('background-image', 'url(' + chrome.extension.getURL('/images/content/lampOn.png') + ')');
 
 				//Save in dataStore
 				dataStore['navigation_button_night_state'] = true;
@@ -1122,7 +1122,7 @@ var lights = {
 
 	topic_switchOn: function () {
 
-		$('body').css('background-image', 'url(' + chrome.extension.getURL('/img/content/background.png') + ')');
+		$('body').css('background-image', 'url(' + chrome.extension.getURL('/images/content/background.png') + ')');
 		$('nav#menu-family').css({'color': '#807D7D'});
 		$('#content').addClass('night_mainTable');
 		$('.oldal-path-2').addClass('night_mainTable');
@@ -1149,7 +1149,7 @@ var lights = {
 
 	forum_switchOn: function () {
 
-		$('body').css('background-image', 'url(' + chrome.extension.getURL('/img/content/background.png') + ')');
+		$('body').css('background-image', 'url(' + chrome.extension.getURL('/images/content/background.png') + ')');
 		$('#content').addClass('night_mainTable');
 
 		//Chat
@@ -1183,7 +1183,7 @@ var update_fave_list = {
 		}
 
 		// Set refresh image
-		$('<img src="' + chrome.extension.getURL('/img/content/refresh.png') + '">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
+		$('<img src="' + chrome.extension.getURL('/images/content/refresh.png') + '">').appendTo('#ext_refresh_faves'); // Erre valamit ki kell találni
 
 		// Add click event
 		refresh_faves.on('click', 'img', function () {
@@ -1200,7 +1200,7 @@ var update_fave_list = {
 		var refresh_img = $('#ext_refresh_faves').find('img');
 
 		// Set 'in progress' icon
-		refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png'));
+		refresh_img.attr('src', chrome.extension.getURL('/images/content/refresh_waiting.png'));
 
 		$.ajax({
 			url: 'https://sg.hu/forum/',
@@ -1218,11 +1218,11 @@ var update_fave_list = {
 				$("nav#favorites-list").html(data);
 
 				// Set 'completed' icon
-				refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh_done.png'));
+				refresh_img.attr('src', chrome.extension.getURL('/images/content/refresh_done.png'));
 
 				// Set back the normal icon in 1 sec
 				setTimeout(function () {
-					refresh_img.attr('src', chrome.extension.getURL('/img/content/refresh.png'));
+					refresh_img.attr('src', chrome.extension.getURL('/images/content/refresh.png'));
 				}, 1000);
 
 				// Faves: show only with unreaded messages
@@ -1268,7 +1268,7 @@ var make_read_all_faves = {
 		}
 
 		// Append the image
-		/*$('<img src="'+chrome.extension.getURL('/img/content/makereaded.png">')+'').appendTo(read_faves);*/
+		/*$('<img src="'+chrome.extension.getURL('/images/content/makereaded.png">')+'').appendTo(read_faves);*/
 		$('<div id="icon">&#9675;</div>').appendTo('#ext_read_faves');
 
 		// Add click event
@@ -1282,7 +1282,7 @@ var make_read_all_faves = {
 		if (confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
 
 			// Set 'in progress' icon
-			//$('#ext_read_faves').find('img').attr('src', chrome.extension.getURL('/img/content/makereaded_waiting.png') );
+			//$('#ext_read_faves').find('img').attr('src', chrome.extension.getURL('/images/content/makereaded_waiting.png') );
 			$('#ext_read_faves').find('#icon').html('&#9684;');
 
 			var count = 0;
@@ -1708,7 +1708,7 @@ var overlay_reply_to = {
 		});
 
 		// Add close button
-		var close_btm = $('<img src="' + chrome.extension.getURL('img/content/overlay_close.png') + '" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+		var close_btm = $('<img src="' + chrome.extension.getURL('images/content/overlay_close.png') + '" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 
 		// Change close button position if WYSIWYG editor is disabled
 		if (dataStore['wysiwyg_editor'] !== true) {
@@ -1766,7 +1766,7 @@ var highlight_comments_for_me = {
 
 				if ($(this).find('.ext_comments_for_me_indicator').length === 0) {
 
-					$(this).css('position', 'relative').append('<img src="' + chrome.extension.getURL('/img/content/comments_for_me_indicator.png') + '" class="ext_comments_for_me_indicator">');
+					$(this).css('position', 'relative').append('<img src="' + chrome.extension.getURL('/images/content/comments_for_me_indicator.png') + '" class="ext_comments_for_me_indicator">');
 
 					if (document.location.href.match(/cikkek/)) {
 						$(this).find('.ext_comments_for_me_indicator').addClass('article');
@@ -2227,14 +2227,14 @@ var custom_blocks = {
 
 			// Contenthide
 			//noinspection JSCheckFunctionSignatures
-			$('<img src="' + chrome.extension.getURL('/img/blocks/minimalize.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
+			$('<img src="' + chrome.extension.getURL('/images/blocks/minimalize.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.contentHide($(this).closest('section').attr('id'), true);
 			});
 
 			// Hide
 			//noinspection JSCheckFunctionSignatures
-			$('<img src="' + chrome.extension.getURL('/img/blocks/close.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
+			$('<img src="' + chrome.extension.getURL('/images/blocks/close.png') + '" class="ext_block_button_right">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.hide($(this).closest('section').attr('id'), true);
 			});
@@ -2242,27 +2242,27 @@ var custom_blocks = {
 
 			// Down
 			//noinspection JSCheckFunctionSignatures
-			$('<img src="' + chrome.extension.getURL('/img/blocks/down.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
+			$('<img src="' + chrome.extension.getURL('/images/blocks/down.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.down($(this).closest('section').attr('id'), true);
 			});
 
 			// Up
 			//noinspection JSCheckFunctionSignatures
-			$('<img src="' + chrome.extension.getURL('/img/blocks/up.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
+			$('<img src="' + chrome.extension.getURL('/images/blocks/up.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.up($(this).closest('section').attr('id'), true);
 			});
 
 			// Right
 			//noinspection JSCheckFunctionSignatures
-			$('<img src="' + chrome.extension.getURL('/img/blocks/right.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
+			$('<img src="' + chrome.extension.getURL('/images/blocks/right.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.right($(this).closest('section').attr('id'), true);
 			});
 			// Left
 			//noinspection JSCheckFunctionSignatures
-			$('<img src="' + chrome.extension.getURL('/img/blocks/left.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
+			$('<img src="' + chrome.extension.getURL('/images/blocks/left.png') + '" class="ext_block_button_left">').prependTo(item).click(function (e) {
 				e.preventDefault();
 				custom_blocks.left($(this).closest('section').attr('id'), true);
 			});
@@ -3603,7 +3603,7 @@ var quick_user_info = {
 				$($(this)).mouseenter(function () {
 					if ($(this).not('.quick_user_info')) {
 						//Place info image
-						$(this).addClass('quick_user_info').find('span.icons').after('<span class=""><img src="' + chrome.extension.getURL('/img/content/info.png') + '" class="ext_quick_user_info_btn"></span>');
+						$(this).addClass('quick_user_info').find('span.icons').after('<span class=""><img src="' + chrome.extension.getURL('/images/content/info.png') + '" class="ext_quick_user_info_btn"></span>');
 					}
 					$(this).append('<div class="infobox"></div>');
 

@@ -448,8 +448,8 @@
 			[/\[#love12]/gmi, '<img src="/kep/faces/love12.gif">'],
 
 			//Spoiler
-			[/\[spoiler]/gmi, '<img src="chrome-extension://kclomjbablonlkaedhdkcplahebcgmlf/img/content/warning.png">'],
-			[/\[\/spoiler]/gmi, '<img src="chrome-extension://kclomjbablonlkaedhdkcplahebcgmlf/img/content/warning2.png">'],
+			[/\[spoiler]/gmi, '<img src="chrome-extension://kclomjbablonlkaedhdkcplahebcgmlf/images/content/warning.png">'],
+			[/\[\/spoiler]/gmi, '<img src="chrome-extension://kclomjbablonlkaedhdkcplahebcgmlf/images/content/warning2.png">'],
 
 			// Anchor and images
 			[/\[url=(.*?)\](.*?)\[\/url\]/gi, "<a href=\"$1\">$2</a>"],
