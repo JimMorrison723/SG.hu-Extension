@@ -1,3 +1,6 @@
+/*!
+ * content.js
+ */
 // Predefined vars
 //noinspection JSDuplicatedDeclaration
 var userName, dataStore;
@@ -1519,125 +1522,56 @@ var overlay_reply_to = {
 
 		// Create textarea clone
 
-		// WYSIWYG editor
-		if (dataStore['wysiwyg_editor'] === 'true') {
+		if (document.location.href.match(/cikkek/)) {
 
-			if (document.location.href.match(/cikkek/)) {
+			textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
+			$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
 
-				textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
-				$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
+			// Add 'article' class to the clone
+			textarea_clone.addClass('article');
 
-				// Add 'article' class to the clone
-				textarea_clone.addClass('article');
+			// Remove username line
+			textarea_clone.find('b').remove();
 
-				// Remove username line
-				textarea_clone.find('b').remove();
+			// Maintain style settings
+			textarea_clone.find('div:first').removeAttr('id');
 
-				// Maintain style settings
-				textarea_clone.find('div:first').removeAttr('id');
+			// Create a container element around the textarea for box-shadow
+			$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
 
-				// Remove div padding
-				textarea_clone.find('form div div').css('padding', 0);
+			// Put textarea the container
+			textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
 
-			} else {
-				textarea_clone = $('form[name="newmessage"]').find('div.cleditorMain').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
-
-				// Add 'article' class to the clone
-				textarea_clone.addClass('topic');
-
-				// Remove div padding
-				textarea_clone.find('form div:eq(0)').css('padding', 0);
-			}
-
-			textarea_clone.find('.cleditorMain').remove();
-			textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
-
-			// Copy textarea original comment to the tmp element
-			textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
-
-			// Apply some styles
-			textarea_clone.css({'background': 'none', 'border': 'none'});
-
-			// Fix buttons
-			textarea_clone.find('a:eq(0)').css({position: 'absolute', top: 220, left: 0});
-			textarea_clone.find('a:eq(1)').css({position: 'absolute', top: 220, left: 90, visibility: 'visible'});
-			textarea_clone.find('a:eq(2)').css({display: 'none'});
-			textarea_clone.find('a:eq(3)').css({display: 'none'});
-			textarea_clone.find('a:eq(4)').css({position: 'absolute', top: 220, left: 180});
-			textarea_clone.find('a:eq(5)').css({position: 'absolute', top: 220, left: 270, right: 'auto'});
-
-			textarea_clone.find('a:eq(6)').css({position: 'absolute', top: 220, right: 0});
-
-			// Fix smile list
-			if (document.location.href.match(/cikkek/)) {
-				textarea_clone.find('#ext_smiles').css({'padding-left': 50, 'padding-right': 50, 'margin-top': 20});
-			} else {
-				textarea_clone.find('#ext_smiles').css({'padding-left': 100, 'padding-right': 100, 'margin-top': 15});
-			}
-			textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
-
-			// CLEditor init
-			if (document.location.href.match(/cikkek/)) {
-				$(".ext_clone_textarea textarea").cleditor({width: 696, height: 200})[0].focus();
-				textarea_clone.find('.cleditorMain').css({position: 'relative', top: -10});
-			} else {
-				$(".ext_clone_textarea textarea").cleditor({width: 800})[0].focus();
-			}
-
-			// Normal textarea
 		} else {
 
-			if (document.location.href.match(/cikkek/)) {
+			textarea_clone = $('form[name="newmessage"] textarea').closest('form').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 
-				textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
-				$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
+			// Add 'topic' class to the clone
+			textarea_clone.addClass('topic');
 
-				// Add 'article' class to the clone
-				textarea_clone.addClass('article');
+			// Remove username line
+			textarea_clone.find('#comments-login').remove();
 
-				// Remove username line
-				textarea_clone.find('b').remove();
+			// Create a container element around the textarea for box-shadow
+			$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
 
-				// Maintain style settings
-				textarea_clone.find('div:first').removeAttr('id');
-
-				// Create a container element around the textarea for box-shadow
-				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
-
-				// Put textarea the container
-				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
-
-			} else {
-
-				textarea_clone = $('form[name="newmessage"] textarea').closest('form').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
-
-				// Add 'topic' class to the clone
-				textarea_clone.addClass('topic');
-
-				// Remove username line
-				textarea_clone.find('#comments-login').remove();
-
-				// Create a container element around the textarea for box-shadow
-				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
-
-				// Put textarea the container
-				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
-			}
-
-			// Copy textarea original comment to the tmp element
-			textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
-
-			// Fix buttons
-			textarea_clone.find('button:eq(1)').css({position: 'absolute', left: 0}); // -85
-			textarea_clone.find('button:eq(2)').css({position: 'absolute', left: 90});  // -175
-			textarea_clone.find('button:eq(3)').css({position: 'absolute', left: 180}); // -265
-			textarea_clone.find('button:eq(4)').css({position: 'absolute', left: 270}); // -375
-			textarea_clone.find('button:eq(5)').css({position: 'absolute', left: 380}); // -486
-			textarea_clone.find('button:eq(6)').css({position: 'absolute', left: 491}); // -608
-			textarea_clone.find('button:eq(7)').css({position: 'absolute', left: 613}); // -711,52
-
-			/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
+			// Put textarea the container
+			textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
 		}
+
+		// Copy textarea original comment to the tmp element
+		textarea_clone.find('textarea').val($('form[name=newmessage]:gt(0) textarea').val());
+
+		// Fix buttons
+		textarea_clone.find('button:eq(1)').css({position: 'absolute', left: 0}); // -85
+		textarea_clone.find('button:eq(2)').css({position: 'absolute', left: 90});  // -175
+		textarea_clone.find('button:eq(3)').css({position: 'absolute', left: 180}); // -265
+		textarea_clone.find('button:eq(4)').css({position: 'absolute', left: 270}); // -375
+		textarea_clone.find('button:eq(5)').css({position: 'absolute', left: 380}); // -486
+		textarea_clone.find('button:eq(6)').css({position: 'absolute', left: 491}); // -608
+		textarea_clone.find('button:eq(7)').css({position: 'absolute', left: 613}); // -711,52
+
+		/*textarea_clone.find('a:eq(6)').css({ position : 'absolute', right : 0 });*/
 
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
@@ -1671,11 +1605,6 @@ var overlay_reply_to = {
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
 
-		// Set the iframe focus
-		if (dataStore['wysiwyg_editor'] === 'true') {
-			textarea_clone.find('iframe')[0].focus();
-		}
-
 		// Block default tab action in non-WYSIWYG editor
 		body.keydown(function (event) {
 			if (event.keyCode === 9) {
@@ -1683,16 +1612,6 @@ var overlay_reply_to = {
 				textarea_clone.find('a:last').focus();
 			}
 		});
-
-		// Block default tab action in a WYSIWYG editor
-		if (dataStore['wysiwyg_editor'] === 'true') {
-			$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function (event) {
-				if (event.keyCode === '9') {
-					event.preventDefault();
-					textarea_clone.find('a:last').focus();
-				}
-			});
-		}
 
 		// Thickbox
 		textarea_clone.find('a.thickbox').each(function () {
@@ -1709,11 +1628,6 @@ var overlay_reply_to = {
 
 		// Add close button
 		var close_btm = $('<img src="' + chrome.extension.getURL('images/content/overlay_close.png') + '" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
-
-		// Change close button position if WYSIWYG editor is disabled
-		if (dataStore['wysiwyg_editor'] !== true) {
-			close_btm.css({'right': 4, 'top': 9});
-		}
 
 		// Add Close event
 		$(close_btm).click(function () {
@@ -2418,213 +2332,6 @@ var remove_ads = {
 		// Bottom ad
 		$('div.forum-topics-block').next('div').remove();
 	}
-};
-
-var wysiwyg_editor = {
-
-	activated: function () {
-
-		var cleditor_iframe = $('.cleditorMain:first iframe');
-		var textarea_message = $('textarea[name="message"]:first');
-		var buttons = $('#forum-codes');
-
-		// Rearrange buttons
-		if (document.location.href.match(/cikkek/)) {
-
-			// Remove username
-			$('form[name="newmessage"] b').remove();
-
-			// CLEditor init
-			$('textarea[name="message"]').cleditor({width: 660});
-
-		} else {
-
-			//$('#comments-login').remove();
-
-			// CLEditor init
-			$('textarea[name="message"]').cleditor();
-		}
-
-		buttons.css('position', 'relative');
-
-		// Create smiles container
-		$('<div id="ext_smiles"></div>').appendTo('form[name="newmessage"]');
-
-		// Add click event to show or hide smile list
-		var smiley = buttons.find('button:eq(0)');
-
-		// Override smiley button action
-		smiley.attr('data-codes','ext_smiley');
-		smiley.on('click', function() {
-			$('#ext_smiles').slideToggle(300);
-		});
-
-		var html = '';
-
-		html += '<div class="ext_smiles_block left">';
-		html += '<h3>Vidám</h3>';
-		html += '<img src="/kep/faces/vigyor4.gif" alt=""> ';
-		html += '<img src="/kep/faces/pias.gif" alt=""> ';
-		html += '<img src="/kep/faces/nevetes1.gif" alt=""> ';
-		html += '<img src="/kep/faces/eplus2.gif" alt=""> ';
-		html += '<img src="/kep/faces/finom.gif" alt=""> ';
-		html += '<img src="/kep/faces/vigyor2.gif" alt=""> ';
-		html += '<img src="/kep/faces/vigyor5.gif" alt=""> ';
-		html += '<img src="/kep/faces/bohoc.gif" alt=""> ';
-		html += '<img src="/kep/faces/bee1.gif" alt=""> ';
-		html += '<img src="/kep/faces/nyes.gif" alt=""> ';
-		html += '<img src="/kep/faces/lookaround.gif" alt=""> ';
-		html += '<img src="/kep/faces/buck.gif" alt=""> ';
-		html += '<img src="/kep/faces/crazya.gif" alt=""> ';
-		html += '<img src="/kep/faces/hawaii.gif" alt=""> ';
-		html += '<img src="/kep/faces/vigyor.gif" alt=""> ';
-		html += '<img src="/kep/faces/hehe.gif" alt=""> ';
-		html += '<img src="/kep/faces/smile.gif" alt=""> ';
-		html += '<img src="/kep/faces/nevetes2.gif" alt=""> ';
-		html += '<img src="/kep/faces/email.gif" alt=""> ';
-		html += '<img src="/kep/faces/vigyor0.gif" alt=""> ';
-		html += '<img src="/kep/faces/vigyor3.gif" alt=""> ';
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block right">';
-		html += '<h3>Szomorú</h3>';
-		html += '<img src="/kep/faces/szomoru2.gif" alt=""> ';
-		html += '<img src="/kep/faces/shakehead.gif" alt=""> ';
-		html += '<img src="/kep/faces/duma.gif" alt=""> ';
-		html += '<img src="/kep/faces/rinya.gif" alt=""> ';
-		html += '<img src="/kep/faces/sniffles.gif" alt=""> ';
-		html += '<img src="/kep/faces/szomoru1.gif" alt=""> ';
-		html += '<img src="/kep/faces/sir.gif" alt=""> ';
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block left">';
-		html += '<h3>Egyetért</h3>';
-		html += '<img src="/kep/faces/eljen.gif" alt=""> ';
-		html += '<img src="/kep/faces/kacsint.gif" alt=""> ';
-		html += '<img src="/kep/faces/taps.gif" alt=""> ';
-		html += '<img src="/kep/faces/papakacsint.gif" alt=""> ';
-		html += '<img src="/kep/faces/wave.gif" alt=""> ';
-		html += '<img src="/kep/faces/worship.gif" alt=""> ';
-		html += '<img src="/kep/faces/wink.gif" alt=""> ';
-		html += '<img src="/kep/faces/awink.gif" alt=""> ';
-
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block right">';
-		html += '<h3>Ellenez</h3>';
-		html += '<img src="/kep/faces/levele.gif" alt=""> ';
-		html += '<img src="/kep/faces/gonosz3.gif" alt=""> ';
-		html += '<img src="/kep/faces/action.gif" alt=""> ';
-		html += '<img src="/kep/faces/falbav.gif" alt=""> ';
-		html += '<img src="/kep/faces/ejnye1.gif" alt=""> ';
-		html += '<img src="/kep/faces/unalmas.gif" alt=""> ';
-		html += '<img src="/kep/faces/schmoll2.gif" alt=""> ';
-		html += '<img src="/kep/faces/nezze.gif" alt=""> ';
-		html += '<img src="/kep/faces/kuss.gif" alt=""> ';
-
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block left">';
-		html += '<h3>Szeretet</h3>';
-		html += '<img src="/kep/faces/hamm.gif" alt=""> ';
-		html += '<img src="/kep/faces/puszi.gif" alt=""> ';
-		html += '<img src="/kep/faces/puszis.gif" alt=""> ';
-		html += '<img src="/kep/faces/law.gif" alt=""> ';
-		html += '<img src="/kep/faces/szeret.gif" alt=""> ';
-		html += '<img src="/kep/faces/love11.gif" alt=""> ';
-		html += '<img src="/kep/faces/love12.gif" alt=""> ';
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block right">';
-		html += '<h3>Utálat</h3>';
-		html += '<img src="/kep/faces/mf1.gif" alt=""> ';
-		html += '<img src="/kep/faces/kocsog.gif" alt=""> ';
-		html += '<img src="/kep/faces/duhos2.gif" alt=""> ';
-		html += '<img src="/kep/faces/lama.gif" alt=""> ';
-		html += '<img src="/kep/faces/banplz.gif" alt=""> ';
-		html += '<img src="/kep/faces/violent.gif" alt=""> ';
-		html += '<img src="/kep/faces/gunyos1.gif" alt=""> ';
-		html += '<img src="/kep/faces/boxer.gif" alt=""> ';
-		html += '<img src="/kep/faces/mf2.gif" alt=""> ';
-		html += '<img src="/kep/faces/gun.gif" alt=""> ';
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block left">';
-		html += '<h3>Csodálkozik</h3>';
-		html += '<img src="/kep/faces/csodalk.gif" alt=""> ';
-		html += '<img src="/kep/faces/wow1.gif" alt=""> ';
-		html += '<img src="/kep/faces/conf.gif" alt=""> ';
-		html += '<img src="/kep/faces/rolleyes.gif" alt=""> ';
-		html += '<img src="/kep/faces/whatever.gif" alt=""> ';
-		html += '<img src="/kep/faces/zavart1.gif" alt=""> ';
-		html += '<img src="/kep/faces/confused.gif" alt=""> ';
-		html += '<img src="/kep/faces/zavart2.gif" alt=""> ';
-		html += '<img src="/kep/faces/fejvakaras.gif" alt=""> ';
-		html += '<img src="/kep/faces/pardon1.gif" alt=""> ';
-		html += '<img src="/kep/faces/circling.gif" alt=""> ';
-		html += '<img src="/kep/faces/ijedt.gif" alt=""> ';
-		html += '<img src="/kep/faces/wow3.gif" alt=""> ';
-		html += '<img src="/kep/faces/nemtudom.gif" alt=""> ';
-		html += '<img src="/kep/faces/merges2.gif" alt=""> ';
-		html += '<img src="/kep/faces/wow2.gif" alt=""> ';
-		html += '<img src="/kep/faces/guluszem1.gif" alt=""> ';
-
-		html += '</div>';
-
-		html += '<div class="ext_smiles_block right">';
-		html += '<h3>Egyéb</h3>';
-		html += '<img src="/kep/faces/felkialtas.gif" alt=""> ';
-		html += '<img src="/kep/faces/alien2.gif" alt=""> ';
-		html += '<img src="/kep/faces/dumcsi.gif" alt=""> ';
-		html += '<img src="/kep/faces/idiota.gif" alt=""> ';
-		html += '<img src="/kep/faces/help.gif" alt=""> ';
-		html += '<img src="/kep/faces/alien.gif" alt=""> ';
-		html += '<img src="/kep/faces/bdead.gif" alt=""> ';
-		html += '<img src="/kep/faces/ticking.gif" alt=""> ';
-		html += '<img src="/kep/faces/ravasz1.gif" alt=""> ';
-		html += '<img src="/kep/faces/beka2.gif" alt=""> ';
-		html += '<img src="/kep/faces/beka3.gif" alt=""> ';
-		html += '<img src="/kep/faces/nezze.gif" alt=""> ';
-		html += '<img src="/kep/faces/vigyor1.gif" alt=""> ';
-		html += '<img src="/kep/faces/phone.gif" alt=""> ';
-		html += '<img src="/kep/faces/heureka.gif" alt=""> ';
-		html += '<img src="/kep/faces/gonosz2.gif" alt=""> ';
-		html += '<img src="/kep/faces/vomit.gif" alt=""> ';
-		html += '<img src="/kep/faces/fogmosas.gif" alt=""> ';
-		html += '<img src="/kep/faces/gonosz1.gif" alt=""> ';
-		html += '<img src="/kep/faces/oooo.gif" alt=""> ';
-		html += '<img src="/kep/faces/integet2.gif" alt=""> ';
-		html += '<img src="/kep/faces/wilting.gif" border="0"> ';
-
-		html += '</div>';
-
-		html += '<div style="clear:both;"></div>';
-
-		var smileys = $('#ext_smiles');
-
-		smileys.html(html);
-
-		// Add click event to the smiles
-		smileys.find('img').click(function (e) {
-
-			e.preventDefault();
-
-			var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
-
-			var bhtml = '[#' + tag + ']';
-			var ihtml = '<img src="/kep/faces/' + tag + '.gif">';
-
-			var tarea = textarea_message.val() + bhtml;
-			var imod = cleditor_iframe.contents().find('body').html() + ihtml;
-
-			textarea_message.val(tarea);
-			textarea_message.cleditor()[0].focus();
-			cleditor_iframe.contents().find('body').html(imod);
-			//noinspection JSUnresolvedFunction
-			textarea_message.cleditor()[0].focus().updateFrame(cleditor_iframe,true);
-		});
-	}
-
 };
 
 var message_center = {
@@ -3651,8 +3358,7 @@ var quick_insertion = {
 
 		var ta;
 		var ta2;
-		/*		if(dataStore['wysiwyg_editor'] === 'true') {
-		 ta = $('.cleditorMain:first iframe').contents().find('body'); //textarea*/
+
 		ta2 = $('.cleditorMain:first textarea[name="message"]');
 		/*}
 		 else {*/
@@ -3696,15 +3402,7 @@ var quick_insertion = {
 					//var imod = $('.cleditorMain:first iframe').contents().find('body').html() + ihtml;
 
 					// Otherwise when wysiwyg editor will appear even if it's disabled
-					/*					if(dataStore['wysiwyg_editor'] === 'true') {
-					 $('textarea[name="message"]:first').val(tarea);
-					 $('textarea[name="message"]:first').cleditor()[0].focus();
-					 $('.cleditorMain:first iframe').contents().find('body').html(imod);
-					 $('textarea[name="message"]:first').cleditor()[0].focus();
-
-					 } else {*/
 					ta.val(tarea);
-					/*}*/
 				}
 
 			} else {
@@ -3890,11 +3588,6 @@ function extInit() {
 			highlight_comments_for_me.activated();
 		}
 
-		// WYSIWYG Editor
-		if(dataStore['wysiwyg_editor'] === 'true') {
-			wysiwyg_editor.activated();
-		}
-
 		if (dataStore['disable_point_system'] === 'true') {
 			disable_point_system.activated();
 		}
@@ -3908,11 +3601,6 @@ function extInit() {
 
 		if (dataStore['columnify_comments'] === 'true') {
 			columnify_comments.activated();
-		}
-
-		//Pasted text will be a hyperlink, picture, video automatically
-		if(dataStore['wysiwyg_editor'] === 'true' && dataStore['quick_insertion'] === 'true') {
-			quick_insertion.activated();
 		}
 
 		// image, video urls in msg box can be previewed inline
@@ -4048,11 +3736,6 @@ function extInit() {
 			// highlight_comments_for_me
 			if (dataStore['highlight_comments_for_me'] === 'true' && isLoggedIn()) {
 				highlight_comments_for_me.activated();
-			}
-
-			// WYSIWYG Editor
-			if(dataStore['wysiwyg_editor'] === 'true') {
-				wysiwyg_editor.activated();
 			}
 
 			// Auto resizing textarea

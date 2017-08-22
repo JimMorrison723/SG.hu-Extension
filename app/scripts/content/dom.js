@@ -1,3 +1,6 @@
+/*!
+ * dom.js
+ */
 $(document).ready(function() {
 	
 	if(document.location.href.match(/forum\/$/)) {

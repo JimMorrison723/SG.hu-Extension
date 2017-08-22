@@ -31,12 +31,7 @@
         "styles/cleditor.css"
       ],
       "js": [
-        "scripts/settings.js",
-        "scripts/date.js",
-        "scripts/content.js",
-        "scripts/cleditor.js",
-        "scripts/dom.js",
-        "scripts/cleditor_bbcode.js"
+        "scripts/app.js"
       ],
       "run_at": "document_start",
       "all_frames": false

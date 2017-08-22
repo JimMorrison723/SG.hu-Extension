@@ -1,3 +1,6 @@
+/*!
+ * date.js
+ */
 function date (format, timestamp) {
     //! http://kevin.vanzonneveld.net
     // +   original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)

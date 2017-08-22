@@ -1,3 +1,6 @@
+/*!
+ * settings.js
+ */
 var cp = {
 
 	init: function (page) {
@@ -107,11 +110,11 @@ var cp = {
 		html += '<p>Bármely topikban a megkezdett beszélgetéseket szálonként átrendezi a script. Egy megválaszolt üzenet az eredeti üzenet alá kerül, ezzel jelezve és elkülönítve az egymásnak szánt üzeneteket.</p>';
 		html += '<div class="button" id="threaded_comments"></div>';
 		html += '</div>';
-		html += '<div>';
+		/*html += '<div>';
 		html += '<h3>WYSIWYG Editor</h3>';
 		html += '<p>Office-szerű formázógombokat kapsz a kommentíró mezőbe élő előnézettel.</p>';
 		html += '<div class="button" id="wysiwyg_editor"></div>';
-		html += '</div>';
+		html += '</div>';*/
 		html += '<div>';
 		html += '<h3>Topikba érkező új üzenetek automatikus kinyerése</h3>';
 		html += '<p>Amíg egy topikban tartózkodsz, a bővítmény automatikusan kinyeri az olvasás ideje alatt érkező új üezenteket.</p>';
