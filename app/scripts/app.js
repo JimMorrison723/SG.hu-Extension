@@ -1,9 +1,13 @@
-/*var settings = require('./content/settings.js');*/
-import { cpInit } from './content/settings.js';
+import 'chromereload/devonly'
+
+/*import { cpInit } from './content/settings.js';*/
 var dom = require('./content/dom.js');
-var date = require('./content/date.js');
-var json = require('./content/json.js');
-var content = require('./content/content.js');
+/*
+import { cpInit } from './settings/settings.js';
+cpInit();*/
 
+import { test } from './settings/test.js';
+import { optionValues } from "./utils/default"
 
-cpInit();
+optionValues();
+test();

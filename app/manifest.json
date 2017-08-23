@@ -44,6 +44,7 @@
   ],
   "permissions": [
     "https://www.sg.hu/",
-    "https://sg.hu/"
+    "https://sg.hu/",
+    "storage"
   ]
 }

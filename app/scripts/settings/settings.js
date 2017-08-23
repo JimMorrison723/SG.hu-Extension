@@ -252,7 +252,7 @@ export function cpInit(page) {
 	cpTab(sPage);
 
 	// Set-up blocklist
-	blocklist_cp.init();
+	blocklistInit();
 
 	// Close when clicking away
 	$('#ext_settings_hide_overlay').click(function () {
@@ -288,7 +288,7 @@ export function cpInit(page) {
 	profiles_cp.init();
 
 	// Init log
-	log.init();
+	logInit();
 }
 
 function cpShow() {
@@ -388,21 +388,19 @@ function cpButton(ele) {
 }
 
 
-var blocklist_cp = {
+export function blocklistInit() {
 
-	init: function () {
+	// Create user list
+	blocklistList();
 
-		// Create user list
-		blocklist_cp.list();
+	// Create remove events
+	$('#ext_blocklist').on('click', 'a', function (e) {
+		e.preventDefault();
+		blocklistRemove(this);
+	});
+}
 
-		// Create remove events
-		$('#ext_blocklist').on('click', 'a', function (e) {
-			e.preventDefault();
-			blocklist_cp.remove(this);
-		});
-	},
-
-	list: function () {
+export function blocklistList() {
 		// If theres is no entry in dataStore or If the list is empty
 		if (typeof dataStore['block_list'] === "undefined" || !dataStore['block_list']) {
 			return false;
@@ -419,28 +417,27 @@ var blocklist_cp = {
 		for (var c = 0; c < users.length; c++) {
 			blocklist.append('<li><span>' + users[c] + '</span> <a href="#">töröl</a></li>');
 		}
-	},
+}
 
-	remove: function (el) {
+export function	blocklistRemove(el) {
 
-		// Get username
-		var user = $(el).prev().html();
+	// Get username
+	var user = $(el).prev().html();
 
-		// Remove user from the list
-		$(el).closest('li').remove();
+	// Remove user from the list
+	$(el).closest('li').remove();
 
-		// Remove user from preferences
-		port.postMessage({name: "removeUserFromBlocklist", message: user});
+	// Remove user from preferences
+	port.postMessage({name: "removeUserFromBlocklist", message: user});
 
-		// Add default message to the list if it is now empty
-		if ($('#ext_blocklist').find('li').length === 0) {
-			$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
-		}
-
-		// Restore user comments
-		blocklist.unblock(user);
+	// Add default message to the list if it is now empty
+	if ($('#ext_blocklist').find('li').length === 0) {
+		$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
 	}
-};
+
+	// Restore user comments
+	blocklist.unblock(user);
+}
 
 var settings = {
 
@@ -655,83 +652,80 @@ var profiles_cp = {
 	}
 };
 
-var log = {
+export function logInit() {
 
-	init: function () {
+	// Clear event
+	$('.settings_page.debugger button').click(function () {
+		logClear();
+	});
+}
 
-		// Clear event
-		$('.settings_page.debugger button').click(function () {
-			log.clear();
-		});
-	},
+export function logAdd(message, origin) {
 
-	add: function (message, origin) {
+	// Get current timestamp
+	var time = Math.round(new Date().getTime() / 1000);
+	var messages = [];
 
-		// Get current timestamp
-		var time = Math.round(new Date().getTime() / 1000);
-		var messages = [];
-
-		// Parse messages
-		if (dataStore['debugger_messages'] !== '') {
-			messages = JSON.parse(dataStore['debugger_messages']);
-		}
-
-		var month = date('M', time);
-
-		// Convert mounts names
-		$.each([
-			['Jan', 'január'],
-			['Feb', 'február'],
-			['Mar', 'március'],
-			['Apr', 'április'],
-			['May', 'május'],
-			['Jun', 'június'],
-			['Jul', 'július'],
-			['Aug', 'augusztus'],
-			['Sep', 'szeptember'],
-			['Oct', 'október'],
-			['Nov', 'november'],
-			['Dec', 'december']
-
-		], function (index, item) {
-			month = month.replace(item[0], item[1]);
-		});
-
-		// Append timestamp
-		message = month + date('d. H:i - ', time) + message;
-
-		// Append origin
-		if (typeof origin !== "undefined") {
-			message = message + ' | Origin: ' + origin;
-		}
-
-		// Add new messages
-		messages.push(message);
-
-		if (messages.length > 100) {
-			messages.splice(0, 1);
-		}
-
-		// Add to dataStore
-		dataStore['debugger_messages'] = JSON.stringify(messages);
-
-		// Store new settings
-		port.postMessage({name: "setSetting", key: 'debugger_messages', val: JSON.stringify(messages)});
-
-		// Update the GUI
-		var textarea = $('.settings_page.debugger textarea').html();
-		textarea.html(textarea + message + "\r\n");
-	},
-
-	clear: function () {
-
-		// Clear in localStorage
-		port.postMessage({name: "setSetting", key: 'debugger_messages', val: ''});
-
-		// Clear in dataStore
-		dataStore['debugger_messages'] = '';
-
-		// Clear the debugger window
-		$('.settings_page.debugger textarea').html('');
+	// Parse messages
+	if (dataStore['debugger_messages'] !== '') {
+		messages = JSON.parse(dataStore['debugger_messages']);
 	}
-};
+
+	var month = date('M', time);
+
+	// Convert mounts names
+	$.each([
+		['Jan', 'január'],
+		['Feb', 'február'],
+		['Mar', 'március'],
+		['Apr', 'április'],
+		['May', 'május'],
+		['Jun', 'június'],
+		['Jul', 'július'],
+		['Aug', 'augusztus'],
+		['Sep', 'szeptember'],
+		['Oct', 'október'],
+		['Nov', 'november'],
+		['Dec', 'december']
+
+	], function (index, item) {
+		month = month.replace(item[0], item[1]);
+	});
+
+	// Append timestamp
+	message = month + date('d. H:i - ', time) + message;
+
+	// Append origin
+	if (typeof origin !== "undefined") {
+		message = message + ' | Origin: ' + origin;
+	}
+
+	// Add new messages
+	messages.push(message);
+
+	if (messages.length > 100) {
+		messages.splice(0, 1);
+	}
+
+	// Add to dataStore
+	dataStore['debugger_messages'] = JSON.stringify(messages);
+
+	// Store new settings
+	port.postMessage({name: "setSetting", key: 'debugger_messages', val: JSON.stringify(messages)});
+
+	// Update the GUI
+	var textarea = $('.settings_page.debugger textarea').html();
+	textarea.html(textarea + message + "\r\n");
+}
+
+export function logClear() {
+
+	// Clear in localStorage
+	port.postMessage({name: "setSetting", key: 'debugger_messages', val: ''});
+
+	// Clear in dataStore
+	dataStore['debugger_messages'] = '';
+
+	// Clear the debugger window
+	$('.settings_page.debugger textarea').html('');
+}
