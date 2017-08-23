@@ -1,4 +1,4 @@
-const defaultValues = {
+export const defaultValues = {
 	chatHide: false,
 	customBlocks: false,
 	jumpUnreadedMessages: true,
