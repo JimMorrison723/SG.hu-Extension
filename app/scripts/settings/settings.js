@@ -1,3 +1,9 @@
+import { port } from '../utils/messaging';
+import { database } from "../utils/options";
+import { profilesCpInit} from "./profilesCp";
+import { logInit } from "./log"
+import { blocklistInit } from "./blocklist"
+
 /*!
  * settings.js
  */
@@ -46,39 +52,39 @@ export function cpInit(page) {
 	html += '<div>';
 	html += '<h3>Chat elrejtése</h3>';
 	html += '<p>Ezzel az opcióval a fórum főoldalon levő közös chatet tüntethted el maradéktalanul.</p>';
-	html += '<div class="button" id="chat_hide"></div>';
+	html += '<div class="button" id="chatHide"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Csak olvasatlan üzenttel rendelkező kedvencek mutatása</h3>';
 	html += '<p class="sub">';
-	html += '<label><input type="checkbox" id="fav_show_only_unreaded_remember"> Utolsó állapot megjegyzése</label><br>';
+	html += '<label><input type="checkbox" id="favShowOnlyUnreadedRemember"> Utolsó állapot megjegyzése</label><br>';
 	html += '</p>';
 	html += '<p>A fórum főoldalán található kedvencek listában csak az olvasatlan üzenettel rendelkező topikok lesznek listázva. A bővítmény létrehoz tovább egy kapcsolót a kedvencek cím mellett mellyel könnyen visszaválthatsz a régi nézetre.</p>';
-	html += '<div class="button" id="fav_show_only_unreaded"></div>';
+	html += '<div class="button" id="favShowOnlyUnreaded"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Rövid kommentjelzők</h3>';
 	html += '<p>A főoldali kedvencek listában nem jelenik meg helyet foglalva új sorban az "N új üzeneted érkezett" szöveg, ehelyett helytakarékos módon csak egy piros szám jelzi az új üzeneteket a topik neve mellett.</p>';
-	html += '<div class="button" id="short_comment_marker"></div>';
+	html += '<div class="button" id="shortCommentMarker"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Fórumkategóriák kiemelése</h3>';
 	html += '<p>A fórum főoldalon átalakított, átdizájnolt listákat láthatsz, mely jobban kiemeli többek között a kedvenceknél a fórumkategóriákat is.</p>';
-	html += '<div class="button" id="highlight_forum_categories"></div>';
+	html += '<div class="button" id="highlightForumCategories"></div>';
 	html += '</div>';
-	html += '<div>';
+	/*html += '<div>';
 	html += '<h3>Blokkok átrendezése, rejtése</h3>';
 	html += '<p class="sub">';
-	html += '<label><input type="checkbox" id="hide_blocks_buttons"> Átrendező gombok elrejtése</label><br>';
-	html += '<button type="button" id="reset_blocks_config">Alapbeállítások visszaállítása</button>';
+	html += '<label><input type="checkbox" id="hideBlocksButtons"> Átrendező gombok elrejtése</label><br>';
+	html += '<button type="button" id="resetBlocksConfig">Alapbeállítások visszaállítása</button>';
 	html += '</p>';
 	html += '<p>A fórum főoldal oldalsávjain található blokkok tetszőleges átrendezése, rejtése.</p>';
-	html += '<div class="button" id="custom_blocks"></div>';
-	html += '</div>';
+	html += '<div class="button" id="customBlocks"></div>';
+	html += '</div>';*/
 	/*html += '<div>';
 	 html += '<h3>Üzenetközpont (BÉTA)</h3>';
 	 html += '<p>Saját üzenetek naplózása, azokra érkező válaszok nyomkövetése.</p>';
-	 html += '<div class="button" id="message_center"></div>';
+	 html += '<div class="button" id="messageCenter"></div>';
 	 html += '</div>';*/
 	html += '</div>';
 
@@ -86,27 +92,27 @@ export function cpInit(page) {
 	html += '<div>';
 	html += '<h3>Ugrás az utolsó üzenethez</h3>';
 	html += '<p>Az "ugrás az utolsó olvasatlan üzenethez" több oldalon keresztül is működik, egy topikba lépve automatikusan az utolsó üzenethez görget.</p>';
-	html += '<div class="button" id="jump_unreaded_messages"></div>';
+	html += '<div class="button" id="jumpUnreadedMessages"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Következő oldal betöltése a lap aljára érve</h3>';
 	html += '<p>A lap aljára görgetve a bővítmény a háttérben betölti a következő oldal tartalmát, majd megjeleníti az új kommenteket oldalfrissítés vagy lapozás nélkül.</p>';
-	html += '<div class="button" id="autoload_next_page"></div>';
+	html += '<div class="button" id="autoloadNextPage"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Overlay kommentmező</h3>';
 	html += '<p>Egy hozzászólásra válaszolva az oldal nem ugrik fel a felső textarához, ehelyett kiemeli a megválaszolandó kommentet és egy overlay szövegmező jelenik meg alatta.</p>';
-	html += '<div class="button" id="overlay_reply_to"></div>';
+	html += '<div class="button" id="overlayReplyTo"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Nekem érkező üzenetek kiemelése</h3>';
 	html += '<p>Bármely topikban a neked címzett üzenetek mellé egy narancssárga nyíl kerül, ezzel jelezve hogy ezt az üzenetet neked szánták.</p>';
-	html += '<div class="button" id="highlight_comments_for_me"></div>';
+	html += '<div class="button" id="highlightCommentsForMe"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Kommentek szálonkénti elrendezése</h3>';
 	html += '<p>Bármely topikban a megkezdett beszélgetéseket szálonként átrendezi a script. Egy megválaszolt üzenet az eredeti üzenet alá kerül, ezzel jelezve és elkülönítve az egymásnak szánt üzeneteket.</p>';
-	html += '<div class="button" id="threaded_comments"></div>';
+	html += '<div class="button" id="threadedComments"></div>';
 	html += '</div>';
 	/*html += '<div>';
 	html += '<h3>WYSIWYG Editor</h3>';
@@ -116,13 +122,13 @@ export function cpInit(page) {
 	html += '<div>';
 	html += '<h3>Topikba érkező új üzenetek automatikus kinyerése</h3>';
 	html += '<p>Amíg egy topikban tartózkodsz, a bővítmény automatikusan kinyeri az olvasás ideje alatt érkező új üezenteket.</p>';
-	html += '<div class="button" id="fetch_new_comments"></div>';
+	html += '<div class="button" id="fetchNewComments"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Navigációs gombok megjelenítése</h3>';
 	html += '<p class="sub">';
 	html += 'Gombok helye: ';
-	html += '<select id="navigation_buttons_position">';
+	html += '<select id="navigationButtonsPosition">';
 	html += '<option value="lefttop">Bal felül</option>';
 	html += '<option value="leftcenter">Bal középen</option>';
 	html += '<option value="leftbottom">Bal alul</option>';
@@ -132,35 +138,35 @@ export function cpInit(page) {
 	html += '</select>';
 	html += '</p>';
 	html += '<p class="sub">';
-	html += '<label><input type="checkbox" id="show_navigation_buttons_night"> Éjszakai / szemkímélő mód kapcsoló</label><br>';
+	html += '<label><input type="checkbox" id="showNavigationButtonsNight"> Éjszakai / szemkímélő mód kapcsoló</label><br>';
 	html += '</p>';
 	html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
-	html += '<div class="button" id="show_navigation_buttons"></div>';
+	html += '<div class="button" id="showNavigationButtons"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Pontrendszer letiltása</h3>';
 	html += '<p>Ez az opció eltávolítja a pontozó gombokat és minden rejtett hozzászólást láthatóvá tesz.</p>';
-	html += '<div class="button" id="disable_point_system"></div>';
+	html += '<div class="button" id="disablePointSystem"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Hosszú kommentek oszloposítása</h3>';
 	html += '<p>Meghatározott karakterszám felett a bővítmény oszlopokra bontja az üzeneteket a könnyebb olvashatóság miatt. </p>';
-	html += '<div class="button" id="columnify_comments"></div>';
+	html += '<div class="button" id="columnifyComments"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Info gomb a hozzászólás fejlécében</h3>';
 	html += '<p>Létrehoz egy "info" gombot a hozzászólás fejlécében, amiben megjelennek a felhasználó adatai.</p>';
-	html += '<div class="button" id="quick_user_info"></div>';
+	html += '<div class="button" id="quickUserInfo"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Gyors beszúrás</h3>';
 	html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
-	html += '<div class="button" id="quick_insertion"></div>';
+	html += '<div class="button" id="quickInsertion"></div>';
 	html += '</div>';
 	html += '<div>';
 	html += '<h3>Külső média hivatkozások előnézete</h3>';
 	html += '<p>Hozzászólásokban a hivatkozások után egy kis gombra kattintva betöltődik a hivatkozott tartalom (kép, videó, tweet).</p>';
-	html += '<div class="button" id="inline_image_viewer"></div>';
+	html += '<div class="button" id="inlineImageViewer"></div>';
 	html += '</div>';
 	html += '</div>';
 
@@ -168,7 +174,7 @@ export function cpInit(page) {
 	html += '<div>';
 	html += '<h3>Reklámok blokkolása</h3>';
 	html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n. (Továbbá a fórum főoldalon található FB doboz!)</p>';
-	html += '<div class="button" id="remove_ads"></div>';
+	html += '<div class="button" id="removeAds"></div>';
 	html += '</div>';
 	html += '</div>';
 
@@ -210,16 +216,6 @@ export function cpInit(page) {
 	html += '<h3>Debugger</h3>';
 	html += '<textarea readonly="readonly">';
 
-	if (dataStore['debugger_messages'] !== '') {
-
-		// Parse debugger messages
-		var messages = JSON.parse(dataStore['debugger_messages']);
-
-		for (var c = 0; c < messages.length; c++) {
-			html += "" + messages[c] + "\r\n";
-		}
-	}
-
 	html += '</textarea>';
 	html += '<button>Törlés</button>';
 	html += '</div>';
@@ -260,7 +256,7 @@ export function cpInit(page) {
 	});
 
 	// Restore settings
-	settings.restore();
+	settingsRestore();
 
 	// Settings change event, saving
 	settings_button.click(function () {
@@ -269,13 +265,13 @@ export function cpInit(page) {
 
 	// Set checkboxes
 	$('.settings_page input:checkbox').click(function () {
-		settings.save(this);
+		settingsSave(this);
 	});
 
 
 	// Set select boxes
 	$('.settings_page select').change(function () {
-		settings.select(this);
+		settingsSelect(this);
 	});
 
 
@@ -285,7 +281,7 @@ export function cpInit(page) {
 	});
 
 	// Init profiles settings
-	profiles_cp.init();
+	profilesCpInit();
 
 	// Init log
 	logInit();
@@ -377,355 +373,85 @@ function cpButton(ele) {
 		$(ele).animate({'background-position-x': 0}, 300);
 		$(ele).attr('class', 'button off');
 
-		settings.save(ele);
+		settingsSave(ele);
 	} else {
 
 		$(ele).animate({'background-position-x': -40}, 300);
 		$(ele).attr('class', 'button on');
 
-		settings.save(ele);
+		settingsSave(ele);
 	}
 }
 
+export function settingsRestore() {
+	console.log(database);
+	// Restore settings for buttons
+	$('.settings_page .button').each(function () {
 
-export function blocklistInit() {
-
-	// Create user list
-	blocklistList();
-
-	// Create remove events
-	$('#ext_blocklist').on('click', 'a', function (e) {
-		e.preventDefault();
-		blocklistRemove(this);
-	});
-}
-
-export function blocklistList() {
-		// If theres is no entry in dataStore or If the list is empty
-		if (typeof dataStore['block_list'] === "undefined" || !dataStore['block_list']) {
-			return false;
-		}
-
-		var blocklist = $('#ext_blocklist');
-		// Everything is OK, remove the default message
-		blocklist.html('');
-
-		// Fetch the userlist into an array
-		var users = dataStore['block_list'].split(',').sort();
-
-		// Iterate over, add users to the list
-		for (var c = 0; c < users.length; c++) {
-			blocklist.append('<li><span>' + users[c] + '</span> <a href="#">töröl</a></li>');
-		}
-}
-
-export function	blocklistRemove(el) {
-
-	// Get username
-	var user = $(el).prev().html();
-
-	// Remove user from the list
-	$(el).closest('li').remove();
-
-	// Remove user from preferences
-	port.postMessage({name: "removeUserFromBlocklist", message: user});
-
-	// Add default message to the list if it is now empty
-	if ($('#ext_blocklist').find('li').length === 0) {
-		$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
-	}
-
-	// Restore user comments
-	blocklist.unblock(user);
-}
-
-var settings = {
-
-	restore: function () {
-
-		// Restore settings for buttons
-		$('.settings_page .button').each(function () {
-
-			if (dataStore[$(this).attr('id')] === 'true') {
-				$(this).attr('class', 'button on');
-
-			} else {
-				$(this).attr('class', 'button off');
-			}
-		});
-
-		// Restore settings for checkboxes
-		$('input:checkbox').each(function () {
-
-			if (dataStore[$(this).attr('id')] === 'true') {
-				$(this).attr('checked', true);
-			} else {
-				$(this).attr('checked', false);
-			}
-		});
-
-		// Restore settings for select boxes
-		$('.settings_page select').each(function () {
-
-			$(this).find('option[value="' + dataStore[$(this).attr('id')] + '"]').attr('selected', true);
-		});
-	},
-
-	save: function (ele) {
-
-		if ($(ele).hasClass('on') || $(ele).prop('checked') === true || $(ele).is(':checked')) {
-
-			// Save new settings ...
-			port.postMessage({name: "setSetting", key: $(ele).attr('id'), val: 'true'});
-
-			// Set new value to dataStore var
-			dataStore[$(ele).attr('id')] = 'true';
-
-			// Check for interactive action
-			if (typeof window[$(ele).attr('id')].activated !== 'undefined') {
-				window[$(ele).attr('id')].activated();
-			}
+		if (database[$(this).attr('id')] === true) {
+			$(this).attr('class', 'button on');
 
 		} else {
-
-			// Save new settings ...
-			port.postMessage({name: "setSetting", key: $(ele).attr('id'), val: 'false'});
-
-			// Set new value to dataStore var
-			dataStore[$(ele).attr('id')] = 'false';
-
-			// Check for interactive action
-			if (typeof window[$(ele).attr('id')].disabled !== 'undefined') {
-				window[$(ele).attr('id')].disabled();
-			}
+			$(this).attr('class', 'button off');
 		}
-	},
+	});
 
-	select: function (ele) {
+	// Restore settings for checkboxes
+	$('input:checkbox').each(function () {
 
-		// Get the settings value
-		var val = $(ele).find('option:selected').val();
-
-		// Update in dataStore
-		dataStore[$(ele).attr('id')] = val;
-
-		// Update in localStorage
-		port.postMessage({name: "setSetting", key: $(ele).attr('id'), val: val});
-	}
-};
-
-var profiles_cp = {
-
-	init: function () {
-
-		// Add new profile group
-		$('.settings_page a.new_profile').on('click', function (e) {
-			e.preventDefault();
-			profiles_cp.addGroup();
-		});
-
-		// Color select
-		$('.settings_page .profiles').on('click', 'li ul li', function () {
-			profiles_cp.changeColor(this);
-		});
-
-		// Remove a group
-		$('.settings_page ul.profiles').on('click', 'p.remove', function () {
-			profiles_cp.removeGroup(this);
-		});
-
-		// Save the settings
-		$('.settings_page .profile_save').on('click', function (e) {
-
-			// Prevent browsers default submission
-			e.preventDefault();
-
-			// Save the settings
-			profiles_cp.save();
-		});
-
-		// Rebuild profiles
-		profiles_cp.rebuildProfiles();
-	},
-
-	rebuildProfiles: function () {
-
-		if (dataStore['profiles'] === '') {
-			return false;
+		if (database[$(this).attr('id')] === true) {
+			$(this).attr('checked', true);
+		} else {
+			$(this).attr('checked', false);
 		}
+	});
 
-		// Empty the list
-		$('.settings_page .profiles > li:not(.sample)').remove();
+	// Restore settings for select boxes
+	$('.settings_page select').each(function () {
 
-		var profiles = JSON.parse(dataStore['profiles']);
-
-		for (var c = 0; c < profiles.length; c++) {
-
-			// Get the clone elementent
-			var clone = $('.settings_page .profiles li.sample').clone();
-
-			// Get the target element
-			var target = $('.settings_page .profiles');
-
-			// Append the new group
-			var content = $(clone).appendTo(target).removeClass('sample');
-
-			// Re-set settings
-			content.find('.color').val(profiles[c]['color']);
-			content.find('span.color').css('background-color', '#' + profiles[c]['color'][0]);
-			content.find('.title').val(profiles[c]['title']);
-			content.find('.users').val(profiles[c]['users']);
-
-			// Re-set checkboxes
-			if (profiles[c]['background']) {
-				content.find('.background').attr('checked', true);
-			}
-		}
-	},
-
-	addGroup: function () {
-
-		// Get the clone elementent
-		var clone = $('.settings_page .profiles li.sample').clone();
-
-		// Get the target element
-		var target = $('.settings_page .profiles');
-
-		// Append the new group
-		$(clone).appendTo(target).removeClass('sample');
-	},
-
-	removeGroup: function (ele) {
-
-		if (confirm('Biztos törlöd ezt a csoportot?')) {
-
-			// Remove the group from DOM
-			$(ele).closest('li').remove();
-		}
-	},
-
-	changeColor: function (ele) {
-
-		// Get selected color
-		var color = $(ele).find('span').html().split(',');
-
-		// Set the color indicator
-		$(ele).parent().parent().find('span:first').css('background-color', '#' + color[0]);
-
-		// Set the color input
-		$(ele).parent().parent().find('input.color').val(color.join(','));
-	},
-
-	save: function () {
-
-		// Var to store data
-		var data = [];
-
-		// Iterate over the groups
-		$('.settings_page .profiles > li:not(.sample)').each(function (index) {
-
-			// Create an new empty object for the group settings
-			data[index] = {};
-
-			// Prefs
-			data[index]['color'] = $(this).find('.color').val().split(',');
-			data[index]['title'] = $(this).find('.title').val();
-			data[index]['users'] = $(this).find('.users').val().split(',');
-
-			// Options
-			data[index]['background'] = $(this).find('.background').prop('checked');
-		});
-
-		// Save settings in localStorage
-		port.postMessage({name: "setSetting", key: 'profiles', val: JSON.stringify(data)});
-
-		// Save new settings in dataStore
-		dataStore['profiles'] = JSON.stringify(data);
-
-		// Saved indicator
-		$('<p class="profile_status">&#10003;</p>').insertAfter($('.settings_page .profile_save'));
-
-		// Remove the idicator in 2 sec
-		setTimeout(function () {
-			$('.settings_page .profile_status').remove();
-		}, 3000);
-	}
-};
-
-export function logInit() {
-
-	// Clear event
-	$('.settings_page.debugger button').click(function () {
-		logClear();
+		$(this).find('option[value="' + database[$(this).attr('id')] + '"]').attr('selected', true);
 	});
 }
 
-export function logAdd(message, origin) {
+export function settingsSave(ele) {
 
-	// Get current timestamp
-	var time = Math.round(new Date().getTime() / 1000);
-	var messages = [];
+	if ($(ele).hasClass('on') || $(ele).prop('checked') === true || $(ele).is(':checked')) {
+		// Save new settings ...
+		port.postMessage({name: "setSetting", key: $(ele).attr('id'), val: true});
 
-	// Parse messages
-	if (dataStore['debugger_messages'] !== '') {
-		messages = JSON.parse(dataStore['debugger_messages']);
+		// Set new value to database var
+		database[$(ele).attr('id')] = true;
+
+		// Check for interactive action
+		if (typeof window[$(ele).attr('id')].activated !== 'undefined') {
+			//Todo
+			//window[$(ele).attr('id')].activated();
+		}
+
+	} else {
+
+		// Save new settings ...
+		port.postMessage({name: "setSetting", key: $(ele).attr('id'), val: false});
+
+		// Set new value to database var
+		database[$(ele).attr('id')] = false;
+
+		// Check for interactive action
+		if (typeof window[$(ele).attr('id')].disabled !== 'undefined') {
+			//Todo
+			//window[$(ele).attr('id')].disabled();
+		}
 	}
-
-	var month = date('M', time);
-
-	// Convert mounts names
-	$.each([
-		['Jan', 'január'],
-		['Feb', 'február'],
-		['Mar', 'március'],
-		['Apr', 'április'],
-		['May', 'május'],
-		['Jun', 'június'],
-		['Jul', 'július'],
-		['Aug', 'augusztus'],
-		['Sep', 'szeptember'],
-		['Oct', 'október'],
-		['Nov', 'november'],
-		['Dec', 'december']
-
-	], function (index, item) {
-		month = month.replace(item[0], item[1]);
-	});
-
-	// Append timestamp
-	message = month + date('d. H:i - ', time) + message;
-
-	// Append origin
-	if (typeof origin !== "undefined") {
-		message = message + ' | Origin: ' + origin;
-	}
-
-	// Add new messages
-	messages.push(message);
-
-	if (messages.length > 100) {
-		messages.splice(0, 1);
-	}
-
-	// Add to dataStore
-	dataStore['debugger_messages'] = JSON.stringify(messages);
-
-	// Store new settings
-	port.postMessage({name: "setSetting", key: 'debugger_messages', val: JSON.stringify(messages)});
-
-	// Update the GUI
-	var textarea = $('.settings_page.debugger textarea').html();
-	textarea.html(textarea + message + "\r\n");
 }
 
-export function logClear() {
+export function settingsSelect(ele) {
 
-	// Clear in localStorage
-	port.postMessage({name: "setSetting", key: 'debugger_messages', val: ''});
+	// Get the settings value
+	var val = $(ele).find('option:selected').val();
 
-	// Clear in dataStore
-	dataStore['debugger_messages'] = '';
+	// Update in database
+	database[$(ele).attr('id')] = val;
 
-	// Clear the debugger window
-	$('.settings_page.debugger textarea').html('');
+	// Update in localStorage
+	port.postMessage({name: "setSetting", key: $(ele).attr('id'), val: val});
 }

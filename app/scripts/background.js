@@ -1,6 +1,6 @@
 import 'chromereload/devonly'
-import { optionValues } from './utils/default';
-import { database} from "./utils/database"
+import { optionValues } from './utils/options';
+//import { database } from "./utils/database"
 /*import { port } from './utils/messaging';*/
 //optionValues();
 
