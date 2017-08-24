@@ -384,7 +384,7 @@ function cpButton(ele) {
 }
 
 export function settingsRestore() {
-	console.log(database);
+
 	// Restore settings for buttons
 	$('.settings_page .button').each(function () {
 
