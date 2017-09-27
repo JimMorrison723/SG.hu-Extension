@@ -1,10 +1,10 @@
 import 'chromereload/devonly'
 // import { optionValues } from './utils/options';
 //import { database } from "./utils/database"
-/*import { port } from './utils/messaging';*/
+import { windowBrowser } from './utils/messaging';
 //optionValues();
 
-chrome.runtime.onConnect.addListener(function (port) {
+windowBrowser.runtime.onConnect.addListener(function (port) {
 	port.onMessage.addListener(({name, key, val} = event) => {
 
 		// For development only!
