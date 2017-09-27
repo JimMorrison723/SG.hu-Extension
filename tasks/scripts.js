@@ -8,7 +8,7 @@ import plumber from 'gulp-plumber'
 import livereload from 'gulp-livereload'
 import args from './lib/args'
 
-const ENV = args.production ? 'production' : 'development'
+const ENV = args.production ? 'production' : 'development';
 
 gulp.task('scripts', (cb) => {
 	return gulp.src('app/scripts/*.js')
