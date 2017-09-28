@@ -1,10 +1,10 @@
 export const defaultValues = {
 	chatHide: true,
-/*	customBlocks: false,
-	jumpUnreadedMessages: true,
-	favShowOnlyUnreaded: true,
-	favShowOnlyUnreadedRemember: false,
-	favShowOnlyUnreadedRememberOpened: false,
+	customBlocks: false,
+	jumpUnreadMessages: true,
+	favShowOnlyUnread: true,
+	favShowOnlyUnreadRemember: false,
+	favShowOnlyUnreadRememberOpened: false,
 	shortCommentMarker: true,
 	highlightForumCategories: false,
 	threadedComments: false,
@@ -28,5 +28,5 @@ export const defaultValues = {
 	quickUserInfo: false,
 	quickInsertion: false,
 	msgPerPage: 80,
-	inlineImageViewer: false*/
+	inlineImageViewer: false
 };

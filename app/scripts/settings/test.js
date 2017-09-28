@@ -2,8 +2,8 @@ import 'chromereload/devonly'
 import { port } from '../utils/messaging.js';
 
 export function test() {
-	port.postMessage({name: "setSetting",  key: 'test', val: 'testVal'});
-	port.postMessage({name: "setSetting",  key: 'chatHide', val: false });
+	/*port.postMessage({name: "setSetting",  key: 'test', val: 'testVal'});
+	port.postMessage({name: "setSetting",  key: 'chatHide', val: false });*/
 	//port.postMessage({name: "getSetting"});
 }
 /*
