@@ -1,0 +1,14 @@
+{
+  "appName": {
+    "message": "SG fórum tuning",
+    "description": "The name of the application"
+  },
+  "appShortName": {
+    "message": "SGTuning",
+    "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name."
+  },
+  "appDescription": {
+    "message": "Az sg.hu nem hivatalos bővítménye.",
+    "description": "The description of the application"
+  }
+}

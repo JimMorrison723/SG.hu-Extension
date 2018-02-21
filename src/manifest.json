@@ -1,0 +1,44 @@
+{
+  "name": "__MSG_appName__",
+  "short_name": "__MSG_appShortName__",
+  "description": "__MSG_appDescription__",
+  "version": "3.9.2",
+  "manifest_version": 2,
+  "default_locale": "hu",
+  "icons": {
+    "16": "images/icons/icon-16.png",
+    "128": "images/icons/icon-128.png"
+  },
+  "background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://sg.hu/*"
+      ],
+      "css": [
+        "styles/content.css",
+        "styles/cleditor.css",
+        "styles/settings.css"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "permissions": [
+    "cookies",
+    "notifications",
+    "sessions",
+    "storage",
+    "webRequest"
+  ],
+  "web_accessible_resources": [
+    "images/*/*.png"
+  ]
+}

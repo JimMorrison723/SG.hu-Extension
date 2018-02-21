@@ -10,9 +10,6 @@ Az SG tuning célja, hogy funkcióival kényelmesebbé varázsolja az sg.hu-n t�
 
 **Firefox:** [Firefox kiegészítők](https://addons.mozilla.org/hu/firefox/addon/sg-f%C3%B3rum-tuning/)
 
-**Maxthon:** Maxthon mappában lévő .mxaddon-t letöltitek, behúzzátok maxthonba, majd megnyitás gombra nyomtok és telepítitek a kiegészítőt. [link](https://raw.githubusercontent.com/JimMorrison723/SG.hu-Extension/master/Maxthon/Sg-tuning.mxaddon)
-		
-		
 ## A bővítmény funkciói
 
 - Chat elrejtése
@@ -34,8 +31,6 @@ Az SG tuning célja, hogy funkcióival kényelmesebbé varázsolja az sg.hu-n t�
 - Reklámok eltávolítása
 - WYSIWYG Editor [Ötlet: tomsolo]
 - Smilek típusuk szerinti csoportosítása
-- Topic fehérlista
-- Üzenetközpont
 - Topikba érkező üzenetek automatikus kinyerése
 - Felhasználói profilcsoportok
 - Beállítások szinkronizálása
