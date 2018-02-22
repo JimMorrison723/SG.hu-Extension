@@ -1,23 +1,46 @@
 import browser from './util/browser'
 import { cp, settings } from './settings'
 
-let scripts = {}
-
-// TODO: find a way to conditinoal import and
-// place this under whatPage()
-if (document.location.href.match(/forum\/$/)) {
-	scripts = require('./modules/forum/index')
-} else if (document.location.href.match(/forum\/tema/)) {
-	scripts = require('./modules/topik/index')
-}
-
-let dataStore
+export let dataStore
+export let scripts = {}
 
 let port = browser.runtime.connect();
 
-browser.runtime.onConnect.addListener(function () {
-	console.log('content connected')
-})
+// TODO: find a better way for conditinoal import
+switch (whatPage()) {
+	case 1:
+		scripts = require('./modules/forum/index')
+		break
+	case 2:
+		break
+		scripts = require('./modules/topik/index')
+	default:
+		break
+}
+
+function startup() {
+
+	for (var item in scripts) {
+		if (dataStore[item]) {
+			scripts[item].activated()
+		}
+	}
+
+}
+
+function whatPage() {
+
+	// Forum main page
+	if (document.location.href.match(/forum\/$/)) return 1
+
+	// Topic page
+	else if (document.location.href.match(/forum\/tema/)) return 2
+
+	// Article page
+	else if (document.location.href.match(/cikkek/)) return 2
+
+	else return 3
+}
 
 port.onMessage.addListener(function (event) {
 
@@ -42,39 +65,8 @@ port.onMessage.addListener(function (event) {
 	}
 });
 
-function startup() {
-
-	for (var item in scripts) {
-		if (dataStore[item]) {
-			scripts[item].activated()
-		}
-	}
-
-}
-
-function whatPage() {
-	// Forum main page
-	if (document.location.href.match(/forum\/$/)) {
-		// import * as modules from './modules/forum/index'
-		return 1;
-
-		// Topic page
-	} else if (document.location.href.match(/forum\/tema/)) {
-		return 2;
-
-		// Article page
-	} else if (document.location.href.match(/cikkek/)) {
-		return 2;
-
-	} else {
-		return 3
-
-	}
-}
-
 // TODO:
 // Filter out iframes
-// Request dataStore object
 // if (window.top === window) {
 // 	port.postMessage({name: "getdataStore"});
 // }

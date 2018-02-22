@@ -1,4 +1,4 @@
-import { Module } from "../module";
+import { Module } from '../module'
 
 export const chatHide = new Module('chatHide')
 
@@ -16,12 +16,8 @@ chatHide.disable = () => {
   $('#forum-wrap').find('.forums-block:first').css({ 'margin-top': '35px' })
 }
 
-chatHide.activated = () => {
-  chatHide.toggle()
-}
-
 chatHide.toggle = () => {
 
-  !chatHide.toggleStatus ?
-    chatHide.disable() : chatHide.activate()
+  chatHide.toggleStatus ?
+    chatHide.activate() : chatHide.disable()
 }
