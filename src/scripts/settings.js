@@ -1,4 +1,5 @@
-import browser from "./util/browser";
+import browser from './util/browser'
+import { unblock } from './modules/topik/blocklist'
 
 let dataStore
 
@@ -47,8 +48,8 @@ export const cp = {
 		html += '<h3>SG Fórum tuning</h3>';
 		html += '<p>Verzió: 3.9.2</p>';
 		html += '<p>Kiadás dátuma: 2018. 02. 21.</p>';
-		html += '<p>Fejlesztő: JimMorrison723 <a href="http://jimmorrison723.hu" target="_blank">http://jimmorrison723.hu</a>, Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
-		html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
+		html += '<p>Fejlesztő: JimMorrison723 <a href="https://jimmorrison723.hu" target="_blank">https://jimmorrison723.hu</a>, Gera János "dzsani" <a href="https://github.com/dzsani" target="_blank">https://github.com/dzsani</a></p>';
+		html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro"</p>';
 		html += '</div>';
 
 		html += '<div class="settings_page">';
@@ -74,15 +75,6 @@ export const cp = {
 		html += '<h3>Fórumkategóriák kiemelése</h3>';
 		html += '<p>A fórum főoldalon átalakított, átdizájnolt listákat láthatsz, mely jobban kiemeli többek között a kedvenceknél a fórumkategóriákat is.</p>';
 		html += '<div class="button" id="highlightForumCategories"></div>';
-		html += '</div>';
-		html += '<div>';
-		html += '<h3>Blokkok átrendezése, rejtése</h3>';
-		html += '<p class="sub">';
-		html += '<label><input type="checkbox" id="hideBlocksButtons"> Átrendező gombok elrejtése</label><br>';
-		html += '<button type="button" id="resetBlocksConfig">Alapbeállítások visszaállítása</button>';
-		html += '</p>';
-		html += '<p>A fórum főoldal oldalsávjain található blokkok tetszőleges átrendezése, rejtése.</p>';
-		html += '<div class="button" id="customBlocks"></div>';
 		html += '</div>';
 		html += '</div>';
 
@@ -367,7 +359,7 @@ export const cp = {
 	}
 }
 
-const blocklist_cp = {
+export const blocklist_cp = {
 
 	init: function () {
 
@@ -417,7 +409,7 @@ const blocklist_cp = {
 		}
 
 		// Restore user comments
-		blocklist.unblock(user);
+		unblock(user);
 	}
 }
 
@@ -456,7 +448,6 @@ export const settings = {
 	save: function (ele) {
 
 		if ($(ele).hasClass('on') || $(ele).prop('checked') === true || $(ele).is(':checked')) {
-
 			// Save new settings ...
 			port.postMessage({ name: "setSetting", key: $(ele).attr('id'), val: true });
 
@@ -630,7 +621,7 @@ const profiles_cp = {
 		});
 
 		// Save settings in localStorage
-		port.postMessage({name: "setSetting", key: 'profiles', val: JSON.stringify(data)});
+		port.postMessage({ name: "setSetting", key: 'profiles', val: JSON.stringify(data) });
 
 		// Save new settings in dataStore
 		dataStore['profiles'] = JSON.stringify(data);

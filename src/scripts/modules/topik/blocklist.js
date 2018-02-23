@@ -1,0 +1,110 @@
+import { Module } from '../module'
+import { port, dataStore } from '../../content'
+
+export const blocklist = new Module('blocklist')
+
+blocklist.activate = () => {
+
+  // Return false if theres no blocklist entry
+  if (typeof dataStore['block_list'] === 'undefined' || dataStore['block_list'] === '') {
+    return false;
+  }
+
+  var deletelist = dataStore['block_list'].split(',')
+
+  $('.forum-post').find('header').each(function () {
+    var nick;
+    if (document.location.href.match(/cikkek/)) {
+
+      nick = $(this).find('a:first').html()
+
+    } else {
+
+      if ($(this).find('a img').length === 1) {
+        nick = $(this).find('a img').attr('alt')
+      } else {
+        nick = $(this).find('a#name').text()
+      }
+
+      nick = nick.replace(/ - VIP/, "")
+    }
+
+    for (var i = 0; i < deletelist.length; i++) {
+      if (nick.toLowerCase() === deletelist[i].toLowerCase()) {
+        $(this).closest('li.forum-post').hide()
+      }
+    }
+  });
+}
+
+export function unblock(user) {
+
+  $('.forum-post').find('header').each(function () {
+
+    var nick
+    if (document.location.href.match(/cikkek/)) {
+
+      nick = $(this).find('a:first').html()
+    } else {
+
+      if ($(this).find('a img').length === 1) {
+        nick = $(this).find('a img').attr('alt')
+      } else {
+        nick = $(this).find('a#name').text()
+      }
+
+      nick = nick.replace(/ - VIP/, "")
+    }
+
+    if (nick.toLowerCase() === user.toLowerCase()) {
+
+      // Show temporary the comment height
+      $(this).closest('li.forum-post').css({ display: 'block', height: 'auto' })
+
+      // Get height
+      var height = $(this).closest('li.forum-post').height()
+
+      // Set back to invisible, then animate
+      $(this).closest('li.forum-post').css({ height: 0 }).animate({ opacity: 1, height: height }, 500)
+    }
+  });
+}
+
+export function block(el) {
+  var nick = '';
+
+  var anchor = $(el).closest('#forum-posts-list ul li header').find('a[href*="/felhasznalo"]')
+  var tmpUrl = anchor.attr('href')
+
+  if (anchor.children('img').length > 0) {
+    nick = anchor.children('img').attr('title').replace(" - VIP", "")
+
+  } else {
+    nick = anchor.html().replace(" - VIP", "")
+  }
+
+  if (confirm('Biztos tiltólistára teszed "' + nick + '" nevű felhasználót?')) {
+
+    $('.forum-post').find('header a[href="' + tmpUrl + '"]').each(function () {
+
+      // Remove the comment
+      $(this).closest('li.forum-post').animate({ height: 0, opacity: 0 }, 500, function () {
+        $(this).hide()
+      });
+    });
+
+    // Store new settings in localStorage
+    port.postMessage({ name: "addToBlocklist", message: nick })
+
+    // Add name to blocklist
+    $('<li><span>' + nick + '</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
+
+    // Remove empty blocklist message
+    $('#ext_empty_blocklist').remove()
+  }
+}
+
+blocklist.toggle = () => {
+
+  blocklist.activate()
+}

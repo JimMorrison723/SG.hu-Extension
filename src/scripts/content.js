@@ -3,18 +3,26 @@ import { cp, settings } from './settings'
 
 export let dataStore
 export let scripts = {}
+export let isLoggedIn
+export let userName
 
-let port = browser.runtime.connect();
+export let port = browser.runtime.connect();
 
 // TODO: find a better way for conditinoal import
 switch (whatPage()) {
 	case 1:
 		scripts = require('./modules/forum/index')
+		isLoggedIn = $('.user-hello').length
+		userName = $('.user-hello').text().match(/Üdv, (.*)!/)[1]
 		break
 	case 2:
-		break
 		scripts = require('./modules/topik/index')
+		isLoggedIn = $('#comments-login').length
+		userName = $('#comments-login').find('span').text()
+		break
 	default:
+		isLoggedIn = $('form[name="newmessage"]').length
+		userName = $('#msg-head').find('b a').html()
 		break
 }
 
@@ -59,7 +67,7 @@ port.onMessage.addListener(function (event) {
 
 		for (const [key, value] of Object.entries(event.message)) {
 			dataStore[key] = value,
-				scripts[key].toggle()
+			scripts[key].toggle()
 		}
 
 	}

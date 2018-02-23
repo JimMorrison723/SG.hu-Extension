@@ -17,14 +17,14 @@ browser.extension.onConnect.addListener(function (port) {
 		} else if (event.name === 'addToBlocklist') {
 
 			// If theres in no entry in localStorage
-			if (typeof localStorage['block_list'] === "undefined") {
+			if (typeof localStorage['block_list'] === 'undefined') {
 				localStorage['block_list'] = '';
 			}
 
 			// If the blocklist is empty
 			if (localStorage['block_list'] === '') {
 				localStorage['block_list'] = event.message;
-				port.postMessage({ name: "updateDataStore", message: localStorage });
+				port.postMessage({ name: 'updateDataStore', message: localStorage });
 
 				// If the blocklist is not empty
 			} else {
@@ -32,7 +32,7 @@ browser.extension.onConnect.addListener(function (port) {
 				if (blockList.indexOf(event.message) === -1) {
 					blockList.push(event.message);
 					localStorage['block_list'] = blockList.join(',');
-					port.postMessage({ name: "updateDataStore", message: localStorage });
+					port.postMessage({ name: 'updateDataStore', message: localStorage });
 				}
 			}
 			// Reset blocks config
@@ -55,7 +55,7 @@ browser.extension.onConnect.addListener(function (port) {
 			localStorage['block_list'] = list.join(',');
 
 			// Update dataStore
-			port.postMessage({ name: "updateDataStore", message: localStorage });
+			port.postMessage({ name: 'updateDataStore', message: localStorage });
 
 			// Save posted settings
 		} else if (event.name === 'setSetting') {
@@ -95,7 +95,6 @@ function storageChange(changes, area) {
 
 function sendMessage(param) {
 	ports.map(port => {
-		console.log(port.sender.tab.id)
 		port.postMessage(param)
 	})
 }
@@ -103,7 +102,6 @@ function sendMessage(param) {
 // if this is the extension's first load, save default settings
 browser.storage.sync.get('installed', function (item) {
 	if (Object.keys(item).length === 0 && item.constructor === Object) {
-		console.log(item)
 		browser.storage.sync.set(defaultSettings.default);
 		browser.storage.sync.set({ installed: true });
 	}
