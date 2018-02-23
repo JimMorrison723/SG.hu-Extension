@@ -1,0 +1,8 @@
+{
+    "1": {
+        "scripts": "./modules/forum/index"
+    },
+    "2": {
+        "scripts": "./modules/topik/index"
+    }
+}

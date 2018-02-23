@@ -64,6 +64,12 @@ browser.extension.onConnect.addListener(function (port) {
 			temp[event.key] = event.val
 			browser.storage.sync.set(temp)
 		}
+		else if (event.name === 'setUserSetting') {
+
+			let temp = { user: {} }
+			temp['user'][event.key] = event.val
+			browser.storage.sync.set(temp)
+		}
 	});
 });
 
@@ -71,8 +77,6 @@ let ports = []
 
 function connected(p) {
 	ports[p.sender.tab.id] = p
-
-	console.log('connected: ' + p.sender.tab.id)
 
 	// when connected, send the settings to the contentscript
 	browser.storage.sync.get(null, function (item) {

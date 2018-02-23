@@ -1,6 +1,6 @@
 export default {
 	addToList: true,
-	chatHide: true,
+	chatHide: false,
 	jumpUnreadMessages: true,
 	favShowOnlyUnread: true,
 	favShowOnlyUnreadRemember: false,
@@ -24,5 +24,9 @@ export default {
 	quickUserInfo: false,
 	quickInsertion: false,
 	msgPerPage: 80,
-	inlineImageViewer: false
+	inlineImageViewer: false,
+	user: {
+		isLoggedIn: false,
+		userName: ''
+	}
 }

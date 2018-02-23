@@ -1,5 +1,5 @@
 import { Module } from '../module'
-import { dataStore, isLoggedIn, userName } from '../../content'
+import { dataStore } from '../../content'
 
 export const showNavigationButtons = new Module('showNavigationButtons')
 
@@ -55,7 +55,7 @@ showNavigationButtons.activate = () => {
   }
 
   // Execute when the user is logged in
-  if (userName || document.location.href.match(/uzenetek/)) {
+  if (dataStore['user']['userName'] || document.location.href.match(/uzenetek/)) {
 
     // Create faves button
     $('<div id="ext_nav_faves" title="Kedvencek"></div>').prependTo('body')

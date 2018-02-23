@@ -133,5 +133,5 @@ favShowOnlyUnread.disable = () => {
 favShowOnlyUnread.toggle = () => {
 
   favShowOnlyUnread.toggleStatus ?
-  favShowOnlyUnread.activate() : favShowOnlyUnread.disable()
+    favShowOnlyUnread.activate() : favShowOnlyUnread.disable()
 }

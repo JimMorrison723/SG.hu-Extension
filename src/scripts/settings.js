@@ -1,18 +1,13 @@
 import browser from './util/browser'
 import { unblock } from './modules/topik/blocklist'
-
-let dataStore
-
-let port = browser.runtime.connect();
+import { port, dataStore } from './content'
 
 // chrome.runtime.getURL(string path)
 // browser.extension.getURL(string)
 
 export const cp = {
 
-	init: function (page, data) {
-
-		dataStore = data
+	init: function (page) {
 
 		// Create the settings button
 		$('<div id="ext_settings_button"><img src="' + chrome.extension.getURL('/images/settings/icon.png') + '" alt=""></div>').appendTo('body');

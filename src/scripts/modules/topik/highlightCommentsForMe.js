@@ -1,17 +1,17 @@
 import { Module } from '../module'
-import { userName } from '../../content'
+import { dataStore } from '../../content'
 
 export const highlightCommentsForMe = new Module('highlightCommentsForMe')
 
 highlightCommentsForMe.activate = () => {
 
   // Return false when no username set
-  if (!userName) {
+  if (!dataStore['user']['userName']) {
     return false
   }
 
   // Get the proper domnodes
-  var comment = $('li[id*="post"] footer a:contains("' + userName + '")')
+  var comment = $('li[id*="post"] footer a:contains("' + dataStore['user']['userName'] + '")')
 
   //We need exact match with the userName
   var start_pos = comment.text().indexOf('\'') + 1
@@ -19,7 +19,7 @@ highlightCommentsForMe.activate = () => {
   var TesTcomment = comment.text().substring(start_pos, end_pos)
   var comments;
 
-  if (TesTcomment === userName) {
+  if (TesTcomment === dataStore['user']['userName']) {
     comments = comment.closest('li')
   }
 
