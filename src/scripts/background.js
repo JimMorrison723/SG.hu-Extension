@@ -16,34 +16,32 @@ browser.extension.onConnect.addListener(function (port) {
 			// Add user to blocklist
 		} else if (event.name === 'addToBlocklist') {
 
-			// If theres in no entry in localStorage
-			if (typeof localStorage['block_list'] === 'undefined') {
-				localStorage['block_list'] = '';
-			}
-
 			// If the blocklist is empty
-			if (localStorage['block_list'] === '') {
-				localStorage['block_list'] = event.message;
-				port.postMessage({ name: 'updateDataStore', message: localStorage });
+			if (localStorage['blocklisted'] === '' || localStorage['blocklisted'] === undefined) {
+				localStorage['blocklisted'] = event.message;
+				let temp = {}
+				temp['blocklisted'] = event.message
+				browser.storage.sync.set(temp)
 
 				// If the blocklist is not empty
 			} else {
-				var blockList = localStorage['block_list'].split(',');
+				var blockList = localStorage['blocklisted'].split(',');
 				if (blockList.indexOf(event.message) === -1) {
 					blockList.push(event.message);
-					localStorage['block_list'] = blockList.join(',');
-					port.postMessage({ name: 'updateDataStore', message: localStorage });
+					localStorage['blocklisted'] = blockList.join(',');
+					let temp = {}
+					temp['blocklisted'] = localStorage['blocklisted']
+					browser.storage.sync.set(temp)
 				}
 			}
 			// Reset blocks config
 		} else if (event.name === 'removeUserFromBlocklist') {
 
-
 			// Get username
 			var user = event.message;
 
 			// Get the blocklist array
-			list = localStorage['block_list'].split(',');
+			list = localStorage['blocklisted'].split(',');
 
 			// Get the removed user index
 			index = list.indexOf(user);
@@ -52,10 +50,12 @@ browser.extension.onConnect.addListener(function (port) {
 			list.splice(index, 1);
 
 			// Save changes in localStorage
-			localStorage['block_list'] = list.join(',');
+			localStorage['blocklisted'] = list.join(',');
 
 			// Update dataStore
-			port.postMessage({ name: 'updateDataStore', message: localStorage });
+			let temp = {}
+			temp['blocklisted'] = localStorage['blocklisted']
+			browser.storage.sync.set(temp)
 
 			// Save posted settings
 		} else if (event.name === 'setSetting') {
@@ -63,8 +63,7 @@ browser.extension.onConnect.addListener(function (port) {
 			let temp = {}
 			temp[event.key] = event.val
 			browser.storage.sync.set(temp)
-		}
-		else if (event.name === 'setUserSetting') {
+		} else if (event.name === 'setUserSetting') {
 
 			let temp = { user: {} }
 			temp['user'][event.key] = event.val

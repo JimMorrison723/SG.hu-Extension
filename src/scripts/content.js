@@ -5,9 +5,9 @@ import { cp, settings } from './settings'
 export let port
 export let dataStore
 export let scripts = {}
+export let PAGE
 
 let router_json = require('./modules/router.json')
-let PAGE
 
 function router() {
 	// TODO: find a better way for conditinoal import
@@ -44,7 +44,7 @@ function whatPage() {
 	else if (document.location.href.match(/forum\/tema/)) return PAGE = 2
 
 	// Article page
-	else if (document.location.href.match(/cikkek/)) return PAGE = 2
+	else if (document.location.href.match(/cikkek/)) return PAGE = 3
 
 	else return PAGE = 0
 }

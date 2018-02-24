@@ -1,17 +1,18 @@
 import { Module } from '../module'
 import { dataStore } from '../../content'
 
-export const profiles = new Module('profiles')
+export const profiles = new Module('profiles', true)
 
 profiles.activate = () => {
 
   // Get the profiles object
-  var profiles = JSON.parse(dataStore['profiles'])
 
   // Check empty
-  if (!profiles.length) {
+  if (!dataStore['profilesList']) {
     return false
   }
+
+  var profiles = JSON.parse(dataStore['profilesList'])
 
   // Iterate over the comments
   $('#forum-posts-list').find('ul li header:not(.checked)').each(function () {

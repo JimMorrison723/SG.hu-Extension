@@ -1,6 +1,7 @@
 import { Module } from '../module'
-import { dataStore } from '../../content'
+import { port, dataStore } from '../../content'
 import { block } from './blocklist'
+import { profiles } from './profiles'
 
 export const addToList = new Module('addToList')
 
@@ -77,12 +78,12 @@ addToList.buildList = () => {
   // Add blocklist option
   $('<li class="ident ext_addtoblocklist">Tiltólista</li>').appendTo('.ext_addtolist_list')
 
-  if (!dataStore['profiles']) {
+  if (!dataStore['profilesList']) {
     return
   }
 
   // Get the profile groups
-  var profiles = JSON.parse(dataStore['profiles']);
+  var profiles = JSON.parse(dataStore['profilesList']);
 
   // Iterate over the groups, add each one to the list
   for (var c = 0; c < profiles.length; c++) {
@@ -94,7 +95,7 @@ addToList.buildList = () => {
 addToList.addToList = (group, ele) => {
 
   // Get profiles
-  var list = JSON.parse(dataStore['profiles'])
+  var list = JSON.parse(dataStore['profilesList'])
   var nick
 
   // Get user's nick
@@ -118,14 +119,13 @@ addToList.addToList = (group, ele) => {
   var data = JSON.stringify(list)
 
   // Save in dataStore
-  dataStore['profiles'] = data
+  dataStore['profilesList'] = data
 
   // Save in localStorage
-  port.postMessage({ name: "setSetting", key: 'profiles', val: data })
-
+  port.postMessage({ name: "setSetting", key: 'profilesList', val: data })
 
   // Remove checked class for update
-  $("#forum-posts-list").find("ul li").each(function () {
+  $("#forum-posts-list").find(".forum-post").each(function () {
     var nick_2
 
     if (document.location.href.match(/cikkek/)) {
@@ -134,7 +134,7 @@ addToList.addToList = (group, ele) => {
 
     } else {
       /* BUG avatar nélküli felhasználóknál nem működik.     $(this).find("header a")[0]  undefined */
-      nick_2 = ($(this).find("header a img").length === 1) ? $(this).find("header a img").attr("alt") : $(this).find("header a")[0]
+      nick_2 = ($(this).find(".name img").length === 1) ? $(this).find(".name img").attr("alt") : $(this).find(".name").text()
       nick_2 = nick_2.replace(/ - VIP/, "")
     }
 
@@ -144,7 +144,7 @@ addToList.addToList = (group, ele) => {
   })
 
   // Update content GUI
-  profiles.init()
+  profiles.activate()
 }
 
 addToList.toggle = () => {

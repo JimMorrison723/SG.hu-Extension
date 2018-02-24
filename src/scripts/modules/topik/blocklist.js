@@ -1,16 +1,16 @@
 import { Module } from '../module'
 import { port, dataStore } from '../../content'
 
-export const blocklist = new Module('blocklist')
+export const blocklist = new Module('blocklist', true)
 
 blocklist.activate = () => {
 
   // Return false if theres no blocklist entry
-  if (typeof dataStore['block_list'] === 'undefined' || dataStore['block_list'] === '') {
+  if (typeof dataStore['blocklisted'] === 'undefined' || dataStore['blocklisted'] === '') {
     return false;
   }
 
-  var deletelist = dataStore['block_list'].split(',')
+  var deletelist = dataStore['blocklisted'].split(',')
 
   $('.forum-post').find('header').each(function () {
     var nick;

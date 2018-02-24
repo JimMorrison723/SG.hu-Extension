@@ -51,7 +51,7 @@ threadedComments.prev = (ele) => {
   var targetOffset = targetTop - (windowHalf - targetHalf)
 
   // Scroll to target element
-  $('body').animate({ scrollTop: targetOffset }, 500)
+  $('html, body').animate({ scrollTop: targetOffset }, 500)
 }
 
 threadedComments.next = (next) => {
@@ -75,7 +75,7 @@ threadedComments.next = (next) => {
   var targetOffset = targetTop - (windowHalf - targetHalf);
 
   // Scroll to target element
-  $('body').animate({ scrollTop: targetOffset }, 500);
+  $('html, body').animate({ scrollTop: targetOffset }, 500);
 }
 
 threadedComments.sort = () => {

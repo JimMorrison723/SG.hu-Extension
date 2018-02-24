@@ -370,7 +370,7 @@ export const blocklist_cp = {
 
 	list: function () {
 		// If theres is no entry in dataStore or If the list is empty
-		if (typeof dataStore['block_list'] === "undefined" || !dataStore['block_list']) {
+		if (!dataStore['blocklisted']) {
 			return false;
 		}
 
@@ -379,7 +379,7 @@ export const blocklist_cp = {
 		blocklist.html('');
 
 		// Fetch the userlist into an array
-		var users = dataStore['block_list'].split(',').sort();
+		var users = dataStore['blocklisted'].split(',').sort();
 
 		// Iterate over, add users to the list
 		for (var c = 0; c < users.length; c++) {
@@ -529,14 +529,14 @@ const profiles_cp = {
 
 	rebuildProfiles: function () {
 
-		if (dataStore['profiles'] === '') {
+		if (dataStore['profilesList'] === '') {
 			return false;
 		}
 
 		// Empty the list
 		$('.settings_page .profiles > li:not(.sample)').remove();
 
-		var profiles = JSON.parse(dataStore['profiles']);
+		var profiles = JSON.parse(dataStore['profilesList']);
 
 		for (var c = 0; c < profiles.length; c++) {
 
@@ -616,10 +616,10 @@ const profiles_cp = {
 		});
 
 		// Save settings in localStorage
-		port.postMessage({ name: "setSetting", key: 'profiles', val: JSON.stringify(data) });
+		port.postMessage({ name: "setSetting", key: 'profilesList', val: JSON.stringify(data) });
 
 		// Save new settings in dataStore
-		dataStore['profiles'] = JSON.stringify(data);
+		dataStore['profilesList'] = JSON.stringify(data);
 
 		// Saved indicator
 		$('<p class="profile_status">&#10003;</p>').insertAfter($('.settings_page .profile_save'));

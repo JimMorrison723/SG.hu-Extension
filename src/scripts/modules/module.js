@@ -1,6 +1,6 @@
 export class Module {
 
-  constructor(name) {
+  constructor(name, active = false) {
     this.moduleName = name
     this.active = false
   }

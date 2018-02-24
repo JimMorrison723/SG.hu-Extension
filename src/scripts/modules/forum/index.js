@@ -2,6 +2,7 @@ import { chatHide } from './chatHide'
 import { highlightForumCategories } from './highlightForumCategories'
 import { shortCommentMarker } from './shortCommentMarker'
 import { favShowOnlyUnread } from './favShowOnlyUnread'
+import { jumpUnreadMessages } from './../topik/jumpUnreadMessages'
 
 // TODO: find a better way
 import { removeAds } from './../always/removeAds'
@@ -11,5 +12,6 @@ export {
   chatHide,
   favShowOnlyUnread,
   highlightForumCategories,
-  shortCommentMarker
+  shortCommentMarker,
+  jumpUnreadMessages
 }
