@@ -20,20 +20,20 @@ shortCommentMarker.activate = () => {
   })
 },
 
-  shortCommentMarker.disable = () => {
+shortCommentMarker.disable = () => {
 
-    $('#favorites-list').find('a').each(function () {
+  $('#favorites-list').find('a').each(function () {
 
-      if ($(this).find('span[class*=new]').length > 0) {
+    if ($(this).find('span[class*=new]').length > 0) {
 
-        // Show old marker text
-        $(this).find('span[class*=new]').show()
+      // Show old marker text
+      $(this).find('span[class*=new]').show()
 
-        // Remove ext_short_comment_marker
-        $(this).find('.ext_short_comment_marker').remove()
-      }
-    })
-  }
+      // Remove ext_short_comment_marker
+      $(this).find('.ext_short_comment_marker').remove()
+    }
+  })
+}
 
 shortCommentMarker.toggle = () => {
 

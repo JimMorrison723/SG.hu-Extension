@@ -4,13 +4,26 @@
         "sourceType": "module"
     },
     "rules": {
-        "semi": [
-            "warn",
-            "never"
-        ],
         "quotes": [
             "error",
             "single"
+        ],
+        "indent": [
+            "error",
+            2
         ]
-    }
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/scripts/settings.js"
+            ],
+            "rules": {
+                "indent": [
+                    "off",
+                    2
+                ]
+            }
+        }
+    ]
 }
