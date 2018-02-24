@@ -36,8 +36,8 @@ profiles.activate = () => {
 
     } else {
 
-      nick = ($(this).find("a img").length === 1) ? $(this).find("a img").attr("alt") : $(this).find("a#name").text()
-      nick = nick.replace(/ - VIP/, "")
+      nick = ($(this).find('a img').length === 1) ? $(this).find('a img').attr('alt') : $(this).find('a#name').text()
+      nick = nick.replace(/ - VIP/, '')
     }
 
     // Remove old outlines and titles
@@ -89,7 +89,7 @@ profiles.activate = () => {
 
     // Add checked marker
     $(this).addClass('checked')
-  });
+  })
 }
 
 profiles.toggle = () => {

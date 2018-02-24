@@ -220,7 +220,7 @@ export const cp = {
 		settings_button.css({ 'background-image': 'url(' + chrome.extension.getURL('/images/settings/button.png') + ')' });
 
 		// Get the requested page number
-		var sPage = typeof page === "undefined" ? 0 : page;
+		var sPage = typeof page === 'undefined' ? 0 : page;
 
 		// Select the right page
 		cp.tab(sPage);
@@ -396,7 +396,7 @@ export const blocklist_cp = {
 		$(el).closest('li').remove();
 
 		// Remove user from preferences
-		port.postMessage({ name: "removeUserFromBlocklist", message: user });
+		port.postMessage({ name: 'removeUserFromBlocklist', message: user });
 
 		// Add default message to the list if it is now empty
 		if ($('#ext_blocklist').find('li').length === 0) {
@@ -444,7 +444,7 @@ export const settings = {
 
 		if ($(ele).hasClass('on') || $(ele).prop('checked') === true || $(ele).is(':checked')) {
 			// Save new settings ...
-			port.postMessage({ name: "setSetting", key: $(ele).attr('id'), val: true });
+			port.postMessage({ name: 'setSetting', key: $(ele).attr('id'), val: true });
 
 			// Set new value to dataStore var
 			dataStore[$(ele).attr('id')] = true;
@@ -457,7 +457,7 @@ export const settings = {
 		} else {
 
 			// Save new settings ...
-			port.postMessage({ name: "setSetting", key: $(ele).attr('id'), val: false });
+			port.postMessage({ name: 'setSetting', key: $(ele).attr('id'), val: false });
 
 			// Set new value to dataStore var
 			dataStore[$(ele).attr('id')] = false;
@@ -478,7 +478,7 @@ export const settings = {
 		dataStore[$(ele).attr('id')] = val;
 
 		// Update in localStorage
-		port.postMessage({ name: "setSetting", key: $(ele).attr('id'), val: val });
+		port.postMessage({ name: 'setSetting', key: $(ele).attr('id'), val: val });
 	},
 
 	create: function (settings) {
@@ -616,7 +616,7 @@ const profiles_cp = {
 		});
 
 		// Save settings in localStorage
-		port.postMessage({ name: "setSetting", key: 'profilesList', val: JSON.stringify(data) });
+		port.postMessage({ name: 'setSetting', key: 'profilesList', val: JSON.stringify(data) });
 
 		// Save new settings in dataStore
 		dataStore['profilesList'] = JSON.stringify(data);

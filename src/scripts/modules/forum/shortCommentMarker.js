@@ -9,7 +9,7 @@ shortCommentMarker.activate = () => {
     if ($(this).find('span[class*=new]').length > 0) {
 
       // Received new messages counter
-      var newMsg = parseInt($(this).find('span[class=new]').html().match(/\d+/g)); // \d - non-digit character
+      var newMsg = parseInt($(this).find('span[class=new]').html().match(/\d+/g)) // \d - non-digit character
 
       // Remove the old marker text
       $(this).find('span[class*=new]').hide()
@@ -17,7 +17,7 @@ shortCommentMarker.activate = () => {
       // Add the new marker after the topic title
       $(this).html($(this).html() + ' <span class="ext_short_comment_marker" style="color: red;">' + newMsg + '</span>')
     }
-  });
+  })
 },
 
   shortCommentMarker.disable = () => {
@@ -32,7 +32,7 @@ shortCommentMarker.activate = () => {
         // Remove ext_short_comment_marker
         $(this).find('.ext_short_comment_marker').remove()
       }
-    });
+    })
   }
 
 shortCommentMarker.toggle = () => {

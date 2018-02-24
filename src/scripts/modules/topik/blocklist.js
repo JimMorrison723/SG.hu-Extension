@@ -7,13 +7,13 @@ blocklist.activate = () => {
 
   // Return false if theres no blocklist entry
   if (typeof dataStore['blocklisted'] === 'undefined' || dataStore['blocklisted'] === '') {
-    return false;
+    return false
   }
 
   var deletelist = dataStore['blocklisted'].split(',')
 
   $('.forum-post').find('header').each(function () {
-    var nick;
+    var nick
     if (document.location.href.match(/cikkek/)) {
 
       nick = $(this).find('a:first').html()
@@ -26,7 +26,7 @@ blocklist.activate = () => {
         nick = $(this).find('a#name').text()
       }
 
-      nick = nick.replace(/ - VIP/, "")
+      nick = nick.replace(/ - VIP/, '')
     }
 
     for (var i = 0; i < deletelist.length; i++) {
@@ -34,7 +34,7 @@ blocklist.activate = () => {
         $(this).closest('li.forum-post').hide()
       }
     }
-  });
+  })
 }
 
 export function unblock(user) {
@@ -53,7 +53,7 @@ export function unblock(user) {
         nick = $(this).find('a#name').text()
       }
 
-      nick = nick.replace(/ - VIP/, "")
+      nick = nick.replace(/ - VIP/, '')
     }
 
     if (nick.toLowerCase() === user.toLowerCase()) {
@@ -67,20 +67,20 @@ export function unblock(user) {
       // Set back to invisible, then animate
       $(this).closest('li.forum-post').css({ height: 0 }).animate({ opacity: 1, height: height }, 500)
     }
-  });
+  })
 }
 
 export function block(el) {
-  var nick = '';
+  var nick = ''
 
   var anchor = $(el).closest('#forum-posts-list ul li header').find('a[href*="/felhasznalo"]')
   var tmpUrl = anchor.attr('href')
 
   if (anchor.children('img').length > 0) {
-    nick = anchor.children('img').attr('title').replace(" - VIP", "")
+    nick = anchor.children('img').attr('title').replace(' - VIP', '')
 
   } else {
-    nick = anchor.html().replace(" - VIP", "")
+    nick = anchor.html().replace(' - VIP', '')
   }
 
   if (confirm('Biztos tiltólistára teszed "' + nick + '" nevű felhasználót?')) {
@@ -90,11 +90,11 @@ export function block(el) {
       // Remove the comment
       $(this).closest('li.forum-post').animate({ height: 0, opacity: 0 }, 500, function () {
         $(this).hide()
-      });
-    });
+      })
+    })
 
     // Store new settings in localStorage
-    port.postMessage({ name: "addToBlocklist", message: nick })
+    port.postMessage({ name: 'addToBlocklist', message: nick })
 
     // Add name to blocklist
     $('<li><span>' + nick + '</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')

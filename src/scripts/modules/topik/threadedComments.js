@@ -8,7 +8,7 @@ threadedComments.activate = () => {
   var newMsg = document.location.href.split('&newmsg=')[1]
 
   // Mark new messages if any
-  if (typeof newMsg !== "undefined" && newMsg !== '') {
+  if (typeof newMsg !== 'undefined' && newMsg !== '') {
     $('.header:lt(' + newMsg + ')').find('a:last').after($('<span class="thread_sep"> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>'))
   }
 
@@ -21,11 +21,11 @@ threadedComments.activate = () => {
     // Bind events
     $('.thread_prev').on('click', function () {
       threadedComments.prev(this)
-    });
+    })
 
     $('.thread_next').on('click', function () {
       threadedComments.next(this)
-    });
+    })
   }
 
   // Sort comments to thread
@@ -63,19 +63,19 @@ threadedComments.next = (next) => {
 
   // Check if is it the last element
   if (index + 1 >= ext_new_comment.length) {
-    return false;
+    return false
   }
 
   var target = ext_new_comment.eq((index + 1)).closest('.post').children('header')
 
   // Target offsets
-  var windowHalf = $(window).height() / 2;
-  var targetHalf = $(target).outerHeight() / 2;
-  var targetTop = $(target).offset().top;
-  var targetOffset = targetTop - (windowHalf - targetHalf);
+  var windowHalf = $(window).height() / 2
+  var targetHalf = $(target).outerHeight() / 2
+  var targetTop = $(target).offset().top
+  var targetOffset = targetTop - (windowHalf - targetHalf)
 
   // Scroll to target element
-  $('html, body').animate({ scrollTop: targetOffset }, 500);
+  $('html, body').animate({ scrollTop: targetOffset }, 500)
 }
 
 threadedComments.sort = () => {
@@ -113,7 +113,7 @@ threadedComments.sort = () => {
     // Add checked class
     $(this).find('.topichead:first').addClass('checked')
 
-  });
+  })
 }
 
 threadedComments.toggle = () => {

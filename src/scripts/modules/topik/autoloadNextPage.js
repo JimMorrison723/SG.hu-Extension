@@ -46,13 +46,13 @@ autoloadNextPage.activate = () => {
     // Get max page number - Fix for "Last page"
     var temp = ($('nav.pagination a.last').attr('href'))
     if (temp) {
-      autoloadNextPage.maxPage = parseInt(temp.substring(temp.lastIndexOf("=") + 1))
+      autoloadNextPage.maxPage = parseInt(temp.substring(temp.lastIndexOf('=') + 1))
     }
   }
 
   $(document).scroll(function () {
-    var docHeight = $(document).height();
-    var scrollPosition = $(window).height() + $(window).scrollTop();
+    var docHeight = $(document).height()
+    var scrollPosition = $(window).height() + $(window).scrollTop()
 
     if ((docHeight - scrollPosition) / docHeight < 0.1
       && !autoloadNextPage.progress
@@ -60,7 +60,7 @@ autoloadNextPage.activate = () => {
       autoloadNextPage.progress = true
       autoloadNextPage.load()
     }
-  });
+  })
 }
 
 autoloadNextPage.disable = () => {
@@ -70,7 +70,7 @@ autoloadNextPage.disable = () => {
 
 autoloadNextPage.load = () => {
 
-  var url;
+  var url
   // Url to call
   // date ASC order
   if (document.location.href.match(/timeline/)) {
@@ -86,11 +86,11 @@ autoloadNextPage.load = () => {
       var topic_id = $('section#forum-posts').data('topic-id')
 
       // Url to call	
-      url = 'forum/tema/' + topic_id;
+      url = 'forum/tema/' + topic_id
       url = url + '?page=' + (autoloadNextPage.currPage + 1) + '&callerid=1'
 
     } else {
-      url = document.location.href.substring(0, 35);
+      url = document.location.href.substring(0, 35)
       url = url + '?page=' + (autoloadNextPage.currPage + 1) + ''
     }
   }
@@ -114,13 +114,13 @@ autoloadNextPage.load = () => {
     // Articles
     if (document.location.href.match(/cikkek/)) {
 
-      tmp = tmp.find('div#forum-posts-list');
-      tmp = safeResponse.cleanDomHtml(tmp[0]);
+      tmp = tmp.find('div#forum-posts-list')
+      tmp = safeResponse.cleanDomHtml(tmp[0])
 
       //TODO: fix meh workaround
-      d = document.createElement('div');
-      d.innerHTML = tmp;
-      $(d).insertAfter('.ext_autopager_idicator:last');
+      d = document.createElement('div')
+      d.innerHTML = tmp
+      $(d).insertAfter('.ext_autopager_idicator:last')
 
       // Topics
     } else {

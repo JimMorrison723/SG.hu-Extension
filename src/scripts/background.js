@@ -4,13 +4,13 @@ let defaultSettings = require('./util/defaultSettings')
 browser.extension.onConnect.addListener(function (port) {
 	port.onMessage.addListener(function (event) {
 
-		let list, index;
+		let list, index
 
 		// Send back the settings object
 		if (event.name === 'getSettings') {
 
 			let gettingItem = browser.storage.sync.get(null, function (item) {
-				port.postMessage({ name: "setSettings", message: item })
+				port.postMessage({ name: 'setSettings', message: item })
 			})
 
 			// Add user to blocklist
@@ -18,17 +18,17 @@ browser.extension.onConnect.addListener(function (port) {
 
 			// If the blocklist is empty
 			if (localStorage['blocklisted'] === '' || localStorage['blocklisted'] === undefined) {
-				localStorage['blocklisted'] = event.message;
+				localStorage['blocklisted'] = event.message
 				let temp = {}
 				temp['blocklisted'] = event.message
 				browser.storage.sync.set(temp)
 
 				// If the blocklist is not empty
 			} else {
-				var blockList = localStorage['blocklisted'].split(',');
+				var blockList = localStorage['blocklisted'].split(',')
 				if (blockList.indexOf(event.message) === -1) {
-					blockList.push(event.message);
-					localStorage['blocklisted'] = blockList.join(',');
+					blockList.push(event.message)
+					localStorage['blocklisted'] = blockList.join(',')
 					let temp = {}
 					temp['blocklisted'] = localStorage['blocklisted']
 					browser.storage.sync.set(temp)
@@ -38,19 +38,19 @@ browser.extension.onConnect.addListener(function (port) {
 		} else if (event.name === 'removeUserFromBlocklist') {
 
 			// Get username
-			var user = event.message;
+			var user = event.message
 
 			// Get the blocklist array
-			list = localStorage['blocklisted'].split(',');
+			list = localStorage['blocklisted'].split(',')
 
 			// Get the removed user index
-			index = list.indexOf(user);
+			index = list.indexOf(user)
 
 			// Remove user from array
-			list.splice(index, 1);
+			list.splice(index, 1)
 
 			// Save changes in localStorage
-			localStorage['blocklisted'] = list.join(',');
+			localStorage['blocklisted'] = list.join(',')
 
 			// Update dataStore
 			let temp = {}
@@ -69,8 +69,8 @@ browser.extension.onConnect.addListener(function (port) {
 			temp['user'][event.key] = event.val
 			browser.storage.sync.set(temp)
 		}
-	});
-});
+	})
+})
 
 let ports = []
 
@@ -81,18 +81,18 @@ function connected(p) {
 	browser.storage.sync.get(null, function (item) {
 
 		// only send the settings to the new page
-		p.postMessage({ name: "setSettings", message: item })
+		p.postMessage({ name: 'setSettings', message: item })
 	})
 }
 
 // send message about a setting has been changed
 function storageChange(changes, area) {
-	var changedItems = Object.keys(changes);
+	var changedItems = Object.keys(changes)
 
 	for (var item of changedItems) {
 		let tmp = {}
 		tmp[item] = changes[item].newValue
-		sendMessage({ name: "updateSettings", message: tmp })
+		sendMessage({ name: 'updateSettings', message: tmp })
 	}
 }
 
@@ -105,10 +105,10 @@ function sendMessage(param) {
 // if this is the extension's first load, save default settings
 browser.storage.sync.get('installed', function (item) {
 	if (Object.keys(item).length === 0 && item.constructor === Object) {
-		browser.storage.sync.set(defaultSettings.default);
-		browser.storage.sync.set({ installed: true });
+		browser.storage.sync.set(defaultSettings.default)
+		browser.storage.sync.set({ installed: true })
 	}
 })
 
-browser.storage.onChanged.addListener(storageChange);
+browser.storage.onChanged.addListener(storageChange)
 browser.runtime.onConnect.addListener(connected)

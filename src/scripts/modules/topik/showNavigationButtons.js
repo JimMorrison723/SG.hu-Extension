@@ -19,8 +19,8 @@ showNavigationButtons.activate = () => {
 
   // Add click event to scrolltop button
   ext_scrolltop.on('click', function () {
-    $('html, body').animate({ scrollTop: 0 }, 400);
-  });
+    $('html, body').animate({ scrollTop: 0 }, 400)
+  })
 
   // Add event to back button
   ext_back.on('click', function () {
@@ -47,11 +47,11 @@ showNavigationButtons.activate = () => {
     // Create the search event
     ext_search.on('click', function () {
       if ($('#ext_overlay_search').length) {
-        showNavigationButtons.removeOverlay();
+        showNavigationButtons.removeOverlay()
       } else {
-        showNavigationButtons.showSearch();
+        showNavigationButtons.showSearch()
       }
-    });
+    })
   }
 
   // Execute when the user is logged in
@@ -78,7 +78,7 @@ showNavigationButtons.activate = () => {
       } else {
         showNavigationButtons.removeOverlay()
       }
-    });
+    })
   }
 
   //Night mode
@@ -204,7 +204,7 @@ showNavigationButtons.showSearch = () => {
 
 showNavigationButtons.showFaves = () => {
 
-  var url = "https://sg.hu/forum/"
+  var url = 'https://sg.hu/forum/'
   var ext_nav_faves_wrapper = $('#ext_nav_faves_wrapper')
   var ext_nav_faves = $('#ext_nav_faves')
   var ext_nav_faves_arrow = $('#ext_nav_faves_arrow')
@@ -249,7 +249,7 @@ showNavigationButtons.showFaves = () => {
       // Create the hiding overlay
       showNavigationButtons.createOverlay()
     }
-  });
+  })
 }
 
 
@@ -358,10 +358,10 @@ showNavigationButtons.createOverlay = () => {
     height: '100%',
     width: '100%',
     zIndex: 80
-  });
+  })
   $('#ext_nav_overlay').click(function () {
     showNavigationButtons.removeOverlay()
-  });
+  })
 }
 
 showNavigationButtons.removeOverlay = () => {

@@ -1,4 +1,4 @@
-import { Module } from "../module";
+import { Module } from '../module'
 
 export const highlightForumCategories = new Module('highlightForumCategories')
 
@@ -7,7 +7,7 @@ highlightForumCategories.activate = () => {
     'color': '#ffffff',
     'background-color': '#6c9ff7',
     'padding-left': '5px'
-  });
+  })
 }
 
 highlightForumCategories.disable = () => {
@@ -15,7 +15,7 @@ highlightForumCategories.disable = () => {
     'color': '#444',
     'background-color': '#fff',
     'padding-left': '15px'
-  });
+  })
 }
 
 highlightForumCategories.toggle = () => {

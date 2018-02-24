@@ -10,7 +10,7 @@ export class Module {
   }
 
   get getName() {
-    return this.moduleName;
+    return this.moduleName
   }
 
   get toggleStatus() {

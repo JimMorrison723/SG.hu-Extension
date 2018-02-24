@@ -17,7 +17,7 @@ highlightCommentsForMe.activate = () => {
   var start_pos = comment.text().indexOf('\'') + 1
   var end_pos = comment.text().indexOf('\'', start_pos)
   var TesTcomment = comment.text().substring(start_pos, end_pos)
-  var comments;
+  var comments
 
   if (TesTcomment === dataStore['user']['userName']) {
     comments = comment.closest('li')
@@ -38,13 +38,13 @@ highlightCommentsForMe.activate = () => {
           $(this).find('.ext_comments_for_me_indicator').addClass('topic')
         }
       }
-    });
+    })
   }
 }
 
 highlightCommentsForMe.disable = () => {
 
-  $('.ext_comments_for_me_indicator').remove();
+  $('.ext_comments_for_me_indicator').remove()
 }
 
 highlightCommentsForMe.toggle = () => {

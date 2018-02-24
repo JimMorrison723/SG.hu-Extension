@@ -83,7 +83,7 @@ addToList.buildList = () => {
   }
 
   // Get the profile groups
-  var profiles = JSON.parse(dataStore['profilesList']);
+  var profiles = JSON.parse(dataStore['profilesList'])
 
   // Iterate over the groups, add each one to the list
   for (var c = 0; c < profiles.length; c++) {
@@ -102,10 +102,10 @@ addToList.addToList = (group, ele) => {
   var anchor = $(ele).closest('#forum-posts-list ul li header').find('a[href*="felhasznalo"]')
 
   if (anchor.children('img').length > 0) {
-    nick = anchor.children('img').attr('title').replace(" - VIP", "")
+    nick = anchor.children('img').attr('title').replace(' - VIP', '')
 
   } else {
-    nick = anchor.html().replace(" - VIP", "")
+    nick = anchor.html().replace(' - VIP', '')
   }
 
   // Check user
@@ -122,10 +122,10 @@ addToList.addToList = (group, ele) => {
   dataStore['profilesList'] = data
 
   // Save in localStorage
-  port.postMessage({ name: "setSetting", key: 'profilesList', val: data })
+  port.postMessage({ name: 'setSetting', key: 'profilesList', val: data })
 
   // Remove checked class for update
-  $("#forum-posts-list").find(".forum-post").each(function () {
+  $('#forum-posts-list').find('.forum-post').each(function () {
     var nick_2
 
     if (document.location.href.match(/cikkek/)) {
@@ -134,8 +134,8 @@ addToList.addToList = (group, ele) => {
 
     } else {
       /* BUG avatar nélküli felhasználóknál nem működik.     $(this).find("header a")[0]  undefined */
-      nick_2 = ($(this).find(".name img").length === 1) ? $(this).find(".name img").attr("alt") : $(this).find(".name").text()
-      nick_2 = nick_2.replace(/ - VIP/, "")
+      nick_2 = ($(this).find('.name img').length === 1) ? $(this).find('.name img').attr('alt') : $(this).find('.name').text()
+      nick_2 = nick_2.replace(/ - VIP/, '')
     }
 
     if (nick === nick_2) {

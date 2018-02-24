@@ -17,7 +17,7 @@ favShowOnlyUnread.init = () => {
 
 favShowOnlyUnread.activate = () => {
 
-  favShowOnlyUnread.init();
+  favShowOnlyUnread.init()
 
   var ext_faves = $('.ext_faves')
 
@@ -74,8 +74,8 @@ favShowOnlyUnread.activate = () => {
       favShowOnlyUnread.opened = true
 
       // Update last state in LocalStorage
-      port.postMessage({ name: "setSetting", key: 'updateFavesFilterLastState', val: true })
-      port.postMessage({ name: "setSetting", key: 'favShowOnlyUnreadOpened', val: true })
+      port.postMessage({ name: 'setSetting', key: 'updateFavesFilterLastState', val: true })
+      port.postMessage({ name: 'setSetting', key: 'favShowOnlyUnreadOpened', val: true })
 
       // Reposition the popup if any
       if ($(this).closest('#ext_nav_faves_wrapper').length) {
@@ -92,8 +92,8 @@ favShowOnlyUnread.activate = () => {
       favShowOnlyUnread.opened = false
 
       // Update last state in LocalStorage
-      port.postMessage({ name: "setSetting", key: 'updateFavesFilterLastState', val: false })
-      port.postMessage({ name: "setSetting", key: 'favShowOnlyUnreadOpened', val: false })
+      port.postMessage({ name: 'setSetting', key: 'updateFavesFilterLastState', val: false })
+      port.postMessage({ name: 'setSetting', key: 'favShowOnlyUnreadOpened', val: false })
 
 
       // Reposition the popup if any

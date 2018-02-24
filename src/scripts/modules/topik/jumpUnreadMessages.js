@@ -29,7 +29,7 @@ jumpUnreadMessages.activate = () => {
 
       $(this).attr('href', $(this).attr('href').substring(0, start))
     }
-  });
+  })
 }
 
 jumpUnreadMessages.disable = () => {
@@ -42,7 +42,7 @@ jumpUnreadMessages.disable = () => {
 
       $(this).attr('href', $(this).attr('href').substring(0, start))
     }
-  });
+  })
 }
 
 jumpUnreadMessages.topic = () => {
@@ -53,7 +53,7 @@ jumpUnreadMessages.topic = () => {
   var newMsg = document.location.href.split('&newmsg=')[1]
 
   // Return if there is not comment counter set
-  if (typeof newMsg === "undefined" || newMsg === '' || newMsg === 0) {
+  if (typeof newMsg === 'undefined' || newMsg === '' || newMsg === 0) {
     return false
   }
 
@@ -87,7 +87,7 @@ jumpUnreadMessages.topic = () => {
 
   // Url to rewrite
   /*var url = document.location.href.replace(/?order=desc&page=\d+/gi, "")*/
-  var url = document.location.href.replace(/&newmsg=\d+/gi, "")
+  var url = document.location.href.replace(/&newmsg=\d+/gi, '')
 
   // Update the url to avoid re-jump
   history.replaceState({ page: url }, '', url)

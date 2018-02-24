@@ -25,13 +25,13 @@ function getUserStatus() {
 
 			dataStore['user']['isLoggedIn'] = true
 			dataStore['user']['userName'] = data.msg.nick
-			port.postMessage({ name: "setUserSetting", key: 'userName', val: data.msg.nick })
+			port.postMessage({ name: 'setUserSetting', key: 'userName', val: data.msg.nick })
 		})
 
 		// User is not logged in
 	} else if (!ident_id) {
 		dataStore['user']['isLoggedIn'] = false
-		port.postMessage({ name: "setUserSetting", key: 'userName', val: '' })
+		port.postMessage({ name: 'setUserSetting', key: 'userName', val: '' })
 	}
 }
 
@@ -61,7 +61,7 @@ function startup() {
 
 // Filter out iframes
 if (window.top === window) {
-	port = browser.runtime.connect();
+	port = browser.runtime.connect()
 }
 
 port.onMessage.addListener(function (event) {
@@ -87,4 +87,4 @@ port.onMessage.addListener(function (event) {
 		}
 
 	}
-});
+})
