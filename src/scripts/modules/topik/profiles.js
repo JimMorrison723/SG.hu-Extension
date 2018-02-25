@@ -12,17 +12,17 @@ profiles.activate = () => {
     return false
   }
 
-  var profiles = JSON.parse(dataStore['profilesList'])
+  let profiles = JSON.parse(dataStore['profilesList'])
 
   // Iterate over the comments
   $('#forum-posts-list').find('ul li header:not(.checked)').each(function () {
-    var nick
+    let nick
 
     // Create the wrapper if not any
     if (!$(this).next().is('.wrapper')) {
 
       // Create the wrapper
-      var wrapper = $('<div class="wrapper"></div>').insertAfter(this).css('position', 'relative')
+      let wrapper = $('<div class="wrapper"></div>').insertAfter(this).css('position', 'relative')
 
       // Place in other elements
       //noinspection JSCheckFunctionSignatures
@@ -50,23 +50,23 @@ profiles.activate = () => {
 
     // Iterate over the profile settings
     // Search for nickname match
-    for (var c = 0; c < profiles.length; c++) {
-      for (var u = 0; u < profiles[c]['users'].length; u++) {
+    for (let c = 0; c < profiles.length; c++) {
+      for (let u = 0; u < profiles[c]['users'].length; u++) {
         if (jQuery.trim(profiles[c]['users'][u]) === nick) {
 
           // WE GOT A MATCH
 
           // Title
           //noinspection JSCheckFunctionSignatures
-          var placeholder = $('<span class="titles">' + profiles[c]['title'] + '</span>').appendTo($(this).find('span.icons'))
+          let placeholder = $('<span class="titles">' + profiles[c]['title'] + '</span>').appendTo($(this).find('span.icons'))
           placeholder.css('padding-left', 10)
 
           // Calc outline width 
-          var width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8
+          let width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8
 
           // Border
           //noinspection JSCheckFunctionSignatures
-          var outline = $('<div class="outline"></div>').insertBefore($(this).parent().find('section.body, footer'))
+          let outline = $('<div class="outline"></div>').insertBefore($(this).parent().find('section.body, footer'))
           outline.css({
             width: 6,
             height: '100%',

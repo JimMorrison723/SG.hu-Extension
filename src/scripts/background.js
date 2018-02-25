@@ -25,7 +25,7 @@ browser.extension.onConnect.addListener(function (port) {
 
         // If the blocklist is not empty
       } else {
-        var blockList = localStorage['blocklisted'].split(',')
+        let blockList = localStorage['blocklisted'].split(',')
         if (blockList.indexOf(event.message) === -1) {
           blockList.push(event.message)
           localStorage['blocklisted'] = blockList.join(',')
@@ -38,7 +38,7 @@ browser.extension.onConnect.addListener(function (port) {
     } else if (event.name === 'removeUserFromBlocklist') {
 
       // Get username
-      var user = event.message
+      let user = event.message
 
       // Get the blocklist array
       list = localStorage['blocklisted'].split(',')
@@ -66,7 +66,8 @@ browser.extension.onConnect.addListener(function (port) {
     } else if (event.name === 'setUserSetting') {
 
       let temp = { user: {} }
-      temp['user'][event.key] = event.val
+      console.log(temp)
+      temp['user'] = event.msg
       browser.storage.sync.set(temp)
     }
   })
@@ -87,9 +88,9 @@ function connected(p) {
 
 // send message about a setting has been changed
 function storageChange(changes, area) {
-  var changedItems = Object.keys(changes)
+  let changedItems = Object.keys(changes)
 
-  for (var item of changedItems) {
+  for (let item of changedItems) {
     let tmp = {}
     tmp[item] = changes[item].newValue
     sendMessage({ name: 'updateSettings', message: tmp })

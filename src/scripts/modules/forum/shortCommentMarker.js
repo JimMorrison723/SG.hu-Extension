@@ -9,7 +9,7 @@ shortCommentMarker.activate = () => {
     if ($(this).find('span[class*=new]').length > 0) {
 
       // Received new messages counter
-      var newMsg = parseInt($(this).find('span[class=new]').html().match(/\d+/g)) // \d - non-digit character
+      let newMsg = parseInt($(this).find('span[class=new]').html().match(/\d+/g)) // \d - non-digit character
 
       // Remove the old marker text
       $(this).find('span[class*=new]').hide()

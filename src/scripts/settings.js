@@ -26,7 +26,7 @@ export const cp = {
     });
 
     // Inject the html code
-    var html = '';
+    let html = '';
 
     html += '<div id="ext_settings_wrapper">';
       html += '<ul id="ext_settings_header">';
@@ -199,13 +199,12 @@ export const cp = {
 
     html += '</div>';
 
-
     // Append settings pane html to body
 
     $(html).appendTo('body');
 
-    var ext_header = $('#ext_settings_header');
-    var settings_button = $('.settings_page .button');
+    let ext_header = $('#ext_settings_header');
+    let settings_button = $('.settings_page .button');
 
     // Set header list backgrounds
     ext_header.find('li').css({ 'background-image': 'url(' + chrome.extension.getURL('/images/settings/icons.png') + ')' });
@@ -220,7 +219,7 @@ export const cp = {
     settings_button.css({ 'background-image': 'url(' + chrome.extension.getURL('/images/settings/button.png') + ')' });
 
     // Get the requested page number
-    var sPage = typeof page === 'undefined' ? 0 : page;
+    let sPage = typeof page === 'undefined' ? 0 : page;
 
     // Select the right page
     cp.tab(sPage);
@@ -257,18 +256,18 @@ export const cp = {
 
   show: function () {
 
-    var ext_h_overlay = $('#ext_settings_hide_overlay');
-    var ext_s_wrapper = $('#ext_settings_wrapper');
+    let ext_h_overlay = $('#ext_settings_hide_overlay');
+    let ext_s_wrapper = $('#ext_settings_wrapper');
 
     // Set the overlay
     ext_h_overlay.css({ display: 'block', opacity: 0 });
     ext_h_overlay.animate({ opacity: 0.6 }, 200);
 
     // Get the viewport and panel dimensions
-    var viewWidth = $(window).width();
-    var paneWidth = ext_s_wrapper.width();
-    var paneHeight = ext_s_wrapper.height();
-    var leftProp = viewWidth / 2 - paneWidth / 2;
+    let viewWidth = $(window).width();
+    let paneWidth = ext_s_wrapper.width();
+    let paneHeight = ext_s_wrapper.height();
+    let leftProp = viewWidth / 2 - paneWidth / 2;
 
     // Apply calculated CSS settings to the panel
     ext_s_wrapper.css({ left: leftProp, top: '-' + (paneHeight + 10) + 'px' });
@@ -283,10 +282,10 @@ export const cp = {
 
   hide: function () {
 
-    var ext_s_wrapper = $('#ext_settings_wrapper');
+    let ext_s_wrapper = $('#ext_settings_wrapper');
 
     // Get the settings pane height
-    var paneHeight = ext_s_wrapper.height();
+    let paneHeight = ext_s_wrapper.height();
 
     // Hide the pane
     ext_s_wrapper.animate({ top: '-' + (paneHeight + 10) + 'px' }, 200, function () {
@@ -306,9 +305,9 @@ export const cp = {
 
   tab: function (index) {
 
-    var ext_s_wrapper = $('#ext_settings_wrapper');
-    var settings_page = $('.settings_page');
-    var ext_settings_header = $('#ext_settings_header');
+    let ext_s_wrapper = $('#ext_settings_wrapper');
+    let settings_page = $('.settings_page');
+    let ext_settings_header = $('#ext_settings_header');
 
     // Set the current height to prevent resize
     ext_s_wrapper.css({ height: ext_s_wrapper.height() });
@@ -320,7 +319,7 @@ export const cp = {
     settings_page.eq(index).fadeIn(250);
 
     // Get new height of settings pane
-    var newPaneHeight = ext_settings_header.height() + settings_page.eq(index).outerHeight();
+    let newPaneHeight = ext_settings_header.height() + settings_page.eq(index).outerHeight();
 
     // Animate the resize
     ext_s_wrapper.stop().animate({ height: newPaneHeight }, 150, function () {
@@ -374,15 +373,15 @@ export const blocklist_cp = {
       return false;
     }
 
-    var blocklist = $('#ext_blocklist');
+    let blocklist = $('#ext_blocklist');
     // Everything is OK, remove the default message
     blocklist.html('');
 
     // Fetch the userlist into an array
-    var users = dataStore['blocklisted'].split(',').sort();
+    let users = dataStore['blocklisted'].split(',').sort();
 
     // Iterate over, add users to the list
-    for (var c = 0; c < users.length; c++) {
+    for (let c = 0; c < users.length; c++) {
       blocklist.append('<li><span>' + users[c] + '</span> <a href="#">töröl</a></li>');
     }
   },
@@ -390,7 +389,7 @@ export const blocklist_cp = {
   remove: function (el) {
 
     // Get username
-    var user = $(el).prev().html();
+    let user = $(el).prev().html();
 
     // Remove user from the list
     $(el).closest('li').remove();
@@ -472,7 +471,7 @@ export const settings = {
   select: function (ele) {
 
     // Get the settings value
-    var val = $(ele).find('option:selected').val();
+    let val = $(ele).find('option:selected').val();
 
     // Update in dataStore
     dataStore[$(ele).attr('id')] = val;
@@ -536,18 +535,18 @@ const profiles_cp = {
     // Empty the list
     $('.settings_page .profiles > li:not(.sample)').remove();
 
-    var profiles = JSON.parse(dataStore['profilesList']);
+    let profiles = JSON.parse(dataStore['profilesList']);
 
-    for (var c = 0; c < profiles.length; c++) {
+    for (let c = 0; c < profiles.length; c++) {
 
       // Get the clone elementent
-      var clone = $('.settings_page .profiles li.sample').clone();
+      let clone = $('.settings_page .profiles li.sample').clone();
 
       // Get the target element
-      var target = $('.settings_page .profiles');
+      let target = $('.settings_page .profiles');
 
       // Append the new group
-      var content = $(clone).appendTo(target).removeClass('sample');
+      let content = $(clone).appendTo(target).removeClass('sample');
 
       // Re-set settings
       content.find('.color').val(profiles[c]['color']);
@@ -565,10 +564,10 @@ const profiles_cp = {
   addGroup: function () {
 
     // Get the clone elementent
-    var clone = $('.settings_page .profiles li.sample').clone();
+    let clone = $('.settings_page .profiles li.sample').clone();
 
     // Get the target element
-    var target = $('.settings_page .profiles');
+    let target = $('.settings_page .profiles');
 
     // Append the new group
     $(clone).appendTo(target).removeClass('sample');
@@ -586,7 +585,7 @@ const profiles_cp = {
   changeColor: function (ele) {
 
     // Get selected color
-    var color = $(ele).find('span').html().split(',');
+    let color = $(ele).find('span').html().split(',');
 
     // Set the color indicator
     $(ele).parent().parent().find('span:first').css('background-color', '#' + color[0]);
@@ -598,7 +597,7 @@ const profiles_cp = {
   save: function () {
 
     // Var to store data
-    var data = [];
+    let data = [];
 
     // Iterate over the groups
     $('.settings_page .profiles > li:not(.sample)').each(function (index) {

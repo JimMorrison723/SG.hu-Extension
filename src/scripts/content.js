@@ -23,16 +23,23 @@ function getUserStatus() {
 
     $.getJSON('https://sg.hu/api/forum/user?apikey=se3kMt7HkaeSjdv4cNuK3jAjyab9Nz7Z&ident_id=' + ident_id, function (data) {
 
-      dataStore['user']['isLoggedIn'] = true
-      dataStore['user']['userName'] = data.msg.nick
-      port.postMessage({ name: 'setUserSetting', key: 'userName', val: data.msg.nick })
+      dataStore['user'] = { isLoggedIn: true, userName: data.msg.nick }
     })
 
     // User is not logged in
   } else if (!ident_id) {
-    dataStore['user']['isLoggedIn'] = false
-    port.postMessage({ name: 'setUserSetting', key: 'userName', val: '' })
+    dataStore['user'] = { isLoggedIn: false, userName: '' }
   }
+  else if (dataStore['user']['userName'] && dataStore['user']['isLoggedIn'] == undefined) {
+
+    $.getJSON('https://sg.hu/api/forum/user/islogged?apikey=se3kMt7HkaeSjdv4cNuK3jAjyab9Nz7Z', function (data) {
+
+      dataStore['user'] = { isLoggedIn: true, userName: dataStore['user']['userName'] }
+    })
+  }
+
+  // sync settings
+  port.postMessage({ name: 'setUserSetting', msg: dataStore['user'] })
 }
 
 function whatPage() {
@@ -51,7 +58,7 @@ function whatPage() {
 
 function startup() {
 
-  for (var item in scripts) {
+  for (let item in scripts) {
     if (dataStore[item]) {
       scripts[item].activated()
     }

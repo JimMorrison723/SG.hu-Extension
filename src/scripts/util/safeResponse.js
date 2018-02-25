@@ -13,9 +13,9 @@ export let safeResponse = {
   },
 
   __removeInvalidAttributes: function (target) {
-    var attrs = target.attributes, currentAttr
+    let attrs = target.attributes, currentAttr
 
-    for (var i = attrs.length - 1; i >= 0; i--) {
+    for (let i = attrs.length - 1; i >= 0; i--) {
       currentAttr = attrs[i].name
 
       if (attrs[i].specified && safeResponse.validAttrs.indexOf(currentAttr) === -1) {
@@ -33,25 +33,25 @@ export let safeResponse = {
   },
 
   __cleanDomString: function (data) {
-    var parser = new DOMParser
-    var tmpDom = parser.parseFromString(data, 'text/html').body
+    let parser = new DOMParser
+    let tmpDom = parser.parseFromString(data, 'text/html').body
 
     return safeResponse.clean(tmpDom)
   },
 
   __cleanDomHtml: function (data) {
-    var parser = new DOMParser
-    var tmpDom = parser.parseFromString(data.outerHTML, 'text/html').body
+    let parser = new DOMParser
+    let tmpDom = parser.parseFromString(data.outerHTML, 'text/html').body
 
     return safeResponse.clean(tmpDom)
   },
 
   clean: function (tmpDom) {
-    var list, current
+    let list, current
 
     list = tmpDom.querySelectorAll('script')
 
-    for (var i = list.length - 1; i >= 0; i--) {
+    for (let i = list.length - 1; i >= 0; i--) {
       current = list[i]
       current.parentNode.removeChild(current)
     }

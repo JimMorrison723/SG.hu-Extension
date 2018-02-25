@@ -17,7 +17,7 @@ autoloadNextPage.activate = () => {
     autoloadNextPage.currPage = 1
 
     // Get topic ID
-    var topic_id = $('section#forum-posts').data('topic-id')
+    let topic_id = $('section#forum-posts').data('topic-id')
 
     // Get the topic page to determinate max page number
     $.ajax({
@@ -26,7 +26,7 @@ autoloadNextPage.activate = () => {
       success: function (data) {
 
         // Parse the response HTML
-        var tmp = $(data)
+        let tmp = $(data)
 
         // Fetch the max page number
         autoloadNextPage.maxPage = parseInt($(tmp).find('nav.pagination a:last').prev().html())
@@ -44,15 +44,15 @@ autoloadNextPage.activate = () => {
     autoloadNextPage.currPage = parseInt($('nav.pagination a.current').html())
 
     // Get max page number - Fix for "Last page"
-    var temp = ($('nav.pagination a.last').attr('href'))
+    let temp = ($('nav.pagination a.last').attr('href'))
     if (temp) {
       autoloadNextPage.maxPage = parseInt(temp.substring(temp.lastIndexOf('=') + 1))
     }
   }
 
   $(document).scroll(function () {
-    var docHeight = $(document).height()
-    var scrollPosition = $(window).height() + $(window).scrollTop()
+    let docHeight = $(document).height()
+    let scrollPosition = $(window).height() + $(window).scrollTop()
 
     if ((docHeight - scrollPosition) / docHeight < 0.1
       && !autoloadNextPage.progress
@@ -70,7 +70,7 @@ autoloadNextPage.disable = () => {
 
 autoloadNextPage.load = () => {
 
-  var url
+  let url
   // Url to call
   // date ASC order
   if (document.location.href.match(/timeline/)) {
@@ -83,7 +83,7 @@ autoloadNextPage.load = () => {
     if (document.location.href.match(/cikkek/)) {
 
       // Get topic ID
-      var topic_id = $('section#forum-posts').data('topic-id')
+      let topic_id = $('section#forum-posts').data('topic-id')
 
       // Url to call	
       url = 'forum/tema/' + topic_id
@@ -108,8 +108,8 @@ autoloadNextPage.load = () => {
     // }
 
     // Parse the response HTML
-    var tmp = $(data)
-    var d
+    let tmp = $(data)
+    let d
 
     // Articles
     if (document.location.href.match(/cikkek/)) {
@@ -140,7 +140,6 @@ autoloadNextPage.load = () => {
     // TODO: Reinit settings
   }, 'html')
 }
-
 
 autoloadNextPage.toggle = () => {
 

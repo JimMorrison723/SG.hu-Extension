@@ -11,13 +11,13 @@ highlightCommentsForMe.activate = () => {
   }
 
   // Get the proper domnodes
-  var comment = $('li[id*="post"] footer a:contains("' + dataStore['user']['userName'] + '")')
+  let comment = $('li[id*="post"] footer a:contains("' + dataStore['user']['userName'] + '")')
 
   //We need exact match with the userName
-  var start_pos = comment.text().indexOf('\'') + 1
-  var end_pos = comment.text().indexOf('\'', start_pos)
-  var TesTcomment = comment.text().substring(start_pos, end_pos)
-  var comments
+  let start_pos = comment.text().indexOf('\'') + 1
+  let end_pos = comment.text().indexOf('\'', start_pos)
+  let TesTcomment = comment.text().substring(start_pos, end_pos)
+  let comments
 
   if (TesTcomment === dataStore['user']['userName']) {
     comments = comment.closest('li')

@@ -5,7 +5,7 @@ export const jumpUnreadMessages = new Module('jumpUnreadMessages')
 
 jumpUnreadMessages.activate = () => {
 
-  var msgPerPage = dataStore['msgPerPage']
+  let msgPerPage = dataStore['msgPerPage']
 
   $('#favorites-list').find('span').find('a').each(function () { //.ext_faves'
 
@@ -13,10 +13,10 @@ jumpUnreadMessages.activate = () => {
     if ($(this).find('span[class="new"]').length > 0) {
 
       // Get the new messages count
-      var newMsg = parseInt($(this).find('span[class="new"]').html().match(/\d+/g))
+      let newMsg = parseInt($(this).find('span[class="new"]').html().match(/\d+/g))
 
       // Get last msn's page number
-      var page = Math.ceil(newMsg / msgPerPage)
+      let page = Math.ceil(newMsg / msgPerPage)
 
       // Rewrite the url
       $(this).attr('href', $(this).attr('href') + '?order=desc&page=' + page + '&newmsg=' + newMsg)
@@ -25,7 +25,7 @@ jumpUnreadMessages.activate = () => {
       // Remove newmsg var from link
     } else if ($(this).attr('href').indexOf('&order') !== -1) {
 
-      var start = $(this).attr('href').indexOf('&order')
+      let start = $(this).attr('href').indexOf('&order')
 
       $(this).attr('href', $(this).attr('href').substring(0, start))
     }
@@ -38,7 +38,7 @@ jumpUnreadMessages.disable = () => {
 
     if ($(this).attr('href').indexOf('&order') !== -1) {
 
-      var start = $(this).attr('href').indexOf('&order')
+      let start = $(this).attr('href').indexOf('&order')
 
       $(this).attr('href', $(this).attr('href').substring(0, start))
     }
@@ -47,10 +47,10 @@ jumpUnreadMessages.disable = () => {
 
 jumpUnreadMessages.topic = () => {
 
-  var msgPerPage = dataStore['msgPerPage']
+  let msgPerPage = dataStore['msgPerPage']
 
   // Get new messages counter
-  var newMsg = document.location.href.split('&newmsg=')[1]
+  let newMsg = document.location.href.split('&newmsg=')[1]
 
   // Return if there is not comment counter set
   if (typeof newMsg === 'undefined' || newMsg === '' || newMsg === 0) {
@@ -58,9 +58,9 @@ jumpUnreadMessages.topic = () => {
   }
 
   // Get the last msg
-  var lastMsg = newMsg % msgPerPage
-  var target
-  var last_read = $('a#last-read')
+  let lastMsg = newMsg % msgPerPage
+  let target
+  let last_read = $('a#last-read')
 
   // Target comment element
   if ($('.ext_new_comment').length > 0) {
@@ -86,8 +86,7 @@ jumpUnreadMessages.topic = () => {
   last_read.remove()
 
   // Url to rewrite
-  /*var url = document.location.href.replace(/?order=desc&page=\d+/gi, "")*/
-  var url = document.location.href.replace(/&newmsg=\d+/gi, '')
+  let url = document.location.href.replace(/&newmsg=\d+/gi, '')
 
   // Update the url to avoid re-jump
   history.replaceState({ page: url }, '', url)
@@ -104,24 +103,22 @@ jumpUnreadMessages.topic = () => {
   })
 }
 
-
 jumpUnreadMessages.jump = () => {
 
-  var hr = $('#ext_unreaded_hr')
+  let hr = $('#ext_unreaded_hr')
   if (!hr) {
     return false
   }
 
   // Target offsets
-  var windowHalf = $(window).height() / 2
-  var targetHalf = $(hr).outerHeight() / 2
-  var targetTop = $(hr).offset().top
-  var targetOffset = targetTop - (windowHalf - targetHalf)
+  let windowHalf = $(window).height() / 2
+  let targetHalf = $(hr).outerHeight() / 2
+  let targetTop = $(hr).offset().top
+  let targetOffset = targetTop - (windowHalf - targetHalf)
 
   // Scroll to target element
   $('html, body').animate({ scrollTop: targetOffset }, 400)
 }
-
 
 jumpUnreadMessages.toggle = () => {
 

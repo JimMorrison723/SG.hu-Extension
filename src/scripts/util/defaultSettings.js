@@ -18,6 +18,7 @@ export default {
   navigationButtonsPosition: 'leftcenter',
   navigationButtonNightState: false,
   removeAds: false,
+  wysiwygEditor: false,
   fetchNewComments: true,
   disablePointSystem: false,
   profiles: true,

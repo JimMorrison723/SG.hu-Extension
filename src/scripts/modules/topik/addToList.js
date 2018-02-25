@@ -20,16 +20,16 @@ addToList.activate = () => {
   $('#forum-posts-list').find('ul li header:not(.ext_add_to_list_topichead) a:contains("#")').each(function () {
 
     // Insert separator
-    var separator = $('<span class="separator pull-right"></span>').insertBefore(this)
+    let separator = $('<span class="separator pull-right"></span>').insertBefore(this)
 
     // Insert dropdow placeholder
-    var dropdown = $('<div class="ext_dropdown pull-right"><span>&#9660;</span></div>').insertBefore(separator)
+    let dropdown = $('<div class="ext_dropdown pull-right"><span>&#9660;</span></div>').insertBefore(separator)
 
     // Insert dropdown list
-    var list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list')
+    let list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list')
 
     // Set dropdown background color
-    var color_id = $(this).closest('#forum-posts-list ul li').css('background-image').match(/\d+/g)
+    let color_id = $(this).closest('#forum-posts-list ul li').css('background-image').match(/\d+/g)
 
     if (color_id) {
       list.css('background-color', '#' + addToList.colors[color_id])
@@ -83,10 +83,10 @@ addToList.buildList = () => {
   }
 
   // Get the profile groups
-  var profiles = JSON.parse(dataStore['profilesList'])
+  let profiles = JSON.parse(dataStore['profilesList'])
 
   // Iterate over the groups, add each one to the list
-  for (var c = 0; c < profiles.length; c++) {
+  for (let c = 0; c < profiles.length; c++) {
     $('<li><hr></li>').appendTo('.ext_addtolist_list')
     $('<li class="ident ext_addtolist profile_' + c + '" style="color: #' + profiles[c]['color'][0] + '">' + profiles[c]['title'] + '</li>').appendTo('.ext_addtolist_list')
   }
@@ -95,11 +95,11 @@ addToList.buildList = () => {
 addToList.addToList = (group, ele) => {
 
   // Get profiles
-  var list = JSON.parse(dataStore['profilesList'])
-  var nick
+  let list = JSON.parse(dataStore['profilesList'])
+  let nick
 
   // Get user's nick
-  var anchor = $(ele).closest('#forum-posts-list ul li header').find('a[href*="felhasznalo"]')
+  let anchor = $(ele).closest('#forum-posts-list ul li header').find('a[href*="felhasznalo"]')
 
   if (anchor.children('img').length > 0) {
     nick = anchor.children('img').attr('title').replace(' - VIP', '')
@@ -116,7 +116,7 @@ addToList.addToList = (group, ele) => {
   }
 
   // Stringify the new profiles list
-  var data = JSON.stringify(list)
+  let data = JSON.stringify(list)
 
   // Save in dataStore
   dataStore['profilesList'] = data
@@ -126,7 +126,7 @@ addToList.addToList = (group, ele) => {
 
   // Remove checked class for update
   $('#forum-posts-list').find('.forum-post').each(function () {
-    var nick_2
+    let nick_2
 
     if (document.location.href.match(/cikkek/)) {
 

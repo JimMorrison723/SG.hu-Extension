@@ -10,10 +10,10 @@ blocklist.activate = () => {
     return false
   }
 
-  var deletelist = dataStore['blocklisted'].split(',')
+  let deletelist = dataStore['blocklisted'].split(',')
 
   $('.forum-post').find('header').each(function () {
-    var nick
+    let nick
     if (document.location.href.match(/cikkek/)) {
 
       nick = $(this).find('a:first').html()
@@ -29,7 +29,7 @@ blocklist.activate = () => {
       nick = nick.replace(/ - VIP/, '')
     }
 
-    for (var i = 0; i < deletelist.length; i++) {
+    for (let i = 0; i < deletelist.length; i++) {
       if (nick.toLowerCase() === deletelist[i].toLowerCase()) {
         $(this).closest('li.forum-post').hide()
       }
@@ -41,7 +41,7 @@ export function unblock(user) {
 
   $('.forum-post').find('header').each(function () {
 
-    var nick
+    let nick
     if (document.location.href.match(/cikkek/)) {
 
       nick = $(this).find('a:first').html()
@@ -62,7 +62,7 @@ export function unblock(user) {
       $(this).closest('li.forum-post').css({ display: 'block', height: 'auto' })
 
       // Get height
-      var height = $(this).closest('li.forum-post').height()
+      let height = $(this).closest('li.forum-post').height()
 
       // Set back to invisible, then animate
       $(this).closest('li.forum-post').css({ height: 0 }).animate({ opacity: 1, height: height }, 500)
@@ -71,10 +71,10 @@ export function unblock(user) {
 }
 
 export function block(el) {
-  var nick = ''
+  let nick = ''
 
-  var anchor = $(el).closest('#forum-posts-list ul li header').find('a[href*="/felhasznalo"]')
-  var tmpUrl = anchor.attr('href')
+  let anchor = $(el).closest('#forum-posts-list ul li header').find('a[href*="/felhasznalo"]')
+  let tmpUrl = anchor.attr('href')
 
   if (anchor.children('img').length > 0) {
     nick = anchor.children('img').attr('title').replace(' - VIP', '')

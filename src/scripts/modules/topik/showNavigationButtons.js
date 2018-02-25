@@ -10,12 +10,12 @@ showNavigationButtons.activate = () => {
   // Created the back button
   $('<div id="ext_back" title="Főoldal">&#9664;</div>').prependTo('body')
 
-  var ext_scrolltop = $('#ext_scrolltop')
-  var ext_back = $('#ext_back')
-  var ext_nav_faves = ''
-  var ext_nightmode = ''
-  var ext_search = ''
-  var ext_whitelist = ''
+  let ext_scrolltop = $('#ext_scrolltop')
+  let ext_back = $('#ext_back')
+  let ext_nav_faves = ''
+  let ext_nightmode = ''
+  let ext_search = ''
+  let ext_whitelist = ''
 
   // Add click event to scrolltop button
   ext_scrolltop.on('click', function () {
@@ -92,7 +92,7 @@ showNavigationButtons.activate = () => {
   // Set the button positions
 
   // Gather visible buttons
-  var buttons = []
+  let buttons = []
 
   if (ext_scrolltop.length) {
     buttons.push('ext_scrolltop')
@@ -124,13 +124,13 @@ showNavigationButtons.activate = () => {
   }
 
   // Calculate buttons height
-  var height = buttons.length * 36
+  let height = buttons.length * 36
 
   // Calculate the top position
-  var top = ($(window).height() / 2) - (height / 2)
+  let top = ($(window).height() / 2) - (height / 2)
 
   // Iterate over the buttons
-  for (var c = 0; c < buttons.length; c++) {
+  for (let c = 0; c < buttons.length; c++) {
 
     if (dataStore['navigationButtonsPosition'] === 'lefttop') {
 
@@ -176,19 +176,19 @@ showNavigationButtons.disable = () => {
 
 showNavigationButtons.showSearch = () => {
 
-  var ext_search = $('#ext_search')
-  var ext_overlay_search_arrow = $('#ext_overlay_search_arrow')
+  let ext_search = $('#ext_search')
+  let ext_overlay_search_arrow = $('#ext_overlay_search_arrow')
 
   // Hide opened overlays
   showNavigationButtons.removeOverlay()
 
   // Clone and append the original search form to body
-  var clone = $('form#search-top').clone().appendTo('body')
+  let clone = $('form#search-top').clone().appendTo('body')
 
   // Add class
   clone.attr('id', 'ext_overlay_search')
 
-  var ext_overlay_search = $('#ext_overlay_search')
+  let ext_overlay_search = $('#ext_overlay_search')
 
   // Set position
   showNavigationButtons.findArrowPosition(ext_overlay_search_arrow, ext_search)
@@ -204,10 +204,10 @@ showNavigationButtons.showSearch = () => {
 
 showNavigationButtons.showFaves = () => {
 
-  var url = 'https://sg.hu/forum/'
-  var ext_nav_faves_wrapper = $('#ext_nav_faves_wrapper')
-  var ext_nav_faves = $('#ext_nav_faves')
-  var ext_nav_faves_arrow = $('#ext_nav_faves_arrow')
+  let url = 'https://sg.hu/forum/'
+  let ext_nav_faves_wrapper = $('#ext_nav_faves_wrapper')
+  let ext_nav_faves = $('#ext_nav_faves')
+  let ext_nav_faves_arrow = $('#ext_nav_faves_arrow')
 
   $.ajax({
     url: url,
@@ -215,7 +215,7 @@ showNavigationButtons.showFaves = () => {
     dataType: 'html',
     success: function (tmp) {
 
-      var data = $('nav#favorites-list', tmp)
+      let data = $('nav#favorites-list', tmp)
 
       // Security reasons
       data = safeResponse.cleanDomHtml(data[0])
@@ -252,10 +252,9 @@ showNavigationButtons.showFaves = () => {
   })
 }
 
-
 showNavigationButtons.findArrowPosition = (ele, target) => {
 
-  var vPos
+  let vPos
   // Top
   if (dataStore['navigationButtonsPosition'].match('bottom')) {
     vPos = parseInt($(target).css('bottom').replace('px', '')) + $(target).height() / 2 - $(ele).outerHeight() / 2
@@ -307,7 +306,7 @@ showNavigationButtons.findArrowPosition = (ele, target) => {
 
 showNavigationButtons.findPosition = (ele, target) => {
 
-  var top, bottom
+  let top, bottom
   if (dataStore['navigation_buttons_position'] === 'lefttop') {
 
     top = parseInt($(target).css('top').replace('px', '')) - 15

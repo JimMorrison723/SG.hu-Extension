@@ -5,7 +5,7 @@ export const threadedComments = new Module('threadedComments')
 threadedComments.activate = () => {
 
   // New message counter
-  var newMsg = document.location.href.split('&newmsg=')[1]
+  let newMsg = document.location.href.split('&newmsg=')[1]
 
   // Mark new messages if any
   if (typeof newMsg !== 'undefined' && newMsg !== '') {
@@ -35,20 +35,20 @@ threadedComments.activate = () => {
 threadedComments.prev = (ele) => {
 
   // Get the index value of the current element
-  var index = $(ele).index('.thread_prev')
+  let index = $(ele).index('.thread_prev')
 
   // Check if is it the first element
   if (index === 0) {
     return false
   }
 
-  var target = $('.ext_new_comment').eq((index - 1)).closest('.post').children('header')
+  let target = $('.ext_new_comment').eq((index - 1)).closest('.post').children('header')
 
   // Target offsets
-  var windowHalf = $(window).height() / 2
-  var targetHalf = $(target).outerHeight() / 2
-  var targetTop = $(target).offset().top
-  var targetOffset = targetTop - (windowHalf - targetHalf)
+  let windowHalf = $(window).height() / 2
+  let targetHalf = $(target).outerHeight() / 2
+  let targetTop = $(target).offset().top
+  let targetOffset = targetTop - (windowHalf - targetHalf)
 
   // Scroll to target element
   $('html, body').animate({ scrollTop: targetOffset }, 500)
@@ -56,23 +56,23 @@ threadedComments.prev = (ele) => {
 
 threadedComments.next = (next) => {
 
-  var ext_new_comment = $('.ext_new_comment')
+  let ext_new_comment = $('.ext_new_comment')
 
   // Get the index value of the current element
-  var index = $(ele).index('.thread_next')
+  let index = $(ele).index('.thread_next')
 
   // Check if is it the last element
   if (index + 1 >= ext_new_comment.length) {
     return false
   }
 
-  var target = ext_new_comment.eq((index + 1)).closest('.post').children('header')
+  let target = ext_new_comment.eq((index + 1)).closest('.post').children('header')
 
   // Target offsets
-  var windowHalf = $(window).height() / 2
-  var targetHalf = $(target).outerHeight() / 2
-  var targetTop = $(target).offset().top
-  var targetOffset = targetTop - (windowHalf - targetHalf)
+  let windowHalf = $(window).height() / 2
+  let targetHalf = $(target).outerHeight() / 2
+  let targetTop = $(target).offset().top
+  let targetOffset = targetTop - (windowHalf - targetHalf)
 
   // Scroll to target element
   $('html, body').animate({ scrollTop: targetOffset }, 500)
@@ -94,7 +94,7 @@ threadedComments.sort = () => {
     }
 
     // Get answered comment numer
-    var commentNum = $(this).find('.reply').text().split('#')[1].match(/\d+/g)
+    let commentNum = $(this).find('.reply').text().split('#')[1].match(/\d+/g)
 
     // Seach for parent node via comment number
     $(this).appendTo($('.header a:contains("#' + commentNum[0] + '"):last').closest('.post'))

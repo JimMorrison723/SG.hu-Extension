@@ -19,7 +19,7 @@ favShowOnlyUnread.activate = () => {
 
   favShowOnlyUnread.init()
 
-  var ext_faves = $('.ext_faves')
+  let ext_faves = $('.ext_faves')
 
   // Remove original toggle button
   $('div[class*="csakujuzi"]').remove()
@@ -34,13 +34,13 @@ favShowOnlyUnread.activate = () => {
   $('#ext_refresh_faves').css('right', 18)
   $('#ext_read_faves').css('right', 36)
 
-  var fav_list = $('#favorites-list')
-  var ext_wrapper = $('#ext_nav_faves_wrapper')
-  var ext_filtered_faves = $('#ext_show_filtered_faves')
-  var ext_filtered_faves_arrow = $('#ext_show_filtered_faves_arrow')
-  var ext_filtered_error = $('#ext_filtered_faves_error')
-  var Alllength = fav_list.find('a[class*="category-"]').length
-  var unreaded_length = fav_list.find('a[class^="category-"][class*="fav-not-new-msg"]').length
+  let fav_list = $('#favorites-list')
+  let ext_wrapper = $('#ext_nav_faves_wrapper')
+  let ext_filtered_faves = $('#ext_show_filtered_faves')
+  let ext_filtered_faves_arrow = $('#ext_show_filtered_faves_arrow')
+  let ext_filtered_error = $('#ext_filtered_faves_error')
+  let Alllength = fav_list.find('a[class*="category-"]').length
+  let unreaded_length = fav_list.find('a[class^="category-"][class*="fav-not-new-msg"]').length
 
   //Fix
   if (typeof unreaded_length === 'undefined') {
