@@ -91,10 +91,10 @@ jumpUnreadMessages.topic = () => {
   // Update the url to avoid re-jump
   history.replaceState({ page: url }, '', url)
 
-  // Call the jump method with 1 sec delay
-  setTimeout(function () {
+  // Call the jump window onload
+  window.onload = function () {
     jumpUnreadMessages.jump()
-  }, 1000)
+  }
 
   // Add click event the manual 'jump to last msg' button
   $('a[href*="#last-read"]').click(function (e) {

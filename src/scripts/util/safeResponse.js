@@ -58,7 +58,7 @@ export let safeResponse = {
 
     list = tmpDom.getElementsByTagName('*')
 
-    for (i = list.length - 1; i >= 0; i--) {
+    for (let i = list.length - 1; i >= 0; i--) {
       safeResponse.__removeInvalidAttributes(list[i])
     }
     return tmpDom.innerHTML

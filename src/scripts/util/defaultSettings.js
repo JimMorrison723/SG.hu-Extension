@@ -24,9 +24,12 @@ export default {
   profiles: true,
   profilesList: '',
   columnifyComments: false,
+  updateFavList: true,
+  makeReadAllFavs: true,
   quickUserInfo: false,
   quickInsertion: false,
   msgPerPage: 80,
+  textareaAutoResize: true,
   inlineImageViewer: false,
   user: {
     isLoggedIn: false,

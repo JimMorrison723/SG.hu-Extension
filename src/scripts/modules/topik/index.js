@@ -7,6 +7,8 @@ import { profiles } from './profiles'
 import { jumpUnreadMessages } from './jumpUnreadMessages'
 import { autoloadNextPage } from './autoloadNextPage'
 import { overlayReplyTo } from './overlayReplyTo'
+import { quickUserInfo } from './quickUserInfo'
+import { textareaAutoResize } from './textareaAutoResize'
 
 // TODO: find a better way
 import { removeAds } from './../always/removeAds'
@@ -21,5 +23,7 @@ export {
   profiles,
   jumpUnreadMessages,
   autoloadNextPage,
-  overlayReplyTo
+  overlayReplyTo,
+  quickUserInfo,
+  textareaAutoResize
 }

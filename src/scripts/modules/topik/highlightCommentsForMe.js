@@ -49,6 +49,16 @@ highlightCommentsForMe.disable = () => {
 
 highlightCommentsForMe.toggle = () => {
 
-  highlightCommentsForMe.toggleStatus ?
-    highlightCommentsForMe.activate() : highlightCommentsForMe.disable()
+  if (document.readyState === 'complete') {
+    highlightCommentsForMe.toggleStatus ?
+      highlightCommentsForMe.activate()
+      : highlightCommentsForMe.disable()
+  }
+  else {
+    highlightCommentsForMe.toggleStatus ?
+      window.onload = function () {
+        highlightCommentsForMe.activate()
+      }
+      : highlightCommentsForMe.disable()
+  }
 }

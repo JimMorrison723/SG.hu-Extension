@@ -148,11 +148,11 @@ export const cp = {
           html += '<p>A vágólapról bemásolt linket autómatikusan bbcode tagek közé rakja.</p>';
           html += '<div class="button" id="quickInsertion"></div>';
         html += '</div>';
-        html += '<div>';
-          html += '<h3>Külső média hivatkozások előnézete</h3>';
-          html += '<p>Hozzászólásokban a hivatkozások után egy kis gombra kattintva betöltődik a hivatkozott tartalom (kép, videó, tweet).</p>';
-          html += '<div class="button" id="inlineImageViewer"></div>';
-        html += '</div>';
+      //   html += '<div>';
+      //     html += '<h3>Külső média hivatkozások előnézete</h3>';
+      //     html += '<p>Hozzászólásokban a hivatkozások után egy kis gombra kattintva betöltődik a hivatkozott tartalom (kép, videó, tweet).</p>';
+      //     html += '<div class="button" id="inlineImageViewer"></div>';
+      //   html += '</div>';
       html += '</div>';
 
       html += '<div class="settings_page">';
