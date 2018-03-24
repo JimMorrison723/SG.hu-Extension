@@ -6,6 +6,9 @@ export const updateFavList = new Module('updateFavList')
 
 updateFavList.activate = () => {
 
+  if (!dataStore['user']['isLoggedIn'])
+    return
+
   // Disable site's built-in auto-update by remove "fkedvenc" ID
   $('#fkedvenc').removeAttr('id')
 
@@ -86,10 +89,4 @@ updateFavList.refresh = () => {
       }
     }
   });
-}
-
-updateFavList.toggle = () => {
-
-  if (dataStore['user']['isLoggedIn'])
-    updateFavList.activate()
 }

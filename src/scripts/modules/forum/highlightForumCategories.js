@@ -17,10 +17,3 @@ highlightForumCategories.disable = () => {
     'padding-left': '15px'
   })
 }
-
-highlightForumCategories.toggle = () => {
-
-  highlightForumCategories.toggleStatus ?
-    highlightForumCategories.activate() :
-    highlightForumCategories.disable()
-}

@@ -19,19 +19,25 @@ function getUserStatus() {
 
   // if there is an identid cookie, the user is logged in, get username
   let ident_id = getCookie('identid')
+
   if (!dataStore['user']['userName'] && ident_id) {
-
-    $.getJSON('https://sg.hu/api/forum/user?apikey=se3kMt7HkaeSjdv4cNuK3jAjyab9Nz7Z&ident_id=' + ident_id, function (data) {
-
-      dataStore['user'] = { isLoggedIn: true, userName: data.msg.nick }
+    $.ajax({
+      dataType: 'json',
+      url: 'https://sg.hu/api/forum/user?apikey=se3kMt7HkaeSjdv4cNuK3jAjyab9Nz7Z&ident_id=' + ident_id
     })
+      .then((data) => {
+        dataStore['user'] = { isLoggedIn: true, userName: data.msg.nick }
+
+        // sync settings
+        port.postMessage({ name: 'setUserSetting', msg: dataStore['user'] })
+        return
+      })
 
     // User is not logged in
   } else if (!ident_id) {
     dataStore['user'] = { isLoggedIn: false, userName: '' }
   }
   else if (dataStore['user']['userName'] && dataStore['user']['isLoggedIn'] == undefined) {
-
     $.getJSON('https://sg.hu/api/forum/user/islogged?apikey=se3kMt7HkaeSjdv4cNuK3jAjyab9Nz7Z', function (data) {
 
       dataStore['user'] = { isLoggedIn: true, userName: dataStore['user']['userName'] }
@@ -60,7 +66,7 @@ function startup() {
 
   for (let item in scripts) {
     if (dataStore[item]) {
-      scripts[item].activated()
+      scripts[item].activate()
     }
   }
 
@@ -90,7 +96,12 @@ port.onMessage.addListener(function (event) {
     settings.update(event.message)
     for (const [key, value] of Object.entries(event.message)) {
       dataStore[key] = value
-      scripts[key].toggle()
+      if (value === true)
+        scripts[key].activate()
+      else if (value === false)
+        scripts[key].disable()
+      // else
+      //   scripts[key].init()
     }
 
   }

@@ -5,6 +5,9 @@ export const jumpUnreadMessages = new Module('jumpUnreadMessages')
 
 jumpUnreadMessages.activate = () => {
 
+  if (PAGE == 2)
+    jumpUnreadMessages.topic()
+
   let msgPerPage = dataStore['msgPerPage']
 
   $('#favorites-list').find('span').find('a').each(function () { //.ext_faves'
@@ -118,15 +121,4 @@ jumpUnreadMessages.jump = () => {
 
   // Scroll to target element
   $('html, body').animate({ scrollTop: targetOffset }, 400)
-}
-
-jumpUnreadMessages.toggle = () => {
-
-  if (PAGE === 1) {
-    jumpUnreadMessages.toggleStatus ?
-      jumpUnreadMessages.activate() : jumpUnreadMessages.disable()
-  }
-  else
-    jumpUnreadMessages.topic()
-
 }

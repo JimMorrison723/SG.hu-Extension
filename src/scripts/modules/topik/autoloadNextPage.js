@@ -140,9 +140,3 @@ autoloadNextPage.load = () => {
     // TODO: Reinit settings
   }, 'html')
 }
-
-autoloadNextPage.toggle = () => {
-
-  autoloadNextPage.toggleStatus ?
-    autoloadNextPage.activate() : autoloadNextPage.disable()
-}

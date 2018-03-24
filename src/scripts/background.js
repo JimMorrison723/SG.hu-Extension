@@ -66,7 +66,6 @@ browser.extension.onConnect.addListener(function (port) {
     } else if (event.name === 'setUserSetting') {
 
       let temp = { user: {} }
-      console.log(temp)
       temp['user'] = event.msg
       browser.storage.sync.set(temp)
     }

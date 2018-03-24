@@ -103,8 +103,3 @@ export function block(el) {
     $('#ext_empty_blocklist').remove()
   }
 }
-
-blocklist.toggle = () => {
-
-  blocklist.activate()
-}

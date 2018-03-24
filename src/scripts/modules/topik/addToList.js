@@ -146,8 +146,3 @@ addToList.addToList = (group, ele) => {
   // Update content GUI
   profiles.activate()
 }
-
-addToList.toggle = () => {
-
-  addToList.activate()
-}

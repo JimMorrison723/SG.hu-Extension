@@ -34,9 +34,3 @@ shortCommentMarker.disable = () => {
     }
   })
 }
-
-shortCommentMarker.toggle = () => {
-
-  shortCommentMarker.toggleStatus ?
-    shortCommentMarker.activate() : shortCommentMarker.disable()
-}

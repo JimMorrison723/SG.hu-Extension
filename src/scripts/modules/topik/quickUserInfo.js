@@ -52,8 +52,3 @@ quickUserInfo.activate = () => {
     }
   })
 }
-
-quickUserInfo.toggle = () => {
-
-  quickUserInfo.activate()
-}

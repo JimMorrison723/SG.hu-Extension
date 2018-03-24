@@ -5,6 +5,9 @@ export const makeReadAllFavs = new Module('makeReadAllFavs')
 
 makeReadAllFavs.activate = () => {
 
+  if (!dataStore['user']['isLoggedIn'])
+    return
+
   // Create the 'read them all' button
   $('section#sidebar-user-favorites h4').append('<span style="cursor: pointer;">[<div id="ext_read_faves" style="display: inline-block;"></div>]</span>')
 
@@ -111,10 +114,4 @@ makeReadAllFavs.makeread = () => {
 
   }
 
-}
-
-makeReadAllFavs.toggle = () => {
-
-  if (dataStore['user']['isLoggedIn'])
-    makeReadAllFavs.activate()
 }

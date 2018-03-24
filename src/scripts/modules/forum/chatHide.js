@@ -15,9 +15,3 @@ chatHide.disable = () => {
   $('#forum-wrap').find('.blue-border-top').show()
   $('#forum-wrap').find('.forums-block:first').css({ 'margin-top': '35px' })
 }
-
-chatHide.toggle = () => {
-
-  chatHide.toggleStatus ?
-    chatHide.activate() : chatHide.disable()
-}

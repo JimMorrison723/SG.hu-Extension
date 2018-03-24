@@ -5,13 +5,15 @@ export const highlightCommentsForMe = new Module('highlightCommentsForMe')
 
 highlightCommentsForMe.activate = () => {
 
+  let userName = dataStore['user']['userName']
+
   // Return false when no username set
-  if (!dataStore['user']['userName']) {
+  if (!userName) {
     return false
   }
 
   // Get the proper domnodes
-  let comment = $('li[id*="post"] footer a:contains("' + dataStore['user']['userName'] + '")')
+  let comment = $('li[id*="post"] footer a:contains("' + userName + '")')
 
   //We need exact match with the userName
   let start_pos = comment.text().indexOf('\'') + 1
@@ -19,7 +21,7 @@ highlightCommentsForMe.activate = () => {
   let TesTcomment = comment.text().substring(start_pos, end_pos)
   let comments
 
-  if (TesTcomment === dataStore['user']['userName']) {
+  if (TesTcomment === userName) {
     comments = comment.closest('li')
   }
 
@@ -45,20 +47,4 @@ highlightCommentsForMe.activate = () => {
 highlightCommentsForMe.disable = () => {
 
   $('.ext_comments_for_me_indicator').remove()
-}
-
-highlightCommentsForMe.toggle = () => {
-
-  if (document.readyState === 'complete') {
-    highlightCommentsForMe.toggleStatus ?
-      highlightCommentsForMe.activate()
-      : highlightCommentsForMe.disable()
-  }
-  else {
-    highlightCommentsForMe.toggleStatus ?
-      window.onload = function () {
-        highlightCommentsForMe.activate()
-      }
-      : highlightCommentsForMe.disable()
-  }
 }

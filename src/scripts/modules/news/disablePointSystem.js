@@ -6,8 +6,3 @@ disablePointSystem.activate = () => {
 
   $('span.forum-post-rate-place').hide()
 }
-
-disablePointSystem.toggle = () => {
-
-  disablePointSystem.activate()
-}

@@ -13,8 +13,3 @@ removeAds.activate = () => {
   // Bottom ad
   $('div.forum-topics-block').next('div').remove()
 }
-
-removeAds.toggle = () => {
-
-  removeAds.activate()
-}

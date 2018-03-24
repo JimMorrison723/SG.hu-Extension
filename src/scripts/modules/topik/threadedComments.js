@@ -115,8 +115,3 @@ threadedComments.sort = () => {
 
   })
 }
-
-threadedComments.toggle = () => {
-
-  threadedComments.activate()
-}

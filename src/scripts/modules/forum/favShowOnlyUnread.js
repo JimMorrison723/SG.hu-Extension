@@ -129,9 +129,3 @@ favShowOnlyUnread.disable = () => {
   // Put back the buttons to the right side
   $('#ext_read_faves').css('right', 18)
 }
-
-favShowOnlyUnread.toggle = () => {
-
-  favShowOnlyUnread.toggleStatus ?
-    favShowOnlyUnread.activate() : favShowOnlyUnread.disable()
-}

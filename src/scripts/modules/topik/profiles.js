@@ -91,8 +91,3 @@ profiles.activate = () => {
     $(this).addClass('checked')
   })
 }
-
-profiles.toggle = () => {
-
-  profiles.activate()
-}

@@ -375,9 +375,3 @@ showNavigationButtons.removeOverlay = () => {
   // Remove the overlay
   $('#ext_nav_overlay').remove()
 }
-
-showNavigationButtons.toggle = () => {
-
-  showNavigationButtons.toggleStatus ?
-    showNavigationButtons.activate() : showNavigationButtons.disable()
-}

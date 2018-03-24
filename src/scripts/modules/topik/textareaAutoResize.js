@@ -63,8 +63,3 @@ console.log(val)
     $(ele).height(newHeight);
   }
 }
-
-textareaAutoResize.toggle = () => {
-
-  textareaAutoResize.activate()
-}

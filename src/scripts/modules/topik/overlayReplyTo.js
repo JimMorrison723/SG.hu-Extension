@@ -295,9 +295,3 @@ overlayReplyTo.show = (comment, msgno) => {
     })
   })
 }
-
-overlayReplyTo.toggle = () => {
-
-  overlayReplyTo.toggleStatus ?
-    overlayReplyTo.activate() : overlayReplyTo.disable()
-}
